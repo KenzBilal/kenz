@@ -109,7 +109,21 @@ body{
   .nav-links{display:none}
   .nav-toggle{display:block}
 
-.btn.ghost.small {
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.25);
+.hero,
+.hero-inner,
+.hero-left {
+  overflow: visible;
 }
+  .btn.ghost.small {
+  position: relative;
+  z-index: 5;
+}
+
+.btn.ghost.small:hover,
+.btn.ghost.small:focus,
+.btn.ghost.small:active {
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.45);
+  transform: translateY(-1px);
+}
+
 
