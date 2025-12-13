@@ -109,8 +109,7 @@ body{
   .nav-links{display:none}
   .nav-toggle{display:block}
 
+.btn.ghost.small {
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.25);
 }
-.btn.ghost.small:hover {
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
-  transform: translateY(-1px);
-}
+
