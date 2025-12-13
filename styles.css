@@ -154,6 +154,34 @@ body{
   box-shadow: 0 0 26px rgba(0, 255, 255, 0.45);
   background: rgba(0, 255, 255, 0.12);
 }
+/* Equal hero buttons */
+.hero-actions-equal {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Outline green buttons */
+.btn.primary.outline {
+  background: transparent;
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.6);
+  box-shadow: none;
+}
+
+.btn.primary.outline:hover,
+.btn.primary.outline:focus {
+  background: rgba(34, 197, 94, 0.12);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+}
+
+/* Mobile spacing fix */
+@media (max-width: 480px) {
+  .hero-actions-equal {
+    grid-template-columns: 1fr;
+  }
+}
 
 
 
