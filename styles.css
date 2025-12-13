@@ -108,4 +108,9 @@ body{
   .offer-grid{grid-template-columns:1fr}
   .nav-links{display:none}
   .nav-toggle{display:block}
+
+}
+.btn.ghost.small:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
+  transform: translateY(-1px);
 }
