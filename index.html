@@ -4,37 +4,60 @@
 <head>
   <meta charset="utf-8" />
 
-  <!-- High-security CSP (safe for Razorpay, ads, Telegram, external links) -->
+  <!-- ================= SECURITY (HARDENED BUT SAFE) ================= -->
   <meta http-equiv="Content-Security-Policy"
     content="
-    default-src 'self';
-    script-src 'self' https://nap5k.com https://rzp.io;
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https:;
-    font-src 'self' https:;
-    connect-src 'self' https:;
-    frame-src https://rzp.io;
-    object-src 'none';
-    base-uri 'self';
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
+      default-src 'self';
+      script-src 'self' https://nap5k.com https://rzp.io https://*.telegram.org https://*.t.me;
+      style-src 'self' 'unsafe-inline' https:;
+      img-src 'self' data: https:;
+      font-src 'self' https:;
+      connect-src 'self' https:;
+      frame-src https://rzp.io https://*.telegram.org;
+      object-src 'none';
+      base-uri 'self';
+      frame-ancestors 'none';
+      upgrade-insecure-requests;
     ">
 
-  <!-- Extra security headers -->
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()">
+  <meta http-equiv="Permissions-Policy"
+        content="geolocation=(), camera=(), microphone=(), payment=()">
 
-  <!-- Mobile & SEO -->
+  <!-- ================= MOBILE ================= -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CashTree Loot — Verified Referral Offers</title>
-  <meta name="description" content="Verified referral offers and guidance. Access private Telegram group and referral tools." />
 
-  <!-- Styles -->
+  <!-- ================= SEO ================= -->
+  <title>CashTree Loot – Verified Referral Offers & Earn Guide</title>
+
+  <meta name="description"
+        content="CashTree Loot provides verified referral offers, earning guidance, and private Telegram access. One-time ₹49 access. No guaranteed earnings.">
+
+  <meta name="keywords"
+        content="earn money online india, referral offers, telegram earning group, cashtree loot, online earning guide">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cashttree.online/">
+
+  <!-- ================= SOCIAL PREVIEW ================= -->
+  <meta property="og:title" content="CashTree Loot – Verified Referral Offers">
+  <meta property="og:description"
+        content="One-time ₹49 access to referral tools & Telegram group. No income guarantee.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cashttree.online">
+  <meta property="og:image" content="https://cashttree.online/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CashTree Loot – Verified Referral Offers">
+  <meta name="twitter:description"
+        content="Verified referral offers and earning guidance. Access private Telegram group.">
+  <meta name="twitter:image" content="https://cashttree.online/logo.png">
+
+  <!-- ================= STYLES ================= -->
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
   <!-- PUSH ADS SCRIPT (SAFE HERE) -->
