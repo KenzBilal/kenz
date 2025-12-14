@@ -204,4 +204,26 @@ body{
   border-radius:8px;
   object-fit:contain;
 }
+/* Telegram Button */
+.telegram-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #2aabee, #229ed9);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 0 18px rgba(42, 171, 238, 0.35);
+  transition: all 0.25s ease;
+}
+
+.telegram-btn:hover {
+  background: linear-gradient(180deg, #3bb3f2, #2aabee);
+  box-shadow: 0 0 26px rgba(42, 171, 238, 0.55);
+  transform: translateY(-2px);
+}
+
 
