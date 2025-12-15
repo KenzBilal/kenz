@@ -1,16 +1,15 @@
 :root{
-  --bg-1:#020617;
-  --bg-2:#030b1e;
-  --bg-3:#02040f;
+  --bg-top:#020617;
+  --bg-mid:#030b1e;
+  --bg-bottom:#02040f;
 
-  --card-bg:rgba(255,255,255,0.065);
+  --card-bg:rgba(255,255,255,0.06);
   --card-border:rgba(255,255,255,0.12);
 
   --text:#eef4fb;
   --muted:#9aa7b6;
 
   --accent:#22c55e;
-  --accent-soft:rgba(34,197,94,0.35);
   --accent-dark:#16a34a;
 
   --radius:18px;
@@ -26,20 +25,12 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 
-  /* CASH TREE GLOW MATCHED GRADIENT */
   background:
-    radial-gradient(900px 500px at 12% 10%, rgba(34,197,94,0.12), transparent 60%),
-    radial-gradient(700px 420px at 85% 80%, rgba(42,171,238,0.06), transparent 65%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3) 100%);
+    radial-gradient(900px 500px at 12% 10%, rgba(34,197,94,0.10), transparent 60%),
+    radial-gradient(700px 420px at 85% 85%, rgba(42,171,238,0.05), transparent 65%),
+    linear-gradient(180deg,var(--bg-top),var(--bg-mid) 55%,var(--bg-bottom));
 
-  /* SUBTLE SCROLL FADE */
-  mask-image:linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 6%,
-    black 94%,
-    transparent 100%
-  );
+  overflow-x:hidden;
 }
 
 /* CONTAINER */
@@ -54,8 +45,8 @@ body{
   position:sticky;
   top:0;
   z-index:100;
-  background:rgba(2,6,23,0.78);
-  backdrop-filter:blur(12px);
+  background:rgba(2,6,23,0.82);
+  backdrop-filter:blur(10px);
   border-bottom:1px solid rgba(255,255,255,0.08);
 }
 .nav-inner{
@@ -71,7 +62,7 @@ body{
 .brand-logo{
   width:36px;
   height:36px;
-  border-radius:9px;
+  border-radius:8px;
 }
 .brand-text{
   font-weight:700;
@@ -105,7 +96,7 @@ body{
   gap:32px;
 }
 .hero h1{
-  font-size:clamp(1.7rem, 2.6vw, 2.3rem);
+  font-size:clamp(1.7rem,2.6vw,2.3rem);
   line-height:1.25;
   margin-bottom:14px;
 }
@@ -126,21 +117,21 @@ body{
   cursor:pointer;
   border:none;
   text-decoration:none;
-  transition:transform .2s ease, box-shadow .2s ease;
+  transition:transform .15s ease, box-shadow .15s ease;
 }
 
 /* PRIMARY BUTTON */
 .btn.primary{
   background:linear-gradient(180deg,var(--accent),var(--accent-dark));
   color:#052e16;
-  box-shadow:0 14px 34px rgba(34,197,94,.35);
+  box-shadow:0 12px 28px rgba(34,197,94,.35);
 }
 .btn.primary:hover{
   transform:translateY(-2px);
-  box-shadow:0 0 38px rgba(34,197,94,.65);
+  box-shadow:0 0 36px rgba(34,197,94,.6);
 }
 .btn.primary:active{
-  transform:scale(.96);
+  transform:scale(.95);
 }
 
 /* HERO BUTTON GRID */
@@ -153,15 +144,22 @@ body{
 .hero-actions-equal .hero-btn{
   background:linear-gradient(180deg,var(--accent),var(--accent-dark));
   color:#052e16;
-  box-shadow:0 0 24px rgba(34,197,94,.35);
+  box-shadow:0 0 22px rgba(34,197,94,.35);
 }
 .hero-actions-equal .hero-btn:active{
   transform:scale(.95);
 }
 
+/* CTA CENTER */
+.cta-center{
+  margin-top:26px;
+  display:flex;
+  justify-content:center;
+}
+
 /* SECTIONS */
 .section{
-  padding:52px 0;
+  padding:56px 0;
 }
 .section-title{
   font-size:1.15rem;
@@ -180,28 +178,24 @@ body{
 
 /* OFFER CARD */
 .offer-card{
-  background:
-    linear-gradient(180deg,
-      rgba(255,255,255,0.09),
-      rgba(255,255,255,0.03)
-    );
+  background:linear-gradient(180deg,
+    rgba(255,255,255,0.09),
+    rgba(255,255,255,0.03)
+  );
   border:1px solid var(--card-border);
   border-radius:var(--radius);
   padding:22px;
-  backdrop-filter:blur(16px);
-  box-shadow:
-    0 24px 50px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow:0 22px 48px rgba(0,0,0,0.7);
   display:flex;
   flex-direction:column;
   gap:14px;
-  transition:transform .25s ease, box-shadow .25s ease;
+  transition:transform .2s ease, box-shadow .2s ease;
 }
 .offer-card:hover{
   transform:translateY(-6px);
   box-shadow:
-    0 34px 70px rgba(0,0,0,0.85),
-    0 0 28px rgba(34,197,94,0.25);
+    0 32px 64px rgba(0,0,0,.85),
+    0 0 24px rgba(34,197,94,.25);
 }
 .offer-card:active{
   transform:scale(.97);
@@ -215,7 +209,7 @@ body{
 }
 .faq-item{
   background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.09);
+  border:1px solid rgba(255,255,255,0.1);
   border-radius:16px;
 }
 .faq-question{
@@ -246,13 +240,13 @@ body{
   color:#fff;
   font-weight:600;
   text-decoration:none;
-  box-shadow:0 0 24px rgba(42,171,238,.45);
+  box-shadow:0 0 22px rgba(42,171,238,.45);
 }
 .telegram-btn:hover{
-  box-shadow:0 0 36px rgba(42,171,238,.65);
+  box-shadow:0 0 34px rgba(42,171,238,.65);
 }
 .telegram-btn:active{
-  transform:scale(.96);
+  transform:scale(.95);
 }
 
 /* LEGAL BOX */
@@ -266,15 +260,15 @@ body{
   border-radius:16px;
 }
 
-/* FOOTER — DARK → DARKER FADE */
+/* FOOTER */
 .footer{
-  margin-top:60px;
-  padding:28px 0;
+  margin-top:70px;
+  padding:34px 0;
   background:
     linear-gradient(180deg,
-      rgba(2,6,23,0),
-      rgba(2,6,23,0.6),
-      rgba(2,6,23,0.95)
+      rgba(2,6,23,0) 0%,
+      rgba(2,6,23,0.45) 35%,
+      rgba(2,6,23,0.95) 100%
     );
   border-top:1px solid rgba(255,255,255,0.06);
 }
