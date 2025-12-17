@@ -146,3 +146,21 @@
     el.style.pointerEvents = 'auto';
   });
 })();
+/* =============================
+   PAYMENT & CTA ALIGNMENT FIX
+   ============================= */
+
+.center-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.center-stack .btn,
+.center-stack .telegram-btn {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
