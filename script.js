@@ -40,26 +40,53 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 
 });
-// MOBILE CTA SCROLL TRIGGER
+// ===============================
+// SMART MOBILE CTA SYSTEM
+// ===============================
 (function () {
-  const cta = document.getElementById('mobileCta');
+  const cta = document.getElementById("mobileCta");
   if (!cta) return;
+
+  const STORAGE_KEY = "cashtree_cta_state";
+  const state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+  // If CTA was clicked, never show again
+  if (state.clicked) return;
+
+  // If CTA was closed less than 24h ago, don't show
+  if (state.closedAt && Date.now() - state.closedAt < 24 * 60 * 60 * 1000) {
+    return;
+  }
 
   let shown = false;
 
-  window.addEventListener('scroll', () => {
+  // Show after 40% scroll
+  window.addEventListener("scroll", () => {
     if (shown) return;
 
     const scrollPercent =
       (window.scrollY + window.innerHeight) / document.body.scrollHeight;
 
     if (scrollPercent > 0.4) {
-      cta.classList.add('show');
+      cta.classList.add("show");
       shown = true;
     }
   });
 
-  cta.querySelector('.cta-close').addEventListener('click', () => {
-    cta.style.display = 'none';
+  // CTA click → permanent hide
+  cta.querySelector(".cta-main").addEventListener("click", () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ clicked: true })
+    );
+  });
+
+  // CTA close → hide for 24 hours
+  cta.querySelector(".cta-close").addEventListener("click", () => {
+    cta.style.display = "none";
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ closedAt: Date.now() })
+    );
   });
 })();
