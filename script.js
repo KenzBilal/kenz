@@ -38,4 +38,28 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
   });
+
 });
+// MOBILE CTA SCROLL TRIGGER
+(function () {
+  const cta = document.getElementById('mobileCta');
+  if (!cta) return;
+
+  let shown = false;
+
+  window.addEventListener('scroll', () => {
+    if (shown) return;
+
+    const scrollPercent =
+      (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+
+    if (scrollPercent > 0.4) {
+      cta.classList.add('show');
+      shown = true;
+    }
+  });
+
+  cta.querySelector('.cta-close').addEventListener('click', () => {
+    cta.style.display = 'none';
+  });
+})();
