@@ -1,21 +1,18 @@
+/* ================= ROOT ================= */
 :root{
   --bg-1:#04060a;
   --bg-2:#07101a;
-
   --card:rgba(255,255,255,0.03);
   --glass:rgba(255,255,255,0.02);
   --border:rgba(255,255,255,0.06);
-
   --text:#eaf2f8;
   --muted:#90a0b0;
-
   --accent:#25c55a;
   --accent-2:#18a14a;
-
   --radius:14px;
 }
 
-/* ================= BASE RESET ================= */
+/* ================= RESET ================= */
 *{box-sizing:border-box}
 html,body{height:100%}
 
@@ -24,12 +21,22 @@ body{
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
   color:var(--text);
   line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-
   background:
     radial-gradient(1200px 600px at 10% 10%,rgba(36,54,60,0.12),transparent 60%),
     radial-gradient(900px 500px at 90% 80%,rgba(15,85,44,0.06),transparent 65%),
     linear-gradient(180deg,var(--bg-1),var(--bg-2) 60%);
+}
+
+/* ================= SAFE STACKING ================= */
+body,
+.hero,
+.section,
+.container,
+.cta-center,
+.offer-card,
+.tool-card {
+  position: relative;
+  z-index: 1;
 }
 
 /* ================= CONTAINER ================= */
@@ -43,7 +50,7 @@ body{
 .nav{
   position:sticky;
   top:0;
-  z-index:90;
+  z-index:100;
   background:linear-gradient(180deg,rgba(2,4,8,.75),rgba(2,4,8,.55));
   border-bottom:1px solid var(--border);
   backdrop-filter:blur(10px);
@@ -51,85 +58,48 @@ body{
 
 .nav-inner{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 }
 
 .brand{
   display:flex;
-  align-items:center;
   gap:12px;
+  align-items:center;
 }
 
 .brand-logo{
   width:36px;
   height:36px;
   border-radius:8px;
-  object-fit:contain;
-}
-
-.brand-text{
-  font-weight:700;
-  font-size:1.05rem;
 }
 
 .brand-text span{color:var(--accent)}
-
-.nav-links{
-  display:flex;
-  gap:14px;
-}
 
 .nav-links a{
   color:var(--muted);
   text-decoration:none;
   padding:8px 10px;
-  border-radius:8px;
 }
-
-.nav-links a:hover{color:var(--text)}
-
-.nav-toggle{display:none}
 
 /* ================= HERO ================= */
-.hero{
-  padding:64px 0;
-}
-
-.hero-compact{
-  padding:56px 0;
-}
-
+.hero{padding:64px 0}
 .hero h1{
   font-size:clamp(2rem,3vw,2.6rem);
-  line-height:1.25;
   margin-bottom:14px;
 }
+.lead{color:var(--muted);max-width:720px}
 
-.lead{
-  color:var(--muted);
-  max-width:720px;
-  font-size:1.05rem;
+/* ================= BUTTONS (FIXED) ================= */
+a,
+button,
+.btn{
+  pointer-events:auto !important;
+  cursor:pointer !important;
+  position:relative;
+  z-index:50;
 }
 
-/* ================= PAGE SCALE FIX ================= */
-.page{
-  font-size:1.05rem;
-}
-
-.page h1{
-  font-size:clamp(2rem,3vw,2.6rem);
-}
-
-.page h2{
-  font-size:clamp(1.5rem,2.4vw,2rem);
-}
-
-.page p{
-  font-size:1.05rem;
-}
-
-/* ================= BUTTONS ================= */
 .btn{
   display:inline-flex;
   align-items:center;
@@ -137,10 +107,9 @@ body{
   padding:13px 18px;
   border-radius:12px;
   font-weight:700;
-  text-decoration:none;
-  cursor:pointer;
   border:none;
-  transition:transform .2s ease, box-shadow .2s ease;
+  text-decoration:none;
+  transition:.2s ease;
 }
 
 .btn.primary{
@@ -154,15 +123,17 @@ body{
   box-shadow:0 0 34px rgba(37,197,90,.6);
 }
 
+/* TELEGRAM BUTTON — FIXED */
 .telegram-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
   background:linear-gradient(180deg,#2aabee,#229ed9);
   color:#fff;
-  box-shadow:0 0 22px rgba(42,171,238,.4);
-}
-
-.telegram-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 34px rgba(42,171,238,.6);
+  padding:13px 18px;
+  border-radius:12px;
+  font-weight:700;
+  z-index:60;
 }
 
 /* ================= CTA ================= */
@@ -170,24 +141,10 @@ body{
   display:flex;
   justify-content:center;
   margin-top:26px;
+  z-index:40;
 }
 
-/* ================= SECTIONS ================= */
-.section{
-  padding:56px 0;
-}
-
-.section-title{
-  font-size:1.2rem;
-  margin-bottom:6px;
-}
-
-.section-sub{
-  color:var(--muted);
-  font-size:0.95rem;
-}
-
-/* ================= OFFER / TOOL CARDS ================= */
+/* ================= CARDS ================= */
 .offer-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -196,48 +153,21 @@ body{
 
 .offer-card,
 .tool-card{
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
   border:1px solid var(--border);
   border-radius:20px;
   padding:26px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  transition:transform .25s ease, box-shadow .25s ease;
-}
-
-.offer-card:hover,
-.tool-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 28px 60px rgba(0,0,0,.6),
-             0 0 30px rgba(37,197,90,.25);
-}
-
-.full-width{width:100%}
-
-/* ================= ADS ================= */
-.ad-zone{
-  margin:40px 0;
-  display:flex;
-  justify-content:center;
+  transition:.25s ease;
 }
 
 /* ================= LEGAL ================= */
 .legal-box{
   margin-top:30px;
-  padding:18px 20px;
+  padding:18px;
   font-size:13px;
-  color:#9ca3af;
   background:rgba(255,255,255,0.03);
   border:1px solid rgba(255,255,255,0.07);
   border-radius:14px;
-}
-
-.legal-box h4{
-  margin:0 0 8px;
-  color:#e5e7eb;
-  font-size:14px;
 }
 
 /* ================= FOOTER ================= */
@@ -245,75 +175,36 @@ body{
   margin-top:80px;
   padding:30px 0;
   border-top:1px solid var(--border);
-  background:linear-gradient(180deg,rgba(4,6,10,0),rgba(4,6,10,.9));
 }
 
-.footer-inner{
+/* ================= MOBILE CTA ================= */
+.mobile-cta{
+  position:fixed;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%) translateY(120%);
+  width:calc(100% - 28px);
+  max-width:520px;
+  background:linear-gradient(180deg,#2aabee,#229ed9);
+  border-radius:16px;
+  padding:14px;
   display:flex;
   justify-content:space-between;
-  color:var(--muted);
-  font-size:14px;
+  z-index:9999;
+  opacity:0;
+}
+
+.mobile-cta.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* DESKTOP: disable mobile CTA interference */
+@media (min-width:981px){
+  .mobile-cta{display:none}
 }
 
 /* ================= RESPONSIVE ================= */
 @media(max-width:980px){
   .offer-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .nav-toggle{display:block}
-  .hero{padding:52px 0}
-  }
-/* ===============================
-   MOBILE FLOATING CTA SYSTEM
-   =============================== */
-
-.mobile-cta {
-  position: fixed;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%) translateY(120%);
-  width: calc(100% - 28px);
-  max-width: 520px;
-  background: linear-gradient(180deg, #2aabee, #229ed9);
-  border-radius: 16px;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  box-shadow: 0 18px 45px rgba(42,171,238,0.55);
-  transition: transform .4s ease, opacity .4s ease;
-  z-index: 9999;
-  opacity: 0;
-}
-
-.mobile-cta.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-.mobile-cta .cta-main {
-  flex: 1;
-  color: #fff;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: 15px;
-  text-align: center;
-}
-
-.mobile-cta .cta-close {
-  background: rgba(255,255,255,0.18);
-  border: none;
-  color: #fff;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Desktop: hide CTA */
-@media (min-width: 981px) {
-  .mobile-cta {
-    display: none;
-  }
 }
