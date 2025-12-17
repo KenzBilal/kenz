@@ -248,3 +248,37 @@ button,
   transform:translateY(-2px);
   box-shadow:0 0 28px rgba(0,255,255,.45);
 }
+/* IMPORTANT FIXES ONLY – DESIGN PRESERVED */
+
+a, button {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 20;
+}
+
+/* Prevent ad overlays stealing clicks */
+.ad-sandbox,
+.ad-sandbox * {
+  pointer-events: none !important;
+}
+
+/* CTA safety */
+.mobile-cta {
+  pointer-events: auto;
+}
+
+@media (min-width: 981px) {
+  .mobile-cta {
+    display: none !important;
+  }
+}
+
+/* Restore hero buttons */
+.hero-btn,
+.create-link-cta,
+.telegram-btn {
+  z-index: 30;
+  pointer-events: auto;
+}
+
+
