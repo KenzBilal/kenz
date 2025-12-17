@@ -1,117 +1,105 @@
 /* ======================================================
-   CashTree Loot – FULL SCRIPT (SAFE & FIXED)
-   ====================================================== */
+   CashTree Loot – Production Script
+   Safe | Stable | No UI Breakage
+====================================================== */
 
-/* -------------------------
-   NAV TOGGLE (MOBILE ONLY)
--------------------------- */
+/* ================= NAV TOGGLE (MOBILE ONLY) ================= */
 (function () {
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.querySelector('.nav-links');
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.getElementById("navLinks");
 
   if (!navToggle || !navLinks) return;
 
-  navToggle.addEventListener('click', () => {
-    const isOpen = navLinks.classList.contains('open');
-    navLinks.classList.toggle('open', !isOpen);
+  navToggle.addEventListener("click", () => {
+    const isOpen = navLinks.style.display === "flex";
+    navLinks.style.display = isOpen ? "none" : "flex";
+    navLinks.style.flexDirection = "column";
+    navLinks.style.gap = "12px";
   });
 })();
 
-/* -------------------------
-   FOOTER YEAR
--------------------------- */
+/* ================= FAQ ACCORDION ================= */
 (function () {
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-})();
+  const faqItems = document.querySelectorAll(".faq-item");
 
-/* -------------------------
-   FAQ ACCORDION
--------------------------- */
-(function () {
-  const items = document.querySelectorAll('.faq-item');
-  if (!items.length) return;
+  if (!faqItems.length) return;
 
-  items.forEach(item => {
-    const btn = item.querySelector('.faq-question');
-    const answer = item.querySelector('.faq-answer');
+  faqItems.forEach(item => {
+    const btn = item.querySelector(".faq-question");
+    const answer = item.querySelector(".faq-answer");
+
     if (!btn || !answer) return;
 
-    btn.addEventListener('click', () => {
-      const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+    btn.addEventListener("click", () => {
+      const isOpen = answer.style.maxHeight;
 
       // Close all
-      document.querySelectorAll('.faq-answer').forEach(a => {
+      document.querySelectorAll(".faq-answer").forEach(a => {
         a.style.maxHeight = null;
       });
 
-      // Open current
+      // Open selected
       if (!isOpen) {
-        answer.style.maxHeight = answer.scrollHeight + 'px';
+        answer.style.maxHeight = answer.scrollHeight + "px";
       }
     });
   });
 })();
 
-/* -------------------------
-   SMOOTH SCROLL (SAFE)
--------------------------- */
+/* ================= SMOOTH SCROLL (SAFE) ================= */
 (function () {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', e => {
-      const targetId = anchor.getAttribute('href');
-      if (!targetId || targetId === '#') return;
+    anchor.addEventListener("click", function (e) {
+      const targetId = this.getAttribute("href");
+      if (!targetId || targetId === "#") return;
 
       const target = document.querySelector(targetId);
       if (!target) return;
 
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     });
   });
 })();
 
-/* ======================================================
-   MOBILE FLOATING CTA SYSTEM (ISOLATED & SAFE)
-   ====================================================== */
+/* ================= MOBILE FLOATING CTA ================= */
 (function () {
-  const cta = document.getElementById('mobileCta');
+  const cta = document.getElementById("mobileCta");
   if (!cta) return;
 
-  // 🚫 Desktop must NEVER be affected
-  if (window.innerWidth > 980) {
-    cta.style.display = 'none';
+  // Disable on desktop
+  if (window.innerWidth >= 981) return;
+
+  const STORAGE_KEY = "cashtree_mobile_cta";
+  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+
+  if (stored.clicked) return;
+  if (stored.closedAt && Date.now() - stored.closedAt < 24 * 60 * 60 * 1000) {
     return;
   }
 
-  const STORAGE_KEY = 'cashtree_mobile_cta';
-  const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-
-  // If user already clicked → never show again
-  if (state.clicked) return;
-
-  // If closed in last 24h → don’t show
-  if (state.closedAt && Date.now() - state.closedAt < 86400000) return;
-
   let shown = false;
 
-  // Show CTA after 40% scroll
-  window.addEventListener('scroll', () => {
+  window.addEventListener("scroll", () => {
     if (shown) return;
 
     const scrollRatio =
       (window.scrollY + window.innerHeight) / document.body.scrollHeight;
 
-    if (scrollRatio > 0.4) {
-      cta.classList.add('show');
+    if (scrollRatio > 0.45) {
+      cta.classList.add("show");
       shown = true;
     }
   });
 
-  // CTA main click → permanent hide
-  const mainBtn = cta.querySelector('.cta-main');
+  const mainBtn = cta.querySelector(".cta-main");
+  const closeBtn = cta.querySelector(".cta-close");
+
   if (mainBtn) {
-    mainBtn.addEventListener('click', () => {
+    mainBtn.addEventListener("click", () => {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ clicked: true })
@@ -119,11 +107,9 @@
     });
   }
 
-  // CTA close → hide for 24h
-  const closeBtn = cta.querySelector('.cta-close');
   if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      cta.classList.remove('show');
+    closeBtn.addEventListener("click", () => {
+      cta.style.display = "none";
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ closedAt: Date.now() })
@@ -132,35 +118,10 @@
   }
 })();
 
-/* ======================================================
-   CLICK SAFETY FIX (ADS / OVERLAYS)
-   ====================================================== */
+/* ================= CLICK SAFETY FIX ================= */
+/* Ensures ads or overlays never block buttons */
 (function () {
-  // Ensure buttons are always clickable
-  document.querySelectorAll('a, button, .btn').forEach(el => {
-    el.style.pointerEvents = 'auto';
-  });
-
-  // Prevent injected ad layers from blocking clicks
-  document.querySelectorAll('iframe, script').forEach(el => {
-    el.style.pointerEvents = 'auto';
+  document.querySelectorAll("a, button").forEach(el => {
+    el.style.pointerEvents = "auto";
   });
 })();
-/* =============================
-   PAYMENT & CTA ALIGNMENT FIX
-   ============================= */
-
-.center-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.center-stack .btn,
-.center-stack .telegram-btn {
-  width: 100%;
-  max-width: 420px;
-  text-align: center;
-}
