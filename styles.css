@@ -481,6 +481,9 @@ button{
   transform:translateY(-2px);
 }
 
+.footer{
+  margin-top:40px; /* instead of huge gap */
+}
 
 
 
