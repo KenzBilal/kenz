@@ -394,6 +394,81 @@ button{
   .nav-toggle{display:block}
   .hero{padding:56px 0}
 }
+/* ================= FOOTER FIX ================= */
+
+.footer{
+  margin-top:80px;
+  padding-top:60px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(4,6,10,0),
+      rgba(4,6,10,0.6),
+      rgba(4,6,10,0.95)
+    );
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.footer-inner{
+  display:flex;
+  justify-content:space-between;
+  gap:40px;
+  padding-bottom:30px;
+}
+
+.footer-left{
+  max-width:420px;
+}
+
+.footer-brand{
+  margin-bottom:14px;
+}
+
+.footer-note{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.footer-right{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.footer-right a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+
+.footer-right a:hover{
+  color:var(--text);
+}
+
+.footer-bottom{
+  text-align:center;
+  padding:16px 0;
+  font-size:13px;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .footer-inner{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .footer-right{
+    align-items:center;
+  }
+
+  .footer-left{
+    max-width:100%;
+  }
+}
 
 
 
