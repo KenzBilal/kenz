@@ -125,3 +125,38 @@
     el.style.pointerEvents = "auto";
   });
 })();
+
+// ===============================
+// FEATURED SHOP PRODUCTS (DYNAMIC)
+// ===============================
+
+const featuredProducts = [
+  {
+    name: "Noise Smartwatch",
+    points: ["AMOLED Display", "7-day battery", "Top Seller"],
+    link: "#"
+  },
+  {
+    name: "Men’s Casual Sneakers",
+    points: ["Comfort wear", "Best for daily use", "High ratings"],
+    link: "#"
+  }
+];
+
+const container = document.getElementById("featuredProducts");
+
+if (container) {
+  featuredProducts.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "offer-card";
+    card.innerHTML = `
+      <h3>${p.name}</h3>
+      <ul>
+        ${p.points.map(i => `<li>${i}</li>`).join("")}
+      </ul>
+      <a href="${p.link}" class="btn primary full-width">Check Price</a>
+    `;
+    container.appendChild(card);
+  });
+}
+
