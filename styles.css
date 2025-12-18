@@ -469,6 +469,18 @@ button{
     max-width:100%;
   }
 }
+.btn.secondary{
+  background:rgba(255,255,255,0.08);
+  color:#eaf2f8;
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow:0 0 18px rgba(0,0,0,.35);
+}
+
+.btn.secondary:hover{
+  background:rgba(255,255,255,0.14);
+  transform:translateY(-2px);
+}
+
 
 
 
