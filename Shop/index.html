@@ -16,6 +16,43 @@
   <meta property="og:url" content="https://cashttree.online/shop">
   <meta property="og:image" content="https://cashttree.online/logo.png">
 
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "CashTree Shop – Featured Picks",
+  "itemListElement": [
+    {
+      "@type": "Product",
+      "position": 1,
+      "name": "Noise Smartwatch",
+      "description": "AMOLED smartwatch with long battery life",
+      "brand": { "@type": "Brand", "name": "Noise" },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "INR",
+        "price": "2999",
+        "availability": "https://schema.org/InStock",
+        "url": "https://cashttree.online/shop"
+      }
+    },
+    {
+      "@type": "Product",
+      "position": 2,
+      "name": "Men's Casual Sneakers",
+      "description": "Comfortable everyday footwear",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "INR",
+        "price": "1499",
+        "availability": "https://schema.org/InStock",
+        "url": "https://cashttree.online/shop"
+      }
+    }
+  ]
+}
+  </script>
+
   <!-- Styles -->
   <link rel="stylesheet" href="/styles.css">
 </head>
@@ -110,28 +147,8 @@
     <h2 class="section-title">Featured Picks</h2>
     <p class="section-sub">Popular products people are buying right now.</p>
 
-    <div class="offer-grid">
-
-      <article class="offer-card">
-        <h3>Noise Smartwatch</h3>
-        <ul>
-          <li>AMOLED Display</li>
-          <li>7-day battery life</li>
-          <li>Best seller</li>
-        </ul>
-        <a href="#" class="btn primary full-width">Check Price</a>
-      </article>
-
-      <article class="offer-card">
-        <h3>Men’s Casual Sneakers</h3>
-        <ul>
-          <li>Comfortable daily wear</li>
-          <li>Top-rated by users</li>
-          <li>Limited-time pricing</li>
-        </ul>
-        <a href="#" class="btn primary full-width">Check Price</a>
-      </article>
-
+    <div class="offer-grid" id="featuredProducts">
+      <!-- Injected by JS -->
     </div>
   </div>
 </section>
