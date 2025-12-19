@@ -5,7 +5,7 @@
   <title>Qoneqt App Reward – CashTree Loot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="description" content="Join Qoneqt via CashTree Loot and earn ₹85 signup bonus. Apply referral code and complete signup to unlock rewards.">
+  <meta name="description" content="Join Qoneqt via CashTree Loot and earn ₹85 signup bonus after approval. Apply referral code and complete signup to unlock rewards.">
 
   <style>
     :root{
@@ -44,6 +44,19 @@
       border-radius:22px;
       padding:26px;
       box-shadow:0 40px 100px rgba(0,0,0,.7);
+    }
+
+    /* BRAND */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:16px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .brand span{
+      color:var(--green);
     }
 
     h1{
@@ -184,6 +197,12 @@
 <body>
 
 <div class="card">
+
+  <!-- BRAND -->
+  <div class="brand">
+    🌱 CashTree <span>Loot</span>
+  </div>
+
   <h1>Qoneqt</h1>
   <div class="badge">Quick Reward</div>
 
@@ -193,8 +212,8 @@
     • Install Qoneqt from Play Store<br>
     • Sign up using Gmail<br>
     • <strong>Apply referral code during signup</strong><br>
-    • ₹85 credited after successful registration<br>
-    • Earn ₹50 more for every referral
+    • Reward credited <strong>after application is approved</strong><br>
+    • Earn ₹50 more for every successful referral
   </div>
 
   <!-- PHONE -->
@@ -222,14 +241,15 @@
     Submit & Open Qoneqt
   </button>
 
-  <!-- DESCRIPTION BELOW SUBMIT (LIKE YOUR IMAGE) -->
+  <!-- DISCLAIMER -->
   <div class="submit-desc">
     After clicking submit, you will be redirected to the official Qoneqt app page.
-    Complete the signup using the referral code above to unlock the reward.
+    Complete the signup using the referral code above.
     <br><br>
     <strong>CashTree Loot</strong> does not guarantee earnings. Rewards are provided
-    directly by the app after verification.
+    by the app only after successful verification and approval.
   </div>
+
 </div>
 
 <script>
@@ -254,7 +274,7 @@
       return;
     }
 
-    // 🔴 REPLACE WITH YOUR REAL REFERRAL LINK
+    // 🔴 Replace with your official referral / tracking link
     window.location.href = "https://qon.is/join?key=8424042254214049";
   }
 </script>
