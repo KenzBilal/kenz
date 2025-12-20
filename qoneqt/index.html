@@ -237,7 +237,7 @@
   </a>
 
   <!-- SUBMIT -->
-<button class="submit-btn" type="button" onclick="submitForm()">
+<button class="submit-btn" id="submitBtn" type="button">
   Submit & Open Qoneqt
 </button>
 
@@ -251,38 +251,7 @@
   </div>
 
 </div>
-
-<script>
-  
-  function copyCode(){
-    const code = document.getElementById("refCode").innerText;
-    navigator.clipboard.writeText(code);
-
-    const btn = document.getElementById("copyBtn");
-    btn.textContent = "Copied ✓";
-    btn.classList.add("copied");
-
-    setTimeout(()=>{
-      btn.textContent = "Copy";
-      btn.classList.remove("copied");
-    },2000);
-  }
-
-  function submitForm(){
-    const phone = document.getElementById("phone").value.trim();
-
-    if(phone.length < 8){
-      alert("Please enter a valid phone number");
-      return;
-    }
-
-    // ✅ OFFICIAL REFERRAL LINK
-    window.location.assign(
-      "https://qon.is/join?key=8424042254214049"
-    );
-  }
-
-</script>
+  <script src="script.js"></script>
 
 </body>
 </html>
