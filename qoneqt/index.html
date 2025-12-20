@@ -237,9 +237,9 @@
   </a>
 
   <!-- SUBMIT -->
-  <button class="submit-btn" onclick="submitForm()">
-    Submit & Open Qoneqt
-  </button>
+<button class="submit-btn" type="button" onclick="submitForm()">
+  Submit & Open Qoneqt
+</button>
 
   <!-- DISCLAIMER -->
   <div class="submit-desc">
@@ -253,6 +253,7 @@
 </div>
 
 <script>
+  
   function copyCode(){
     const code = document.getElementById("refCode").innerText;
     navigator.clipboard.writeText(code);
@@ -269,14 +270,18 @@
 
   function submitForm(){
     const phone = document.getElementById("phone").value.trim();
+
     if(phone.length < 8){
       alert("Please enter a valid phone number");
       return;
     }
 
-    // 🔴 Replace with your official referral / tracking link
-    window.location.href = "https://qon.is/join?key=8424042254214049";
+    // ✅ OFFICIAL REFERRAL LINK
+    window.location.assign(
+      "https://qon.is/join?key=8424042254214049"
+    );
   }
+
 </script>
 
 </body>
