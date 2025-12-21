@@ -624,9 +624,12 @@ button{
    GOLD TAG
 =========================== */
 .tag.gold{
-  background:rgba(255,215,128,.18);
+  background: none;
   color:#ffd27d;
-  border:1px solid rgba(255,215,128,.35);
+  border: none;
+  font-weight: 700;
+  letter-spacing: .4px;
+  font-size: 13px;
 }
 
 /* ===========================
@@ -659,6 +662,7 @@ button{
 .indusind h3{
   letter-spacing:.3px;
 }
+
 
 
 
