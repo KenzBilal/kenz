@@ -160,3 +160,20 @@ if (container) {
   });
 }
 
+<script>
+(function(){
+  const btn = document.getElementById("payBtn");
+  if(!btn) return;
+
+  // 🔴 Offer ends Jan 5 (local time)
+  const offerEnd = new Date("2025-01-05T23:59:59");
+
+  const now = new Date();
+
+  if(now > offerEnd){
+    btn.classList.add("no-offer");
+  }
+})();
+</script>
+
+
