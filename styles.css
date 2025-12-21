@@ -267,6 +267,74 @@ button{
   gap:14px;
   transition:transform .25s ease, box-shadow .25s ease;
 }
+/* ===============================
+   SUN / MOON THEME TOGGLE
+   =============================== */
+
+.theme-toggle{
+  position:fixed;
+  top:18px;
+  right:18px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:9999;
+  transition:background .3s ease, transform .3s ease;
+}
+
+.theme-toggle:hover{
+  transform:scale(1.06);
+}
+
+/* ICON BASE */
+.theme-toggle .icon{
+  position:absolute;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  transition:
+    transform .5s cubic-bezier(.4,0,.2,1),
+    opacity .4s ease,
+    box-shadow .4s ease;
+}
+
+/* SUN */
+.sun{
+  background:#facc15;
+  box-shadow:0 0 14px rgba(250,204,21,.9);
+}
+
+/* MOON */
+.moon{
+  background:#e5e7eb;
+  box-shadow:inset -6px -6px 0 #9ca3af;
+  transform:scale(.5) rotate(-90deg);
+  opacity:0;
+}
+
+/* DARK MODE ACTIVE */
+body.dark .sun{
+  transform:scale(.5) rotate(90deg);
+  opacity:0;
+}
+
+body.dark .moon{
+  transform:scale(1) rotate(0deg);
+  opacity:1;
+  box-shadow:0 0 14px rgba(229,231,235,.7);
+}
+
+/* OPTIONAL: DARK MODE BACKGROUND HOOK */
+body.dark{
+  background-color:#04060a;
+}
 
 .offer-card:hover,
 .tool-card:hover{
@@ -662,6 +730,7 @@ button{
 .indusind h3{
   letter-spacing:.3px;
 }
+
 
 
 
