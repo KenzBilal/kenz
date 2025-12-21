@@ -590,9 +590,7 @@ button{
     linear-gradient(180deg, rgba(255,215,128,.12), rgba(255,255,255,.02)),
     linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
   border: 1px solid rgba(255,215,128,.25);
-  box-shadow:
-    0 30px 80px rgba(0,0,0,.6),
-    inset 0 0 0 1px rgba(255,215,128,.08);
+
   transform: translateY(0);
   transition: transform .25s ease, box-shadow .25s ease;
 }
@@ -618,6 +616,7 @@ button{
   border-radius:999px;
   background:linear-gradient(180deg,#ffd27d,#e6a93f);
   color:#3a2200;
+  box-shadow:0 6px 16px rgba(255,215,128,.45);
   
 }
 
@@ -660,6 +659,7 @@ button{
 .indusind h3{
   letter-spacing:.3px;
 }
+
 
 
 
