@@ -581,6 +581,85 @@ button{
   display:none;
 }
 
+/* ===========================
+   PREMIUM OFFER BASE
+=========================== */
+.premium-offer{
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255,215,128,.12), rgba(255,255,255,.02)),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,215,128,.25);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(255,215,128,.08);
+  transform: translateY(0);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.premium-offer:hover{
+  transform: translateY(-6px);
+  box-shadow:
+    0 40px 100px rgba(0,0,0,.75),
+    inset 0 0 0 1px rgba(255,215,128,.18);
+}
+
+/* ===========================
+   PREMIUM BADGE
+=========================== */
+.premium-badge{
+  position:absolute;
+  top:14px;
+  right:14px;
+  padding:6px 12px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.8px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#ffd27d,#e6a93f);
+  color:#3a2200;
+  box-shadow:0 6px 16px rgba(255,215,128,.45);
+}
+
+/* ===========================
+   GOLD TAG
+=========================== */
+.tag.gold{
+  background:rgba(255,215,128,.18);
+  color:#ffd27d;
+  border:1px solid rgba(255,215,128,.35);
+}
+
+/* ===========================
+   PREMIUM EARN TEXT
+=========================== */
+.premium-earn{
+  font-size:15px;
+  font-weight:800;
+  color:#ffe8b0;
+}
+
+/* ===========================
+   PREMIUM CTA BUTTON
+=========================== */
+.premium-btn{
+  background:
+    linear-gradient(180deg,#ffd27d,#e6a93f);
+  color:#3a2200;
+  font-weight:900;
+  box-shadow:0 18px 40px rgba(255,215,128,.55);
+}
+
+.premium-btn:hover{
+  filter:brightness(1.05);
+}
+
+/* ===========================
+   INDUSIND ACCENT
+=========================== */
+.indusind h3{
+  letter-spacing:.3px;
+}
 
 
 
