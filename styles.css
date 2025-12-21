@@ -528,66 +528,64 @@ button{
   background: #fff7ed;      /* soft orange */
   color: #9a3412;
 }
-.pay-btn.christmas{
+.pay-btn{
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   padding: 18px 26px;
   border-radius: 18px;
-  background: linear-gradient(180deg,#22c55e,#16a34a);
-  color: #052e16;
-  font-weight: 900;
-  font-size: 1.1rem;
-  text-decoration: none;
-  box-shadow: 0 18px 50px rgba(34,197,94,.55);
-  overflow: hidden;
-}
-
-/* 🎅 Hat */
-.pay-btn.christmas .hat{
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  font-size: 26px;
-  transform: rotate(-18deg);
-}
-
-/* Old price */
-.pay-btn.christmas .price-old{
-  color: #064e3b;
-  opacity: .7;
-  text-decoration: line-through;
-  font-weight: 700;
-  font-size: .95rem;
-}
-
-/* New price */
-.pay-btn.christmas .price-new{
-  color: #022c22;
-  font-size: 1.4rem;
-  font-weight: 900;
-}
-
-/* Text */
-.pay-btn.christmas .label{
-  font-size: .95rem;
+  font-size: 18px;
   font-weight: 800;
+  background: linear-gradient(180deg,#22c55e,#16a34a);
+  color:#062e14;
+  border:none;
+  cursor:pointer;
+  overflow: visible;
 }
 
-/* Subtle glow animation */
-.pay-btn.christmas::after{
+/* Prices */
+.price-old{
+  text-decoration: line-through;
+  opacity:.6;
+  margin-right:8px;
+}
+
+.price-new{
+  font-size:22px;
+}
+
+/* 🎄 CHRISTMAS HAT */
+.pay-btn.christmas .hat{
+  position:absolute;
+  top:-14px;
+  right:-8px;
+  width:36px;
+  height:22px;
+  background:#e11d48; /* red hat */
+  border-radius:6px 6px 12px 12px;
+  transform: rotate(15deg);
+}
+
+/* White fur strip */
+.pay-btn.christmas .hat::before{
   content:"";
   position:absolute;
-  inset:-40%;
-  background: radial-gradient(circle,rgba(255,255,255,.25),transparent 60%);
-  animation: glow 3s infinite linear;
+  bottom:-6px;
+  left:-4px;
+  width:44px;
+  height:8px;
+  background:#fff;
+  border-radius:999px;
 }
 
-@keyframes glow{
-  0%{transform:rotate(0deg)}
-  100%{transform:rotate(360deg)}
+/* Pom-pom */
+.pay-btn.christmas .hat::after{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  width:10px;
+  height:10px;
+  background:#fff;
+  border-radius:50%;
 }
 
 
