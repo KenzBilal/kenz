@@ -29,17 +29,18 @@
       Details are used only for confirmation.
     </div>
 
-    <form onsubmit="submitConfirm(event)">
-      <label>Full Name</label>
-      <input type="text" id="name" placeholder="Enter your name" required>
+   <form id="confirmForm">
+  <label>Name</label>
+  <input type="text" id="name" required>
 
-      <label>Phone Number (used in PhonePe)</label>
-      <input type="tel" id="phone" placeholder="10-digit number" required>
+  <label>Phone Number</label>
+  <input type="tel" id="phone" required>
 
-      <button type="submit" class="btn">
-        Submit Confirmation
-      </button>
-    </form>
+  <button type="submit" class="submit-btn">
+    Submit & Open PhonePe
+  </button>
+</form>
+
 
     <div class="note">
       Bonus is credited by <strong>PhonePe</strong>.  
