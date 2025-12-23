@@ -20,6 +20,6 @@ document.getElementById("confirmForm").addEventListener("submit", function (e) {
   );
 
   // ✅ PHONEPE REFERRAL LINK
-  window.location.href = "https://phon.pe/YOUR_REFERRAL_CODE";
+  window.location.href = "https://phon.pe/30fjw1gh";
 });
 
