@@ -376,6 +376,9 @@ body.dark{
   color:var(--muted);
 }
 
+.faq-item.active .faq-answer {
+  max-height: 500px; /* large enough for content */
+}
 /* ================= LEGAL ================= */
 .legal-box{
   margin-top:32px;
@@ -842,6 +845,7 @@ body.dark{
 .offer-confirm-btn:active {
   transform: scale(0.98);
 }
+
 
 
 
