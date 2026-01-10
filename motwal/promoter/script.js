@@ -44,3 +44,12 @@ document.getElementById("createLinkBtn").addEventListener("click", () => {
 function closePopup(){
   document.getElementById("popup").style.display = "none";
 }
+(function () {
+  const btn = document.getElementById("promoterDashboardBtn");
+  if (!btn) return;
+
+  const code = localStorage.getItem("cashttree_referral");
+  if (code) {
+    btn.href = "/dashboard/?code=" + code;
+  }
+})();
