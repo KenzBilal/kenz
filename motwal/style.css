@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  background: linear-gradient(180deg, #f9fafb, #eef2f7);
+  color: #111827;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.offer-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tagline {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.offer-info {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.offer-title {
+  font-size: 20px;
+  margin: 0;
+}
+
+.offer-desc {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 8px 0 14px;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.lead-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 14px;
+}
+
+.lead-form input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+}
+
+.lead-form button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lead-form button:hover {
+  background: #15803d;
+}
+
+.note {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 14px;
+  text-align: center;
+}
