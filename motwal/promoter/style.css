@@ -132,22 +132,3 @@ input{
   font-weight:800;
   cursor:pointer;
 }
-
-.close-btn{
-  margin-top:10px;
-  background:none;
-  border:none;
-  color:var(--muted);
-  cursor:pointer;
-}
-.dashboard-btn{
-  display:block;
-  margin-top:14px;
-  padding:14px;
-  border-radius:16px;
-  background:linear-gradient(180deg,#22c55e,#16a34a);
-  color:#052e16;
-  font-weight:900;
-  text-align:center;
-  text-decoration:none;
-}
