@@ -1,0 +1,108 @@
+:root{
+  --bg:#02050a;
+  --card:#0b121a;
+  --border:rgba(255,255,255,.08);
+  --text:#eaf2f8;
+  --muted:#9aa4af;
+  --green:#22c55e;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(34,197,94,.10), transparent 60%),
+    linear-gradient(180deg,#02050a,#07101a);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--text);
+  padding:20px;
+}
+
+.dashboard{
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.brand{
+  font-weight:900;
+}
+.brand span{ color:var(--green); }
+
+.role{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.ref-code-main{
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:var(--green);
+}
+
+.offers h2{
+  margin-bottom:12px;
+}
+
+.offer-card{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+
+.offer{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+}
+
+.offer h3{
+  margin:0 0 6px;
+}
+
+.offer p{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.offer .actions{
+  margin-top:14px;
+  display:flex;
+  gap:8px;
+}
+
+.offer button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.share{
+  background:var(--green);
+}
+
+.copy{
+  background:#1f2937;
+  color:var(--text);
+}
