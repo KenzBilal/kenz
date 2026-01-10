@@ -188,3 +188,24 @@ if (container) {
     }
   });
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("navToggle");
+  const nav = document.getElementById("navLinks");
+  const dashLink = document.getElementById("menuDashboardLink");
+
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("nav-open");
+    toggle.setAttribute(
+      "aria-expanded",
+      nav.classList.contains("nav-open")
+    );
+  });
+
+  const code = localStorage.getItem("cashttree_referral");
+  if (code && dashLink) {
+    dashLink.href = "/dashboard/?code=" + code;
+  }
+});
