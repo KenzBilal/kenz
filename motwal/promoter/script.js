@@ -18,10 +18,10 @@ document.getElementById("createLinkBtn").addEventListener("click", () => {
     return;
   }
 
-  // Generate referral code
-  const cleanName = name.replace(/\s+/g, "").toUpperCase().slice(0, 4);
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  const referralCode = cleanName + randomNum;
+  // 🔥 NEW REFERRAL CODE LOGIC
+  const firstName = name.split(" ")[0].toUpperCase();
+  const last4 = phone.slice(-4);
+  const referralCode = firstName + last4;
 
   const referralLink = `https://cashttree.online/r/${referralCode}`;
 
@@ -36,8 +36,8 @@ document.getElementById("createLinkBtn").addEventListener("click", () => {
   };
 
   /*
-    OPTIONAL LATER:
-    - Send name, phone, UPI, referralCode to backend / Google Form
+    NEXT STEP (LATER):
+    Save name, phone, UPI, referralCode for approval
   */
 });
 
