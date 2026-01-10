@@ -1,125 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Motwal Offer – CashtTree</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Inter, Arial, sans-serif;
-      background: #f9fafb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 420px;
-      width: 100%;
-      padding: 24px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-    .logo {
-      text-align: center;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      text-align: center;
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    label {
-      font-size: 13px;
-      font-weight: 600;
-      display: block;
-      margin-top: 14px;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      font-size: 15px;
-    }
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
-      border-radius: 12px;
-      border: none;
-      background: #16a34a;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .note {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 12px;
-      text-align: center;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<div class="container">
-  <div class="card">
-    <div class="logo">CashtTree</div>
-    <div class="subtitle">
-      Complete the details to continue with this offer
-    </div>
+  <main class="page">
+    <section class="offer-card">
 
-    <form id="leadForm">
-      <label>Your Name</label>
-      <input type="text" id="name" required placeholder="Enter your full name">
+      <div class="brand">
+        <span class="logo">CashtTree</span>
+        <p class="tagline">Verified App Offer</p>
+      </div>
 
-      <label>Mobile Number</label>
-      <input type="tel" id="mobile" required placeholder="10-digit mobile number">
+      <div class="offer-info">
+        <h1 class="offer-title">Motwal App Offer</h1>
+        <p class="offer-desc">
+          Install the Motwal app and complete the required steps to earn rewards.
+        </p>
 
-      <button type="submit">Continue to Offer</button>
-    </form>
+        <div class="badges">
+          <span>⏱ 5–10 mins</span>
+          <span>💰 Earn ₹70</span>
+        </div>
+      </div>
 
-    <div class="note">
-      Reward will be credited after successful verification.
-    </div>
-  </div>
-</div>
+      <form id="leadForm" class="lead-form">
+        <label>
+          Full Name
+          <input type="text" id="name" placeholder="Enter your full name" required />
+        </label>
 
-<script>
-  document.getElementById("leadForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+        <label>
+          Mobile Number
+          <input type="tel" id="mobile" placeholder="10-digit mobile number" required />
+        </label>
 
-    const name = document.getElementById("name").value;
-    const mobile = document.getElementById("mobile").value;
+        <button type="submit">Continue to App</button>
+      </form>
 
-    // send silently to Google Form
-    const formUrl = "YOUR_GOOGLE_FORM_POST_URL";
-    const data = new FormData();
-    data.append("entry.NAME_ID", name);
-    data.append("entry.MOBILE_ID", mobile);
+      <p class="note">
+        Reward will be credited after successful verification.
+      </p>
 
-    fetch(formUrl, {
-      method: "POST",
-      mode: "no-cors",
-      body: data
-    });
+    </section>
+  </main>
 
-    // smooth redirect
-    setTimeout(() => {
-      window.location.href = "YOUR_NORMAL_REFERRAL_LINK";
-    }, 600);
-  });
-</script>
-
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
 </html>
