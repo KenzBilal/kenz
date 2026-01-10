@@ -1,16 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const submitBtn = document.querySelector(".submit-btn");
+  const btn = document.getElementById("submitBtn");
 
-  if (!submitBtn) return;
+  btn.addEventListener("click", function () {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
 
-  submitBtn.addEventListener("click", function () {
-    const nameInput = document.getElementById("name");
-    const phoneInput = document.getElementById("phone");
-
-    const name = nameInput ? nameInput.value.trim() : "";
-    const phone = phoneInput ? phoneInput.value.trim() : "";
-
-    // Basic validation
     if (name.length < 2) {
       alert("Please enter your full name");
       return;
@@ -20,12 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Please enter a valid 10-digit mobile number");
       return;
     }
-
-    /* 
-      OPTIONAL (LATER):
-      Send name & phone to Google Form / backend here
-      (Keeping it clean for now)
-    */
 
     // Redirect to NORMAL referral link
     window.location.href =
