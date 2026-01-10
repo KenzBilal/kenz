@@ -864,6 +864,42 @@ body.dark{
   text-decoration:none;
 }
 
+.nav-toggle{
+  background:none;
+  border:none;
+  color:#eaf2f8;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* Menu container */
+.nav-links{
+  position:absolute;
+  top:56px;
+  right:16px;
+  width:180px;
+
+  background:#0b121a;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  overflow:hidden;
+  z-index:9999;
+}
+
+/* Menu item */
+.nav-link{
+  display:block;
+  padding:14px 16px;
+  color:#eaf2f8;
+  text-decoration:none;
+  font-weight:700;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.nav-link:hover{
+  background:rgba(255,255,255,0.05);
+}
 
 
 
