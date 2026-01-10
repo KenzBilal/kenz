@@ -1,57 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Motwal Offer – CashtTree</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>Motwal App Reward – CashTree Loot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Install Motwal via CashTree Loot and earn ₹70 after verification. Complete required steps to unlock reward.">
+
+  <style>
+    /* SAME THEME AS QONEQT – UNCHANGED */
+    :root{
+      --bg:#04060a;
+      --card:#0b121a;
+      --border:rgba(255,255,255,0.08);
+      --text:#eaf2f8;
+      --muted:#9aa4af;
+      --green:#22c55e;
+      --green-dark:#16a34a;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(34,197,94,.08), transparent 60%),
+        radial-gradient(700px 400px at 90% 90%, rgba(34,197,94,.05), transparent 60%),
+        linear-gradient(180deg,#02050a,#07101a);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .card{
+      width:100%;
+      max-width:440px;
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:0 40px 100px rgba(0,0,0,.7);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:16px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .brand span{
+      color:var(--green);
+    }
+
+    h1{
+      margin:0;
+      font-size:1.7rem;
+      letter-spacing:.3px;
+    }
+
+    .badge{
+      display:inline-block;
+      margin-top:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(34,197,94,.15);
+      color:var(--green);
+      font-size:.85rem;
+      font-weight:700;
+    }
+
+    .earn-box{
+      margin-top:18px;
+      padding:16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px dashed var(--border);
+      font-size:.95rem;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .earn-box strong{
+      color:#e5fbe9;
+    }
+
+    .section{
+      margin-top:20px;
+    }
+
+    label{
+      display:block;
+      font-size:.85rem;
+      margin-bottom:6px;
+      color:var(--muted);
+    }
+
+    input{
+      width:100%;
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#02060c;
+      color:var(--text);
+      font-size:1rem;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:var(--green);
+    }
+
+    .submit-btn{
+      width:100%;
+      margin-top:22px;
+      padding:16px;
+      border-radius:18px;
+      border:none;
+      background:linear-gradient(180deg,var(--green),var(--green-dark));
+      color:#052e16;
+      font-size:1.05rem;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 18px 46px rgba(34,197,94,.45);
+    }
+
+    .submit-desc{
+      margin-top:14px;
+      font-size:13px;
+      color:#94a3b8;
+      line-height:1.5;
+      text-align:center;
+    }
+
+    .submit-desc strong{
+      color:#eaf2f8;
+    }
+  </style>
 </head>
 <body>
 
-  <main class="page">
-    <section class="offer-card">
+<div class="card">
 
-      <div class="brand">
-  <img src="logo.png" alt="CashtTree" class="logo-img" />
-  <span class="verified">✔ Verified Offer</span>
-      </div>
+  <div class="brand">
+    🌱 CashTree <span>Loot</span>
+  </div>
 
-      <div class="offer-info">
-        <h1 class="offer-title">Motwal App Offer</h1>
-        <p class="offer-desc">
-          Install the Motwal app and complete the required steps to earn rewards.
-        </p>
+  <h1>Motwal</h1>
+  <div class="badge">Verified App Offer</div>
 
-        <div class="badges">
-          <span>⏱ 5–10 mins</span>
-          <span>💰 Earn ₹70</span>
-        </div>
-      </div>
+  <div class="earn-box">
+    <strong>How you earn ₹70:</strong><br>
+    • Install the Motwal app from Play Store<br>
+    • Complete the required steps inside the app<br>
+    • No investment required<br>
+    • Reward credited <strong>after successful verification</strong>
+  </div>
 
-      <form id="leadForm" class="lead-form">
-        <label>
-          Full Name
-          <input type="text" id="name" placeholder="Enter your full name" required />
-        </label>
+  <div class="section">
+    <label>Your Name</label>
+    <input type="text" id="name" placeholder="Enter your full name">
+  </div>
 
-        <label>
-          Mobile Number
-          <input type="tel" id="mobile" placeholder="10-digit mobile number" required />
-        </label>
+  <div class="section">
+    <label>Phone Number</label>
+    <input type="tel" id="phone" placeholder="Enter your phone number">
+  </div>
 
-        <button type="submit">Continue to App</button>
-      </form>
+  <button class="submit-btn">
+    Submit & Open Motwal
+  </button>
 
-      <p class="note">
-        Reward will be credited after successful verification.
-      </p>
+  <div class="submit-desc">
+    After clicking submit, you will be redirected to the official Motwal app page.
+    <br><br>
+    <strong>CashTree Loot</strong> does not guarantee earnings. Rewards are provided
+    only after successful verification by the app.
+  </div>
 
-    </section>
-  </main>
+</div>
 
-  <!-- JS -->
-  <script src="script.js"></script>
 </body>
 </html>
