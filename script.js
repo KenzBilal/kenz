@@ -1,23 +1,3 @@
-/* ======================================================
-   CashTree Loot – Production Script
-   Safe | Stable | No UI Breakage
-====================================================== */
-
-/* ================= NAV TOGGLE (MOBILE ONLY) ================= */
-(function () {
-  const navToggle = document.getElementById("navToggle");
-  const navLinks = document.getElementById("navLinks");
-
-  if (!navToggle || !navLinks) return;
-
-  navToggle.addEventListener("click", () => {
-    const isOpen = navLinks.style.display === "flex";
-    navLinks.style.display = isOpen ? "none" : "flex";
-    navLinks.style.flexDirection = "column";
-    navLinks.style.gap = "12px";
-  });
-})();
-
 /* ================= FAQ ACCORDION ================= */
 (function () {
   const faqItems = document.querySelectorAll(".faq-item");
@@ -46,6 +26,7 @@
   });
 })();
 
+
 /* ================= SMOOTH SCROLL (SAFE) ================= */
 (function () {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -64,6 +45,7 @@
     });
   });
 })();
+
 
 /* ================= MOBILE FLOATING CTA ================= */
 (function () {
@@ -117,6 +99,7 @@
     });
   }
 })();
+
 
 /* ================= CLICK SAFETY FIX ================= */
 /* Ensures ads or overlays never block buttons */
@@ -175,29 +158,33 @@ if (container) {
   }
 })();
 </script>
-/* ===============================
-   THEME TOGGLE LOGIC
-   =============================== */
+/* ===== NAV MENU + DASHBOARD LINK ===== */
 
-(function(){
-  const toggle = document.getElementById("themeToggle");
-  if(!toggle) return;
+(function () {
+  const toggle = document.getElementById("navToggle");
+  const menu = document.getElementById("navLinks");
+  const dashLink = document.getElementById("menuDashboardLink");
 
-  // Load saved theme
-  const savedTheme = localStorage.getItem("theme");
-  if(savedTheme === "dark"){
-    document.body.classList.add("dark");
+  if (!toggle || !menu) return;
+
+  // Toggle menu open/close
+  toggle.addEventListener("click", () => {
+    const isOpen = !menu.hasAttribute("hidden");
+    menu.toggleAttribute("hidden");
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  // Smart dashboard link
+  const code = localStorage.getItem("cashttree_referral");
+  if (code && dashLink) {
+    dashLink.href = "/dashboard/?code=" + code;
   }
 
-  toggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-
-    // Save preference
-    localStorage.setItem(
-      "theme",
-      document.body.classList.contains("dark") ? "dark" : "light"
-    );
+  // Close menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      menu.setAttribute("hidden", "");
+      toggle.setAttribute("aria-expanded", "false");
+    }
   });
 })();
-
-
