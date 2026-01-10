@@ -132,19 +132,28 @@
 <!-- ================= END AD SANDBOX ================= -->
 
 <header class="nav" role="banner">
+<header class="nav" role="banner">
   <div class="container nav-inner">
+
     <div class="brand">
       <img src="logo.png" class="brand-logo" alt="CashTree Loot logo">
       <div class="brand-text">CashTree <span>Loot</span></div>
     </div>
 
-    <nav class="nav-links" id="navLinks" role="navigation" aria-label="Primary">
+    <!-- SINGLE NAV (ONLY ONE navLinks) -->
+    <nav class="nav-links" id="navLinks" role="navigation" aria-label="Primary" hidden>
       <a href="#offers">Offers</a>
       <a href="/shop.html">Shop</a>
       <a href="#how-it-works">How it works</a>
       <a href="#faq">FAQ</a>
+
+      <!-- Dashboard added here -->
+      <a href="/dashboard" id="menuDashboardLink" class="nav-link">
+        📊 Dashboard
+      </a>
     </nav>
 
+    <!-- Hamburger -->
     <button
       id="navToggle"
       class="nav-toggle"
@@ -154,12 +163,7 @@
     >
       ☰
     </button>
-    <nav id="navLinks" class="nav-links" hidden>
-  <a href="/dashboard" id="menuDashboardLink" class="nav-link">
-    📊 Dashboard
-  </a>
-    </nav>
-    
+
   </div>
 </header>
 
