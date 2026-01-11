@@ -851,6 +851,16 @@ body.dark{
   }
 }
 
+/* Highlight dashboard button on desktop */
+.nav-links a#menuDashboardLink{
+  background: linear-gradient(180deg,#22c55e,#16a34a);
+  color:#052e16;
+}
+
+.nav-links a#menuDashboardLink:hover{
+  background: linear-gradient(180deg,#2dd36f,#1db954);
+}
+
 
 
 
