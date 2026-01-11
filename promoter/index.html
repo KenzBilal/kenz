@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Promoter Signup – CashTree Partner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+
+  <div class="brand">
+    🌱 CashTree <span>Partner</span>
+  </div>
+
+  <h1>Join the Team</h1>
+  <div class="badge">Promoter Program</div>
+
+  <div class="info-box">
+    <strong>Benefits:</strong><br>
+    • Instant Promoter Code generation<br>
+    • Earn ₹30 per successful refer<br>
+    • Live Dashboard access<br>
+    • Daily Payouts via UPI
+  </div>
+
+  <div class="section">
+    <label>Full Name</label>
+    <input type="text" id="name" placeholder="Enter your name">
+  </div>
+
+  <div class="section">
+    <label>Phone Number (Your Login ID)</label>
+    <input type="tel" id="phone" placeholder="Ex: 9876543210">
+  </div>
+
+  <div class="section">
+    <label>UPI ID (For Payouts)</label>
+    <input type="text" id="upi" placeholder="Ex: name@upi">
+  </div>
+
+  <button class="submit-btn" id="signupBtn">
+    Sign Up as Promoter
+  </button>
+
+  <div class="submit-desc">
+    Already a partner? <a href="../dashboard/login.html" style="color:var(--green)">Login Here</a>
+  </div>
+
+</div>
+
+<div class="popup" id="successPopup">
+  <div class="popup-card">
+    <div style="font-size:40px; margin-bottom:10px;">🎉</div>
+    <h2>Registration Successful!</h2>
+    <p style="color:#aaa; font-size:14px;">Save these details to login.</p>
+
+    <div class="cred-box">
+      <div class="cred-row">
+        <span>Promoter Code:</span>
+        <strong id="newCode">...</strong>
+      </div>
+      <div class="cred-row">
+        <span>Password:</span>
+        <strong id="newPass">...</strong>
+      </div>
+    </div>
+
+    <button class="copy-btn" id="loginRedirectBtn">
+      Go to Dashboard Login →
+    </button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
