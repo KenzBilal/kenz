@@ -109,85 +109,21 @@
   });
 })();
 
-// ===============================
-// FEATURED SHOP PRODUCTS (DYNAMIC)
-// ===============================
-
-const featuredProducts = [
-  {
-    name: "Noise Smartwatch",
-    points: ["AMOLED Display", "7-day battery", "Top Seller"],
-    link: "#"
-  },
-  {
-    name: "Men’s Casual Sneakers",
-    points: ["Comfort wear", "Best for daily use", "High ratings"],
-    link: "#"
-  }
-];
-
-const container = document.getElementById("featuredProducts");
-
-if (container) {
-  featuredProducts.forEach(p => {
-    const card = document.createElement("article");
-    card.className = "offer-card";
-    card.innerHTML = `
-      <h3>${p.name}</h3>
-      <ul>
-        ${p.points.map(i => `<li>${i}</li>`).join("")}
-      </ul>
-      <a href="${p.link}" class="btn primary full-width">Check Price</a>
-    `;
-    container.appendChild(card);
-  });
-}
-
-<script>
+/* ================= OFFER EXPIRY CHECK ================= */
 (function(){
   const btn = document.getElementById("payBtn");
   if(!btn) return;
 
   // 🔴 Offer ends Jan 5 (local time)
   const offerEnd = new Date("2025-01-05T23:59:59");
-
   const now = new Date();
 
   if(now > offerEnd){
     btn.classList.add("no-offer");
   }
 })();
-</script>
-/* ===== NAV MENU + DASHBOARD LINK ===== */
 
-(function () {
-  const toggle = document.getElementById("navToggle");
-  const menu = document.getElementById("navLinks");
-  const dashLink = document.getElementById("menuDashboardLink");
-
-  if (!toggle || !menu) return;
-
-  // Toggle menu open/close
-  toggle.addEventListener("click", () => {
-    const isOpen = !menu.hasAttribute("hidden");
-    menu.toggleAttribute("hidden");
-    toggle.setAttribute("aria-expanded", String(!isOpen));
-  });
-
-  // Smart dashboard link
-  const code = localStorage.getItem("cashttree_referral");
-  if (code && dashLink) {
-    dashLink.href = "/dashboard/?code=" + code;
-  }
-
-  // Close menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      menu.setAttribute("hidden", "");
-      toggle.setAttribute("aria-expanded", "false");
-    }
-  });
-})();
+/* ================= NAV MENU + DASHBOARD (FINAL) ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("navToggle");
@@ -196,16 +132,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!toggle || !nav) return;
 
-  toggle.addEventListener("click", () => {
+  /* Toggle mobile menu */
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
     nav.classList.toggle("nav-open");
+
     toggle.setAttribute(
       "aria-expanded",
       nav.classList.contains("nav-open")
     );
   });
 
+  /* Smart dashboard link */
   const code = localStorage.getItem("cashttree_referral");
   if (code && dashLink) {
     dashLink.href = "/dashboard/?code=" + code;
   }
+
+  /* Close menu when clicking outside */
+  document.addEventListener("click", () => {
+    nav.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+  });
 });
+
