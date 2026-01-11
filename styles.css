@@ -851,15 +851,23 @@ body.dark{
   }
 }
 
-/* Highlight dashboard button on desktop */
-.nav-links a#menuDashboardLink{
-  background: linear-gradient(180deg,#22c55e,#16a34a);
-  color:#052e16;
+/* ===== DESKTOP NAV BUTTONS ===== */
+.nav-links a{
+  text-decoration: none;
+  color: #eaf2f8;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  position: relative;
 }
 
-.nav-links a#menuDashboardLink:hover{
-  background: linear-gradient(180deg,#2dd36f,#1db954);
+.nav-links a:hover{
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-1px);
 }
+
+
 
 
 
