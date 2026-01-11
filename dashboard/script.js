@@ -75,10 +75,10 @@ function initDashboard() {
         // Found them! Update UI
         updateUI(freshUser[0], freshUser[1], freshUser[6], freshUser[4]);
       } else {
-        // ⚠️ CRITICAL FIX: If user is not found, stop loading and warn them
+        // User not found in sheet (maybe deleted?)
         document.getElementById("loader").style.display = "none";
         alert("User not found in database. Please contact admin.");
-        logout(); // Kick them out so they can try logging in again
+        logout();
       }
     })
     .catch(err => {
@@ -107,7 +107,8 @@ function updateUI(name, code, wallet, earned) {
     btn.innerText = "Request Payout 💸";
     btn.disabled = false;
     btn.classList.add("active");
-    btn.onclick = () => window.open("https://wa.me/91YOUR_NUMBER?text=Request Payout Code: " + code, "_blank");
+    // ⚠️ UPDATE YOUR PHONE NUMBER BELOW
+    btn.onclick = () => window.open("https://wa.me/919876543210?text=Request Payout Code: " + code, "_blank");
   } else {
     btn.innerText = `Reach ₹${CONFIG.MIN_WITHDRAW} to Withdraw`;
     btn.disabled = true;
@@ -126,20 +127,23 @@ function renderOffers(code) {
       name: "Motwal App",
       pay: "₹30 / Refer",
       desc: "Instant payout on verification.",
-      // Points to your Motwal Page + User Code
       link: `../motwal/index.html?ref=${code}` 
-    }
-    // Add more offers here later (e.g., AngelOne)
+    }, // <--- ⚠️ THIS COMMA WAS MISSING!
     {
       id: "angelone",
       name: "Angel One",
       pay: "₹100 / Refer", 
-      desc: "Open Free Account Only. No Trade Required.", // ✅ Updated Text
+      desc: "Open Free Account Only. No Trade Required.", 
       link: `../angelone/index.html?ref=${code}`
     }
   ];
 
-  container.innerHTML = campaigns.map(offer => `
+  container.innerHTML = campaigns.map(offer => {
+    // Fix link generation for copy button
+    // Removes the ".." to make a clean shareable link
+    const cleanLink = window.location.origin + offer.link.replace("..", "");
+    
+    return `
     <div class="offer-card">
       <div class="offer-header">
         <div>
@@ -149,7 +153,7 @@ function renderOffers(code) {
       </div>
       <p>${offer.desc}</p>
       <div class="actions">
-        <button class="share-btn" onclick="copyLink('${window.location.origin}/${offer.link}')">
+        <button class="share-btn" onclick="copyLink('${cleanLink}')">
           Copy Link 🔗
         </button>
         <button class="view-btn" onclick="window.open('${offer.link}', '_blank')">
@@ -157,7 +161,7 @@ function renderOffers(code) {
         </button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 // Helpers
