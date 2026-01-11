@@ -844,6 +844,13 @@ body.dark{
   }
 }
 
+/* ===== FORCE MOBILE SINGLE COLUMN OFFER GRID ===== */
+@media (max-width: 980px){
+  .offer-grid{
+    grid-template-columns: 1fr !important;
+  }
+}
+
 
 
 
