@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 5. PREPARE DATA FOR GOOGLE SHEETS
     // Using the IDs we extracted earlier
-    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSf-k2OWSAaqYKqxUWVzueKzg60Gd-Px6xzPP0gWBEvFZNRIqw/formResponse";
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSf-k2OWSAaqYKqxUWVzueKzg60Gd-Px6xzPP0gWBEvFZNRIqw/viewform?usp=publish-editor";
     const formData = new FormData();
 
     formData.append("entry.1820803299", upi);        // UPI ID
