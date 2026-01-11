@@ -812,6 +812,38 @@ body.dark{
   }
 }
 
+/* ===== MOBILE SCALE NORMALIZER ===== */
+@media (max-width: 768px){
+
+  body{
+    font-size:14px;
+  }
+
+  .container{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .offer-card{
+    width:100%;
+    max-width:100%;
+  }
+
+  .offer-card h3{
+    font-size:15px;
+    line-height:1.35;
+  }
+
+  .offer-points li{
+    font-size:13px;
+  }
+
+  .offer-footer .btn{
+    font-size:14px;
+    padding:12px;
+  }
+}
+
 
 
 
