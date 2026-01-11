@@ -1,4 +1,6 @@
-/* ================= ROOT & RESET ================= */
+/* =========================================
+   1. VARIABLES & THEME
+   ========================================= */
 :root {
   --bg-1: #04060a;
   --bg-2: #07101a;
@@ -6,32 +8,61 @@
   --border: rgba(255, 255, 255, 0.08);
   --text: #eaf2f8;
   --muted: #90a0b0;
-  --accent: #25c55a;
-  --accent-2: #18a14a;
+  
+  /* Brand Colors */
+  --accent: #25c55a;       /* Green Primary */
+  --accent-2: #18a14a;     /* Green Dark */
+  --telegram: #2aabee;     /* Telegram Blue */
+  --telegram-2: #229ed9;
+  --gold: #ffd27d;         /* Premium Gold */
+  --gold-2: #e6a93f;
+  
+  /* Layout */
+  --radius: 16px;
+  --nav-height: 64px;
 }
 
+/* =========================================
+   2. RESET & BASE
+   ========================================= */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  scroll-behavior: smooth;
+}
 
 body {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.6;
   background: 
     radial-gradient(1200px 600px at 12% 12%, rgba(36, 54, 60, 0.12), transparent 60%),
     linear-gradient(180deg, var(--bg-1), var(--bg-2) 65%);
   -webkit-font-smoothing: antialiased;
 }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 28px 18px; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
 
-/* ================= HEADER & NAVIGATION ================= */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================
+   3. NAVIGATION
+   ========================================= */
 .nav {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(4, 6, 10, 0.88);
-  backdrop-filter: blur(14px);
+  background: rgba(4, 6, 10, 0.85);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
 
@@ -39,31 +70,32 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: var(--nav-height);
 }
 
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand-logo { width: 36px; height: auto; }
-.brand-text { font-size: 20px; font-weight: 800; }
+.brand-logo { width: 34px; height: auto; }
+.brand-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
 .brand-text span { color: var(--accent); }
 
-.nav-links { display: flex; gap: 16px; }
+.nav-links { display: flex; gap: 8px; }
 .nav-links a {
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 700;
-  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
   border-radius: 10px;
-  transition: all 0.2s ease;
+  transition: background 0.2s;
 }
+.nav-links a:hover { background: rgba(255,255,255,0.06); }
 
+/* Dashboard Highlight */
 #menuDashboardLink {
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   color: #052e16;
 }
 
 .nav-toggle {
-  display: none;
+  display: none; /* Hidden on desktop */
   background: none;
   border: none;
   color: #fff;
@@ -71,128 +103,322 @@ body {
   cursor: pointer;
 }
 
-/* ================= HERO SECTION ================= */
-.hero { padding: 72px 0 64px; }
-.hero h1 { font-size: clamp(2.1rem, 3vw, 2.6rem); line-height: 1.25; }
-.lead { color: var(--muted); max-width: 720px; }
+/* =========================================
+   4. HERO SECTION
+   ========================================= */
+.hero { padding: 80px 0 60px; }
+.hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1.2;
+  margin: 0 0 16px;
+  font-weight: 800;
+}
+.hero-highlight { color: #fff; }
 
+.lead {
+  color: var(--muted);
+  max-width: 680px;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+/* Hero Button Grid */
 .hero-actions-equal {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 24px;
+  grid-template-columns: repeat(3, minmax(140px, 1fr)); /* Clean equal width */
+  gap: 12px;
+  max-width: 600px;
 }
 
-.cta-center { display: flex; justify-content: center; margin-top: 26px; }
-
-/* ================= OFFERS GRID & CARDS ================= */
-.section { padding: 64px 0; }
-.offer-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 26px;
-  margin-top: 26px;
-}
-
-.offer-card {
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 28px;
+.cta-center {
+  margin-top: 40px;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-  transition: transform 0.25s ease;
+  justify-content: center;
 }
 
-.offer-card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(0,0,0,0.5); }
-
-/* Buttons */
+/* =========================================
+   5. BUTTON SYSTEM (Professional Scaling)
+   ========================================= */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 13px 18px;
-  border-radius: 14px;
+  padding: 12px 24px;
+  border-radius: 12px;
   font-weight: 700;
-  text-decoration: none;
+  font-size: 15px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
 
+.btn:hover { transform: translateY(-2px); }
+
+/* Primary Green */
 .btn.primary {
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   color: #052e16;
-  width: 100%;
+  box-shadow: 0 8px 20px rgba(37, 197, 90, 0.25);
 }
 
-/* ================= PREMIUM & SPECIAL OFFERS ================= */
+/* Secondary Ghost */
+.btn.secondary {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Cyan Create Link (Hero CTA) */
+.create-link-cta {
+  padding: 14px 30px;
+  border-radius: 100px;
+  color: #7fffd4;
+  background: rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+  font-weight: 700;
+}
+
+/* =========================================
+   6. OFFER CARDS & GRID
+   ========================================= */
+.section { padding: 60px 0; }
+.section-title { font-size: 1.8rem; margin: 0 0 10px; }
+.section-sub { color: var(--muted); margin-bottom: 30px; }
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 Columns Desktop */
+  gap: 24px;
+}
+
+.offer-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  transition: 0.3s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.offer-head h3 { margin: 0; font-size: 1.1rem; }
+.offer-points { padding-left: 20px; color: var(--muted); font-size: 0.95rem; margin: 0; }
+.offer-points li { margin-bottom: 6px; }
+
+.offer-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.earn { font-size: 1.1rem; color: var(--text); }
+.earn strong { color: var(--accent); font-size: 1.3rem; }
+
+/* Full width buttons inside cards */
+.full-width { width: 100%; text-align: center; }
+
+/* =========================================
+   7. SPECIAL OFFER STYLES
+   ========================================= */
+/* Premium / IndusInd (Gold) */
 .premium-offer {
   border: 1px solid rgba(255, 215, 128, 0.25);
-  background: linear-gradient(180deg, rgba(255,215,128,.1), rgba(4,6,10,1));
+  background: linear-gradient(180deg, rgba(255,215,128,0.08), rgba(4,6,10,0.5));
 }
 
 .premium-badge {
   position: absolute;
   top: 14px; right: 14px;
-  padding: 4px 12px;
-  font-size: 11px;
-  background: linear-gradient(180deg, #ffd27d, #e6a93f);
+  background: var(--gold-2);
   color: #3a2200;
-  border-radius: 99px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
 }
 
 .premium-btn {
-  background: linear-gradient(180deg, #ffd27d, #e6a93f) !important;
-  color: #3a2200 !important;
+  background: linear-gradient(180deg, var(--gold), var(--gold-2));
+  color: #3a2200;
+  box-shadow: 0 8px 20px rgba(255, 215, 128, 0.25);
 }
 
-/* PhonePe Custom Card */
-.offer-earn strong { font-size: 28px; color: var(--accent); }
+/* PhonePe Special Card */
 .offer-confirm-btn {
-  background: linear-gradient(180deg, #2563eb, #1e40af);
-  color: white;
-  padding: 14px;
-  border-radius: 16px;
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+  color: #fff;
   text-align: center;
-  text-decoration: none;
+  padding: 14px;
+  border-radius: 12px;
   font-weight: 800;
+  display: block;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 
-/* ================= PAYMENT & CHRISTMAS ================= */
-.pay-btn {
-  position: relative;
-  padding: 18px 32px;
-  background: linear-gradient(180deg, #22c55e, #16a34a);
-  color: #062e14;
-  border-radius: 18px;
-  font-weight: 800;
-  text-decoration: none;
-  display: inline-flex;
+/* =========================================
+   8. FAQ ACCORDION (Clean)
+   ========================================= */
+.faq-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  padding: 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-/* ================= MOBILE RESPONSIVENESS ================= */
+/* Arrow Icon */
+.faq-question::after {
+  content: '+';
+  font-size: 1.2rem;
+  color: var(--muted);
+  transition: transform 0.3s ease;
+}
+.faq-item.active .faq-question::after {
+  content: '−'; /* Minus sign */
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+.faq-item.active .faq-answer {
+  max-height: 500px; 
+  padding-bottom: 20px;
+}
+
+/* =========================================
+   9. PAYMENT & TELEGRAM (Scaled Down)
+   ========================================= */
+.center-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Payment Button (Fixed Size) */
+.pay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px; /* Balanced Padding */
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+  color: #062e14;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+  text-decoration: none;
+  min-width: 220px; /* Prevents looking too small */
+}
+
+.price-old {
+  text-decoration: line-through;
+  opacity: 0.6;
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+
+/* Telegram Button (Official Blue) */
+.telegram-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  background: linear-gradient(180deg, var(--telegram), var(--telegram-2));
+  color: #fff;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(42, 171, 238, 0.3);
+  min-width: 220px;
+}
+
+/* =========================================
+   10. FOOTER
+   ========================================= */
+.footer {
+  margin-top: 80px;
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  background: rgba(4, 6, 10, 0.5);
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.footer-links a { margin-left: 20px; color: var(--muted); }
+.footer-links a:hover { color: var(--text); }
+
+/* =========================================
+   11. MOBILE RESPONSIVENESS (Final Fix)
+   ========================================= */
 @media (max-width: 768px) {
-  .nav-toggle { display: block; }
   
+  /* Mobile Nav */
+  .nav-toggle { display: block; }
   .nav-links {
     display: none;
     position: absolute;
-    top: 64px; right: 18px;
+    top: var(--nav-height);
+    right: 18px;
     flex-direction: column;
     background: #0b121a;
-    width: 200px;
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 10px;
+    width: 200px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  }
+  .nav-links.nav-open { display: flex; }
+
+  /* Mobile Grid Reset */
+  .offer-grid, 
+  .hero-actions-equal { 
+    grid-template-columns: 1fr; /* Stack vertically */
   }
 
-  .nav-links.nav-open { display: flex; }
-  .offer-grid { grid-template-columns: 1fr; }
-  .hero-actions-equal { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 26px; }
+  /* Typography Scaling */
+  .hero h1 { font-size: 2rem; }
+  .section-title { font-size: 1.5rem; }
+  
+  /* Footer Stack */
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .footer-links a { margin: 0 10px; }
 }
