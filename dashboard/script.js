@@ -68,12 +68,23 @@ function initDashboard() {
     .then(res => res.text())
     .then(csv => {
       const rows = parseCSV(csv);
-      const freshUser = rows.find(r => r[1] === user.code);
+      // Search for the code in Column B (Index 1)
+      const freshUser = rows.find(r => r[1] && r[1].trim() === user.code);
       
       if(freshUser) {
-        // Update the UI with fresh data
+        // Found them! Update UI
         updateUI(freshUser[0], freshUser[1], freshUser[6], freshUser[4]);
+      } else {
+        // ⚠️ CRITICAL FIX: If user is not found, stop loading and warn them
+        document.getElementById("loader").style.display = "none";
+        alert("User not found in database. Please contact admin.");
+        logout(); // Kick them out so they can try logging in again
       }
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("loader").style.display = "none";
+      alert("Failed to connect to spreadsheet. Check internet.");
     });
 
   renderOffers(user.code);
