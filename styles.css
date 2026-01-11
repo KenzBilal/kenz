@@ -10,15 +10,11 @@
   --muted: #90a0b0;
   
   /* Brand Colors */
-  --accent: #25c55a;       /* Green Primary */
-  --accent-2: #18a14a;     /* Green Dark */
-  --telegram: #2aabee;     /* Telegram Blue */
-  --telegram-2: #229ed9;
-  --gold: #ffd27d;         /* Premium Gold */
-  --gold-2: #e6a93f;
+  --accent: #22c55e;       /* Vibrant Green */
+  --accent-dark: #15803d;
+  --cyan: #22d3ee;         /* Cyan for CTA */
+  --gold: #f59e0b;         /* Premium Gold */
   
-  /* Layout */
-  --radius: 16px;
   --nav-height: 64px;
 }
 
@@ -90,12 +86,12 @@ button { font-family: inherit; }
 
 /* Dashboard Highlight */
 #menuDashboardLink {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  color: #052e16;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #022c22;
 }
 
 .nav-toggle {
-  display: none; /* Hidden on desktop */
+  display: none;
   background: none;
   border: none;
   color: #fff;
@@ -104,12 +100,12 @@ button { font-family: inherit; }
 }
 
 /* =========================================
-   4. HERO SECTION
+   4. HERO SECTION (RESTORED TO ORIGINAL STYLE)
    ========================================= */
-.hero { padding: 80px 0 60px; }
+.hero { padding: 60px 0 60px; }
 .hero h1 {
   font-size: clamp(2.2rem, 4vw, 3rem);
-  line-height: 1.2;
+  line-height: 1.15;
   margin: 0 0 16px;
   font-weight: 800;
 }
@@ -119,77 +115,91 @@ button { font-family: inherit; }
   color: var(--muted);
   max-width: 680px;
   font-size: 1.1rem;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
-/* Hero Button Grid */
+/* THE "CHUNKY" BUTTON GRID */
 .hero-actions-equal {
   display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr)); /* Clean equal width */
-  gap: 12px;
-  max-width: 600px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 100%; /* Allow full width matching your image */
 }
 
+/* THE "FAT" GREEN HERO BUTTONS */
+.hero-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+  color: #022c22; /* Dark Green Text */
+  padding: 24px 16px; /* Tall padding */
+  border-radius: 20px; /* Big rounded corners */
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.5); /* The Green Glow */
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.hero-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px -10px rgba(34, 197, 94, 0.7);
+}
+
+/* THE "CREATE LINK" ROCKET BUTTON */
 .cta-center {
-  margin-top: 40px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
 }
 
-/* =========================================
-   5. BUTTON SYSTEM (Professional Scaling)
-   ========================================= */
-.btn {
+.create-link-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
-  border-radius: 12px;
+  gap: 10px;
+  width: 100%;
+  max-width: 450px; /* Limits width so it doesn't stretch too far */
+  padding: 18px 30px;
+  border-radius: 24px;
+  background: rgba(6, 40, 40, 0.6);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #67e8f9; /* Cyan text */
   font-weight: 700;
-  font-size: 15px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  font-size: 1.1rem;
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); /* Cyan glow */
+  transition: 0.2s;
 }
 
-.btn:hover { transform: translateY(-2px); }
-
-/* Primary Green */
-.btn.primary {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  color: #052e16;
-  box-shadow: 0 8px 20px rgba(37, 197, 90, 0.25);
+.create-link-cta:hover {
+  background: rgba(6, 40, 40, 0.9);
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.25);
+  transform: translateY(-2px);
 }
 
-/* Secondary Ghost */
-.btn.secondary {
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Cyan Create Link (Hero CTA) */
-.create-link-cta {
-  padding: 14px 30px;
-  border-radius: 100px;
-  color: #7fffd4;
-  background: rgba(0, 255, 255, 0.08);
-  border: 1px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
-  font-weight: 700;
+.hero-trust {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  opacity: 0.8;
 }
 
 /* =========================================
-   6. OFFER CARDS & GRID
+   5. OFFER CARDS
    ========================================= */
 .section { padding: 60px 0; }
 .section-title { font-size: 1.8rem; margin: 0 0 10px; }
-.section-sub { color: var(--muted); margin-bottom: 30px; }
 
 .offer-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 Columns Desktop */
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
+  margin-top: 30px;
 }
 
 .offer-card {
@@ -207,7 +217,6 @@ button { font-family: inherit; }
 .offer-card:hover {
   transform: translateY(-5px);
   border-color: rgba(255,255,255,0.15);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
 .offer-head h3 { margin: 0; font-size: 1.1rem; }
@@ -220,40 +229,43 @@ button { font-family: inherit; }
   flex-direction: column;
   gap: 12px;
 }
-.earn { font-size: 1.1rem; color: var(--text); }
+.earn { font-size: 1.1rem; }
 .earn strong { color: var(--accent); font-size: 1.3rem; }
 
-/* Full width buttons inside cards */
-.full-width { width: 100%; text-align: center; }
-
-/* =========================================
-   7. SPECIAL OFFER STYLES
-   ========================================= */
-/* Premium / IndusInd (Gold) */
-.premium-offer {
-  border: 1px solid rgba(255, 215, 128, 0.25);
-  background: linear-gradient(180deg, rgba(255,215,128,0.08), rgba(4,6,10,0.5));
+/* Buttons inside cards */
+.btn.primary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #022c22;
+  font-weight: 700;
+  width: 100%; /* Fill card width */
+  text-decoration: none;
+  border: none;
 }
 
+/* =========================================
+   6. PREMIUM & SPECIAL OFFERS
+   ========================================= */
+.premium-offer {
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(4,6,10,0.5));
+}
 .premium-badge {
   position: absolute;
   top: 14px; right: 14px;
-  background: var(--gold-2);
+  background: var(--gold);
   color: #3a2200;
   font-size: 10px;
   font-weight: 800;
   padding: 4px 10px;
   border-radius: 20px;
-  letter-spacing: 0.5px;
 }
 
-.premium-btn {
-  background: linear-gradient(180deg, var(--gold), var(--gold-2));
-  color: #3a2200;
-  box-shadow: 0 8px 20px rgba(255, 215, 128, 0.25);
-}
-
-/* PhonePe Special Card */
+/* PhonePe Blue Button */
 .offer-confirm-btn {
   background: linear-gradient(180deg, #3b82f6, #1d4ed8);
   color: #fff;
@@ -262,11 +274,11 @@ button { font-family: inherit; }
   border-radius: 12px;
   font-weight: 800;
   display: block;
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  text-decoration: none;
 }
 
 /* =========================================
-   8. FAQ ACCORDION (Clean)
+   7. FAQ ACCORDION (Clean Dropdown)
    ========================================= */
 .faq-item {
   background: var(--card);
@@ -291,7 +303,7 @@ button { font-family: inherit; }
   align-items: center;
 }
 
-/* Arrow Icon */
+/* Arrow */
 .faq-question::after {
   content: '+';
   font-size: 1.2rem;
@@ -299,7 +311,7 @@ button { font-family: inherit; }
   transition: transform 0.3s ease;
 }
 .faq-item.active .faq-question::after {
-  content: '−'; /* Minus sign */
+  content: '−';
   transform: rotate(180deg);
   color: var(--text);
 }
@@ -309,17 +321,17 @@ button { font-family: inherit; }
   overflow: hidden;
   padding: 0 20px;
   color: var(--muted);
-  line-height: 1.6;
   font-size: 0.95rem;
+  line-height: 1.6;
   transition: max-height 0.3s ease, padding 0.3s ease;
 }
 .faq-item.active .faq-answer {
-  max-height: 500px; 
+  max-height: 500px;
   padding-bottom: 20px;
 }
 
 /* =========================================
-   9. PAYMENT & TELEGRAM (Scaled Down)
+   8. FOOTER BUTTONS (Scaled Correctly)
    ========================================= */
 .center-stack {
   display: flex;
@@ -329,21 +341,24 @@ button { font-family: inherit; }
   margin-top: 20px;
 }
 
-/* Payment Button (Fixed Size) */
+/* Payment Button - NOT GIGANTIC */
 .pay-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px; /* Balanced Padding */
-  background: linear-gradient(180deg, #22c55e, #16a34a);
-  color: #062e14;
+  padding: 14px 32px;
+  min-width: 240px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #022c22;
   border-radius: 14px;
   font-weight: 800;
   font-size: 16px;
   box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
   text-decoration: none;
-  min-width: 220px; /* Prevents looking too small */
+  transition: 0.2s;
 }
+
+.pay-btn:hover { transform: translateY(-2px); }
 
 .price-old {
   text-decoration: line-through;
@@ -352,24 +367,24 @@ button { font-family: inherit; }
   font-size: 0.9em;
 }
 
-/* Telegram Button (Official Blue) */
+/* Telegram Blue Button */
 .telegram-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 14px 32px;
-  background: linear-gradient(180deg, var(--telegram), var(--telegram-2));
+  min-width: 240px;
+  background: linear-gradient(180deg, #38bdf8, #0284c7);
   color: #fff;
   border-radius: 14px;
   font-weight: 700;
   font-size: 16px;
   text-decoration: none;
-  box-shadow: 0 10px 25px rgba(42, 171, 238, 0.3);
-  min-width: 220px;
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
 }
 
 /* =========================================
-   10. FOOTER
+   9. FOOTER
    ========================================= */
 .footer {
   margin-top: 80px;
@@ -384,14 +399,12 @@ button { font-family: inherit; }
   color: var(--muted);
 }
 .footer-links a { margin-left: 20px; color: var(--muted); }
-.footer-links a:hover { color: var(--text); }
 
 /* =========================================
-   11. MOBILE RESPONSIVENESS (Final Fix)
+   10. MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
   
-  /* Mobile Nav */
   .nav-toggle { display: block; }
   .nav-links {
     display: none;
@@ -408,17 +421,15 @@ button { font-family: inherit; }
   }
   .nav-links.nav-open { display: flex; }
 
-  /* Mobile Grid Reset */
-  .offer-grid, 
-  .hero-actions-equal { 
-    grid-template-columns: 1fr; /* Stack vertically */
-  }
-
-  /* Typography Scaling */
-  .hero h1 { font-size: 2rem; }
-  .section-title { font-size: 1.5rem; }
+  /* Stack Grid on Mobile */
+  .offer-grid { grid-template-columns: 1fr; }
   
-  /* Footer Stack */
+  /* Make Hero Buttons 1 column on very small screens, or keep 3 if small enough */
+  .hero-actions-equal { 
+    grid-template-columns: 1fr; /* Stack vertically on mobile like typical apps */
+  }
+  
+  .hero-btn { width: 100%; } /* Full width buttons */
+
   .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
-  .footer-links a { margin: 0 10px; }
 }
