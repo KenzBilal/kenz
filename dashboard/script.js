@@ -119,6 +119,13 @@ function renderOffers(code) {
       link: `../motwal/index.html?ref=${code}` 
     }
     // Add more offers here later (e.g., AngelOne)
+    {
+      id: "angelone",
+      name: "Angel One",
+      pay: "₹100 / Refer", 
+      desc: "Open Free Account Only. No Trade Required.", // ✅ Updated Text
+      link: `../angelone/index.html?ref=${code}`
+    }
   ];
 
   container.innerHTML = campaigns.map(offer => `
