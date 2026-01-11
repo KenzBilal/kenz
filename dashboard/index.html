@@ -2,47 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Promoter Dashboard – CashTree Loot</title>
+  <title>Dashboard – CashTree Partner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="dashboard">
+  <div id="loader" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Syncing with Server...</p>
+  </div>
 
-  <!-- HEADER -->
-  <header class="top">
-    <div class="brand">🌱 CashTree <span>Loot</span></div>
-    <div class="role">Promoter Dashboard</div>
-  </header>
+  <div class="dashboard" style="display:none;" id="mainContent">
 
-  <!-- REFERRAL SUMMARY -->
-  <section class="card">
-    <h2>Your Referral Code</h2>
-    <div class="ref-code-main" id="refCode">—</div>
-  </section>
+    <header class="top">
+      <div class="brand">🌱 CashTree <span>Loot</span></div>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </header>
 
-  <!-- OFFERS LIST -->
-  <section class="offers">
-    <h2>Available Offers</h2>
+    <section class="card welcome-card">
+      <div>
+        <h2 id="userName">Welcome Back</h2>
+        <div class="code-badge">Code: <span id="userCode">...</span></div>
+      </div>
+    </section>
 
-    <div class="offer-card" id="offersContainer">
-      <!-- Offers injected by JS -->
-    </div>
-  </section>
+    <section class="stats-grid">
+      <div class="stat-box">
+        <p>Wallet Balance</p>
+        <h1 id="walletBal">₹0</h1>
+        
+        <button id="payoutBtn" class="payout-btn" disabled>
+          Min Withdraw: ₹100
+        </button>
+      </div>
 
-  <!-- INFO -->
-  <section class="card info">
-    <p>
-      Share offer links to earn commissions.
-      Earnings are calculated after successful verification.
-      This dashboard will auto-update once backend is enabled.
-    </p>
-  </section>
+      <div class="stat-box secondary">
+        <p>Total Earnings</p>
+        <h2 id="totalEarned">₹0</h2>
+      </div>
+    </section>
 
-</div>
+    <section class="offers">
+      <h3 class="section-title">Active Campaigns</h3>
+      <div class="offer-list" id="offersContainer">
+        </div>
+    </section>
 
-<script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Initialize Dashboard logic on load
+    document.addEventListener("DOMContentLoaded", initDashboard);
+  </script>
 </body>
 </html>
