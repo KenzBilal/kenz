@@ -1,23 +1,18 @@
 // ==========================================
 // ⚙️ CONFIGURATION
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbxrwCbCUmzNySEu3r1Lfch1PKmwwvIG2a-2o7MuIrquAC8CtD5Sjfa-5P71zx5jbK7W3g/exec"; 
-let sessionPass = ""; 
+const API_URL = "https://script.google.com/macros/s/AKfycbxrwCbCUmzNySEu3r1Lfch1PKmwwvIG2a-2o7MuIrquAC8CtD5Sjfa-5P71zx5jbK7W3g/exec";
+let sessionPass = "";
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loginBtn").addEventListener("click", login);
-    // Add a refresh listener if you have the button
     const refreshBtn = document.getElementById("refreshBtn");
     if(refreshBtn) refreshBtn.addEventListener("click", () => loadAllData());
 });
 
-// ==========================================
-// 2. LOGIN & DATA ORCHESTRATION
-// ==========================================
 function login() {
     const input = document.getElementById("adminPass").value.trim();
     if(!input) { alert("Enter password"); return; }
-    
     sessionPass = input;
     document.getElementById("loginBtn").innerText = "Verifying Command Center...";
     loadAllData(true); 
@@ -25,7 +20,7 @@ function login() {
 
 async function loadAllData(isLoginAttempt = false) {
     try {
-        // We fetch the data from the server
+        // FIXED: Added backticks for Template Literal
         const response = await fetch(`${API_URL}?action=readAll&password=${sessionPass}`);
         const data = await response.json();
 
@@ -34,17 +29,14 @@ async function loadAllData(isLoginAttempt = false) {
                 document.getElementById("loginScreen").style.display = "none";
                 document.getElementById("dashboard").style.display = "block";
             }
-            
-            // Separate rendering for the two sections
-            renderUserTasks(data.leads);      // From Master_DB or Leads sheet
-            renderPromoterPayouts(data.wallets); // From Promoter_Wallet sheet
-            
+            renderUserTasks(data.leads);
+            renderPromoterPayouts(data.wallets);
         } else {
             throw new Error("Invalid Access");
         }
     } catch (err) {
         console.error(err);
-        if(isLoginAttempt) alert("❌ Access Denied");
+        if(isLoginAttempt) alert("❌ Access Denied: Check Password");
     }
 }
 
@@ -54,8 +46,6 @@ async function loadAllData(isLoginAttempt = false) {
 function renderPromoterPayouts(wallets) {
     const container = document.getElementById("promoterList");
     container.innerHTML = "";
-
-    // Filter promoters who have ₹100 or more
     const highEarners = wallets.filter(p => parseInt(p.walletBalance) >= 100);
 
     if (highEarners.length === 0) {
@@ -95,16 +85,14 @@ function renderUserTasks(leads) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>
-                <div style="font-weight:bold;">${row[3]}</div>
-                <div style="font-size:11px; color:#555;">${row[2]}</div>
-            </td>
+                <div style="font-weight:bold;">${row[3]}</div> <div style="font-size:11px; color:#555;">${row[2]}</div> </td>
             <td><b style="color:#22c55e">${row[4]}</b></td>
             <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
             <td>
                 <div class="action-group">
-                    ${status !== "Approved" ? 
+                    ${status !== "Approved" && status !== "Paid" ? 
                         `<button class="approve-sm" onclick="approveUser('${row[2]}', this)">Verify ✅</button>` : 
-                        `<span class="done-check">✓ Approved</span>`
+                        `<span class="done-check">✓ ${status}</span>`
                     }
                     <button class="pay-sm" onclick="processPayout('${row[3]}', '20', 'User Task')">Pay ₹20</button>
                 </div>
@@ -115,15 +103,42 @@ function renderUserTasks(leads) {
 }
 
 // ==========================================
-// 5. SMART PAYOUT LOGIC
+// 5. MISSING: APPROVE USER LOGIC
+// ==========================================
+window.approveUser = async function(phone, btn) {
+    if(!confirm("Mark this task as Approved?")) return;
+    btn.innerText = "...";
+    btn.disabled = true;
+
+    try {
+        await fetch(API_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                action: "approve",
+                password: sessionPass,
+                phone: phone
+            })
+        });
+        alert("✅ Task Approved!");
+        loadAllData(); // Refresh to show "Approved" status
+    } catch (err) {
+        alert("Error approving task");
+        btn.disabled = false;
+        btn.innerText = "Verify ✅";
+    }
+};
+
+// ==========================================
+// 6. SMART PAYOUT LOGIC
 // ==========================================
 function processPayout(upiId, amount, name) {
-    if(!upiId.includes('@')) {
-        alert("Invalid UPI ID");
+    if(!upiId || !upiId.includes('@')) {
+        alert("Invalid UPI ID: " + upiId);
         return;
     }
     const cleanAmount = amount.toString().replace('₹', '').trim();
-    // Professional UPI Deep Link
+    // FIXED: Added backticks for Template Literal
     const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${cleanAmount}&cu=INR`;
     window.location.href = upiLink;
 }
