@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CashTree | Admin Command Center</title>
+    <title>CashTree | Ultimate Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 30px; }
-        .admin-box { max-width: 800px; margin: auto; }
-        .card { background: #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h1 { color: #00ff88; text-align: center; }
-        .btn-approve { background: #00c853; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: bold; }
-        .btn-reject { background: #ff3d00; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; margin-left: 10px; }
-        #authLayer { text-align: center; margin-top: 100px; }
-        input { padding: 12px; border-radius: 6px; border: 1px solid #444; background: #222; color: white; margin-bottom: 10px; }
+        :root { --primary: #00ff88; --bg: #0a0a0a; --card: #161616; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 20px; }
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab { padding: 10px 20px; background: #222; cursor: pointer; border-radius: 8px; }
+        .tab.active { background: var(--primary); color: black; font-weight: bold; }
+        .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-pay { background: var(--primary); color: black; }
+        .btn-reject { background: #ff4444; color: white; }
+        .upi-box { background: #000; padding: 5px 10px; border-radius: 4px; color: var(--primary); font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <div id="authLayer">
-        <h1>🔐 Admin Access</h1>
-        <input type="password" id="adminPass" placeholder="Enter Master Key">
-        <br>
-        <button class="btn-approve" onclick="checkAccess()">Unlock Panel</button>
+    <div id="authLayer" style="text-align: center; margin-top: 100px;">
+        <h1>🔐 Master Access</h1>
+        <input type="password" id="adminPass" style="padding:10px; border-radius:5px; border:none;">
+        <button class="btn btn-pay" onclick="checkAccess()">Unlock</button>
     </div>
 
-    <div id="adminPanel" class="admin-box" style="display: none;">
-        <h1>Lead Approval Panel</h1>
-        <div id="leadsList">Searching for pending leads...</div>
+    <div id="adminPanel" style="display: none; max-width: 900px; margin: auto;">
+        <div class="tab-container">
+            <div id="tabLeads" class="tab active" onclick="switchTab('leads')">Pending Leads</div>
+            <div id="tabPayouts" class="tab" onclick="switchTab('payouts')">Withdrawal Requests</div>
+        </div>
+
+        <div id="leadsSection">
+            <h2>New Submissions</h2>
+            <div id="leadsList">Loading...</div>
+        </div>
+
+        <div id="payoutsSection" style="display: none;">
+            <h2>Promoters to be Paid</h2>
+            <div id="payoutsList">Loading...</div>
+        </div>
     </div>
 
     <script>
@@ -33,69 +45,69 @@
         const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // SET YOUR PASSWORD HERE
-        const MASTER_KEY = "znek7906"; 
-
         function checkAccess() {
-            const pass = document.getElementById("adminPass").value;
-            if (pass === MASTER_KEY) {
+            if(document.getElementById("adminPass").value === "BOSS777") {
                 document.getElementById("authLayer").style.display = "none";
                 document.getElementById("adminPanel").style.display = "block";
-                fetchLeads();
-            } else {
-                alert("Access Denied!");
+                loadData();
             }
         }
 
-        async function fetchLeads() {
-            const { data, error } = await supabase
-                .from('leads')
-                .select(`
-                    id, lead_phone, status,
-                    promoters ( id, full_name, username ),
-                    campaigns ( app_name, promoter_payout )
-                `)
-                .eq('status', 'pending');
+        function switchTab(type) {
+            document.getElementById("leadsSection").style.display = type === 'leads' ? 'block' : 'none';
+            document.getElementById("payoutsSection").style.display = type === 'payouts' ? 'block' : 'none';
+            document.getElementById("tabLeads").className = type === 'leads' ? 'tab active' : 'tab';
+            document.getElementById("tabPayouts").className = type === 'payouts' ? 'tab active' : 'tab';
+        }
 
-            const container = document.getElementById("leadsList");
-            if (!data || data.length === 0) { 
-                container.innerHTML = "<p style='text-align:center'>No pending leads. Refreshing in 10s...</p>"; 
-                setTimeout(fetchLeads, 10000);
-                return; 
-            }
-
-            container.innerHTML = data.map(lead => `
+        async function loadData() {
+            // LOAD LEADS
+            const { data: leads } = await supabase.from('leads').select('*, promoters(full_name, username), campaigns(app_name, promoter_payout)').eq('status', 'pending');
+            document.getElementById("leadsList").innerHTML = leads.map(l => `
                 <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <h3 style="margin:0">${lead.campaigns.app_name}</h3>
-                            <p style="color:#aaa; margin:5px 0;">Promoter: ${lead.promoters.full_name} (${lead.promoters.username})</p>
-                            <p><strong>User: ${lead.lead_phone}</strong></p>
-                        </div>
-                        <div>
-                            <button class="btn-approve" onclick="approveLead('${lead.id}', '${lead.promoters.id}', ${lead.campaigns.promoter_payout})">Approve (₹${lead.campaigns.promoter_payout})</button>
-                            <button class="btn-reject" onclick="rejectLead('${lead.id}')">Reject</button>
-                        </div>
+                    <div>
+                        <strong>${l.campaigns.app_name}</strong> by ${l.promoters.full_name}<br>
+                        <small>Phone: ${l.lead_phone}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-pay" onclick="approveLead('${l.id}','${l.promoter_id}',${l.campaigns.promoter_payout})">Approve ✅</button>
+                        <button class="btn btn-reject" onclick="updateStatus('${l.id}','rejected')">Reject</button>
                     </div>
                 </div>
-            `).join('');
+            `).join('') || "No pending leads.";
+
+            // LOAD PAYOUTS (Promoters with balance > 100)
+            const { data: promoters } = await supabase.from('promoters').select('*').gt('wallet_balance', 99);
+            document.getElementById("payoutsList").innerHTML = promoters.map(p => `
+                <div class="card">
+                    <div>
+                        <strong>${p.full_name}</strong><br>
+                        <span class="upi-box">${p.upi_id}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="margin:0; color:var(--primary)">₹${p.wallet_balance}</h3>
+                        <button class="btn btn-pay" onclick="confirmPayment('${p.id}')">MARK AS PAID 💸</button>
+                    </div>
+                </div>
+            `).join('') || "No pending payouts.";
         }
 
-        async function approveLead(leadId, promoterId, amount) {
-            const { error: err1 } = await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
-            const { error: err2 } = await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
-            
-            if(!err1 && !err2) {
-                alert("Payment Added to Wallet!");
-                fetchLeads();
-            } else {
-                alert("Error updating wallet. Check SQL function.");
+        async function approveLead(id, p_id, amt) {
+            await supabase.from('leads').update({status:'approved'}).eq('id', id);
+            await supabase.rpc('increment_wallet', {row_id: p_id, amount: amt});
+            loadData();
+        }
+
+        async function updateStatus(id, stat) {
+            await supabase.from('leads').update({status:stat}).eq('id', id);
+            loadData();
+        }
+
+        async function confirmPayment(p_id) {
+            if(confirm("Did you send the UPI payment? This will reset their balance to 0.")) {
+                await supabase.rpc('process_payout', {p_id: p_id});
+                loadData();
             }
-        }
-
-        async function rejectLead(leadId) {
-            await supabase.from('leads').update({ status: 'rejected' }).eq('id', leadId);
-            fetchLeads();
         }
     </script>
 </body>
