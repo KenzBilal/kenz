@@ -59,22 +59,77 @@
             document.getElementById("tabLeads").className = type === 'leads' ? 'tab active' : 'tab';
             document.getElementById("tabPayouts").className = type === 'payouts' ? 'tab active' : 'tab';
         }
-
         async function loadData() {
-            // LOAD LEADS
-            const { data: leads } = await supabase.from('leads').select('*, promoters(full_name, username), campaigns(app_name, promoter_payout)').eq('status', 'pending');
-            document.getElementById("leadsList").innerHTML = leads.map(l => `
-                <div class="card">
-                    <div>
-                        <strong>${l.campaigns.app_name}</strong> by ${l.promoters.full_name}<br>
-                        <small>Phone: ${l.lead_phone}</small>
-                    </div>
-                    <div>
-                        <button class="btn btn-pay" onclick="approveLead('${l.id}','${l.promoter_id}',${l.campaigns.promoter_payout})">Approve ✅</button>
-                        <button class="btn btn-reject" onclick="updateStatus('${l.id}','rejected')">Reject</button>
+    // We fetch everything: Lead info, Promoter info, and Campaign (App) info
+    const { data: leads, error } = await supabase
+        .from('leads')
+        .select(`
+            id, 
+            lead_phone, 
+            lead_upi, 
+            promoter_id,
+            promoters ( full_name, upi_id ),
+            campaigns ( app_name, promoter_payout, user_payout )
+        `)
+        .eq('status', 'pending');
+
+    if (error) { console.error(error); return; }
+
+    const container = document.getElementById("leadsList");
+    
+    container.innerHTML = leads.map(l => {
+        // 10/10 LOGIC: Determine who gets paid and how much
+        const isPromoterLead = l.promoter_id !== null;
+        
+        // If promoter brought them, use promoter_payout. If random, use user_payout.
+        const amountToPay = isPromoterLead ? l.campaigns.promoter_payout : l.campaigns.user_payout;
+        
+        // If promoter, use their saved UPI. If random, use the UPI they typed in the folder.
+        const targetUPI = isPromoterLead ? l.promoters.upi_id : l.lead_upi;
+        
+        const sourceLabel = isPromoterLead 
+            ? `<span style="color:#00dbff">PROMOTER: ${l.promoters.full_name}</span>` 
+            : `<span style="color:#ffcc00">DIRECT USER</span>`;
+
+        return `
+            <div class="card">
+                <div>
+                    <strong style="font-size:1.2em">${l.campaigns.app_name}</strong><br>
+                    ${sourceLabel}<br>
+                    <small>User Phone: ${l.lead_phone}</small><br>
+                    <div style="margin-top:10px;">
+                        <span style="color:#00ff88; font-weight:bold; font-size:1.1em">PAY: ₹${amountToPay}</span><br>
+                        <code class="upi-box" style="display:inline-block; margin-top:5px; padding:5px; background:#000; border:1px solid #333;">${targetUPI || 'No UPI Provided'}</code>
                     </div>
                 </div>
-            `).join('') || "No pending leads.";
+                <div style="text-align:right">
+                    <button class="btn btn-pay" onclick="handlePayout('${l.id}', '${l.promoter_id}', ${amountToPay})">
+                        PAID & APPROVE ✅
+                    </button>
+                    <button class="btn btn-reject" onclick="updateStatus('${l.id}','rejected')">REJECT</button>
+                </div>
+            </div>
+        `;
+    }).join('') || "No pending leads.";
+}
+
+async function handlePayout(leadId, promoterId, amount) {
+    if(!confirm("Have you sent the UPI payment? Clicking OK will approve the lead.")) return;
+
+    // 1. Update Lead Status to 'approved'
+    const { error: err1 } = await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
+
+    // 2. If it was a promoter, we ALSO update their history/wallet
+    if (promoterId && promoterId !== "null") {
+        await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
+    }
+
+    if(!err1) {
+        alert("Lead Approved!");
+        loadData(); // Refresh the list
+    }
+}
+       
 
             // LOAD PAYOUTS (Promoters with balance > 100)
             const { data: promoters } = await supabase.from('promoters').select('*').gt('wallet_balance', 99);
