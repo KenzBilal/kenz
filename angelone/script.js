@@ -66,12 +66,12 @@ document.getElementById("submitBtn").addEventListener("click", async function() 
         btn.style.display = "none";
         
         setTimeout(() => {
-            window.location.href = OFFER_LINK;
+            window.location.href ="https://trkkcoin.com/ITC65034934/JAM0MN?ln=English";
         }, 1500);
 
     } catch (err) {
         console.error("Submission Error:", err);
         // Fail-safe: Always redirect so you don't lose the user
-        window.location.href = OFFER_LINK;
+        window.location.href ="https://trkkcoin.com/ITC65034934/JAM0MN?ln=English";
     }
 });
