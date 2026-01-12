@@ -3,39 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CashTree | Command Center</title>
+    <title>CashTree Admin | Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="admin-body">
+<body class="admin-theme">
+    <div id="loginScreen">
+        <div class="login-box">
+            <h2>Command Center</h2>
+            <input type="password" id="adminPass" placeholder="Enter Admin Secret">
+            <button id="loginBtn">Access Dashboard</button>
+        </div>
+    </div>
 
-    <header class="admin-header">
-        <div class="brand">🌱 CashTree <span>Admin</span></div>
-        <div id="statusIndicator" class="status-pill">System Online</div>
-    </header>
+    <div id="dashboard" style="display:none;">
+        <header>
+            <h1>🌱 CashTree <span>Admin</span></h1>
+            <button id="refreshBtn">Sync Data 🔄</button>
+        </header>
 
-    <main class="admin-container">
-        
-        <section class="admin-section">
-            <div class="section-header">
-                <h3>🏆 Promoter Payouts <span class="badge">Balance ≥ ₹100</span></h3>
-            </div>
-            <div id="promoterList" class="grid-container">
-                <p class="loading">Fetching high-earners...</p>
-            </div>
+        <section class="payout-section">
+            <h3>🏆 Promoter Payouts (Balance ≥ ₹100)</h3>
+            <div id="promoterList" class="payout-grid">
+                </div>
         </section>
 
-        <section class="admin-section">
-            <div class="section-header">
-                <h3>👥 Recent User Tasks <span class="badge">Pending Approval</span></h3>
-            </div>
-            <div class="table-wrapper">
-                <table id="userTaskTable">
+        <section class="task-section">
+            <h3>👥 User Task Verifications</h3>
+            <div class="table-scroll">
+                <table>
                     <thead>
                         <tr>
-                            <th>User UPI</th>
-                            <th>App Name</th>
+                            <th>User Info</th>
+                            <th>App</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="userTaskBody">
@@ -43,9 +44,7 @@
                 </table>
             </div>
         </section>
-
-    </main>
-
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
