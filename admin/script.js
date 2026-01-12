@@ -2,7 +2,7 @@
 // ⚙️ CONFIGURATION
 // ==========================================
 // ⚠️ PASTE YOUR DEPLOYED WEB APP URL HERE
-const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbzA1tY3e3SXuZIGzPCu1J6LrB7hTMccdL03-Llz7tIan7B_GdcUUwNCCBsfTLXgym4KsQ/exec"; 
 
 let sessionPass = ""; 
 
