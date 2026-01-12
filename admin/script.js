@@ -1,127 +1,105 @@
-// ==========================================
-// 🚀 THE FINAL ULTIMATE ADMIN SCRIPT
-// ==========================================
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-const MASTER_KEY = "znek7906"; 
+const MASTER_KEY = "BOSS777";
 
-document.getElementById("loginBtn").addEventListener("click", login);
-
-function login() {
-    const input = document.getElementById("adminPass").value.trim();
-    if(input === MASTER_KEY) {
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        loadAllData();
+// 1. LOGIN LOGIC
+document.getElementById("loginBtn").addEventListener("click", () => {
+    const pass = document.getElementById("adminPass").value;
+    if(pass === MASTER_KEY) {
+        document.getElementById("authLayer").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        loadData();
     } else {
-        alert("❌ Access Denied");
+        alert("Incorrect Password!");
     }
+});
+
+// 2. TAB SWITCHING
+function switchTab(type) {
+    document.getElementById("leadsSection").style.display = type === 'leads' ? 'block' : 'none';
+    document.getElementById("payoutsSection").style.display = type === 'payouts' ? 'block' : 'none';
+    document.getElementById("tabLeads").className = type === 'leads' ? 'tab active' : 'tab';
+    document.getElementById("tabPayouts").className = type === 'payouts' ? 'tab active' : 'tab';
 }
 
-async function loadAllData() {
-    try {
-        const { data: leads, error: e1 } = await supabase
-            .from('leads')
-            .select('*, promoters(full_name, upi_id), campaigns(app_name, promoter_payout, user_payout)')
-            .eq('status', 'pending');
+// 3. DATA LOADING (The Multi-Tasker)
+async function loadData() {
+    // --- PART A: LOAD PENDING LEADS ---
+    const { data: leads, error: e1 } = await supabase
+        .from('leads')
+        .select('*, promoters(full_name, upi_id), campaigns(app_name, promoter_payout, user_payout)')
+        .eq('status', 'pending');
 
-        const { data: promoters, error: e2 } = await supabase
-            .from('promoters')
-            .select('*')
-            .gt('wallet_balance', 99);
+    if (e1) console.error("Leads Error:", e1);
 
-        if (e1 || e2) throw new Error("Database Error");
+    document.getElementById("leadsList").innerHTML = (leads || []).map(l => {
+        const isPromoter = l.promoter_id !== null;
+        const amt = isPromoter ? l.campaigns.promoter_payout : l.campaigns.user_payout;
+        const upi = isPromoter ? l.promoters?.upi_id : l.lead_upi;
+        const source = isPromoter ? `PROMOTER: ${l.promoters?.full_name}` : `DIRECT USER`;
 
-        renderUserTasks(leads);
-        renderPromoterPayouts(promoters);
-    } catch (err) {
-        console.error(err);
-        alert("Error loading data from SQL");
-    }
-}
-
-// 1. RENDER PROMOTER CARDS
-function renderPromoterPayouts(promoters) {
-    const container = document.getElementById("promoterList");
-    container.innerHTML = promoters.length === 0 ? "<p>No payouts due.</p>" : "";
-
-    promoters.forEach(p => {
-        const card = `
-            <div class="payout-card">
-                <div class="card-info">
-                    <span class="badge">Promoter Withdrawal</span>
-                    <h4>${p.full_name}</h4>
-                    <p class="upi-text">${p.upi_id}</p>
-                    <h2 class="amount">₹${p.wallet_balance}</h2>
+        return `
+            <div class="card">
+                <div>
+                    <strong>${l.campaigns.app_name}</strong> | ${source}<br>
+                    <small>User: ${l.lead_phone}</small><br>
+                    <div style="margin-top:8px">
+                        <span style="color:var(--primary)">₹${amt}</span> | <code class="upi-box">${upi || 'No UPI'}</code>
+                    </div>
                 </div>
-                <button class="pay-btn" onclick="confirmPromoterPay('${p.id}', '${p.upi_id}', '${p.wallet_balance}', '${p.full_name}')">
-                    Pay Now 💸
-                </button>
+                <div>
+                    <button class="btn btn-pay" onclick="handlePayout('${l.id}', '${l.promoter_id}', ${amt}, '${upi}')">PAID ✅</button>
+                    <button class="btn btn-reject" onclick="updateStatus('${l.id}', 'rejected')">REJECT</button>
+                </div>
             </div>
         `;
-        container.insertAdjacentHTML('beforeend', card);
-    });
+    }).join('') || "No pending leads.";
+
+    // --- PART B: LOAD PROMOTER WITHDRAWALS ---
+    const { data: promoters, error: e2 } = await supabase
+        .from('promoters')
+        .select('*')
+        .gt('wallet_balance', 99);
+
+    if (e2) console.error("Promoter Error:", e2);
+
+    document.getElementById("payoutsList").innerHTML = (promoters || []).map(p => `
+        <div class="card">
+            <div>
+                <strong>${p.full_name}</strong><br>
+                <code class="upi-box">${p.upi_id}</code>
+            </div>
+            <div style="text-align:right">
+                <h2 style="margin:0; color:var(--primary)">₹${p.wallet_balance}</h2>
+                <button class="btn btn-pay" onclick="clearPromoterWallet('${p.id}', '${p.upi_id}', ${p.wallet_balance}, '${p.full_name}')">MARK PAID 💸</button>
+            </div>
+        </div>
+    `).join('') || "No one to pay yet.";
 }
 
-// 2. RENDER TASK TABLE
-function renderUserTasks(leads) {
-    const tbody = document.getElementById("userTaskBody");
-    tbody.innerHTML = leads.length === 0 ? "<tr><td colspan='4'>No pending tasks.</td></tr>" : "";
-
-    leads.forEach(lead => {
-        // --- 10/10 Logic: Direct vs Promoter ---
-        const isPromoter = lead.promoter_id !== null;
-        const upiToPay = isPromoter ? lead.promoters?.upi_id : lead.lead_upi;
-        const amountToPay = isPromoter ? lead.campaigns.promoter_payout : lead.campaigns.user_payout;
-        const label = isPromoter ? `<b>Promoter:</b> ${lead.promoters?.full_name}` : `<b style="color:#ffcc00">DIRECT USER</b>`;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <div style="font-weight:bold;">${lead.campaigns.app_name}</div>
-                <div style="font-size:11px; color:#555;">${label}</div>
-            </td>
-            <td><b style="color:#22c55e">${lead.lead_phone}</b></td>
-            <td><code style="font-size:11px">${upiToPay || 'No UPI'}</code></td>
-            <td>
-                <div class="action-group">
-                    <button class="approve-sm" onclick="approveLead('${lead.id}', ${lead.promoter_id ? `'${lead.promoter_id}'` : 'null'}, ${amountToPay})">Approve ✅</button>
-                    <button class="pay-sm" onclick="processPayout('${upiToPay}', ${amountToPay}, 'Task')">Pay ₹${amountToPay}</button>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-// 3. ACTION LOGIC
-async function approveLead(leadId, promoterId, amount) {
-    if(!confirm("Approve this task?")) return;
-    
-    // Update status to approved
-    await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
-    
-    // Only if it's a promoter, add to their wallet
-    if (promoterId) {
-        await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
+// 4. ACTION FUNCTIONS
+async function handlePayout(leadId, promoterId, amount, upi) {
+    window.location.href = `upi://pay?pa=${upi}&am=${amount}&cu=INR`;
+    if(confirm("Confirm: Payment sent? This will approve the task.")) {
+        await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
+        if (promoterId && promoterId !== "null") {
+            await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
+        }
+        loadData();
     }
-    
-    alert("Approved!");
-    loadAllData();
 }
 
-async function confirmPromoterPay(pId, upi, amt, name) {
-    processPayout(upi, amt, name);
-    if(confirm("Payment sent? Click OK to reset wallet.")) {
+async function clearPromoterWallet(pId, upi, amt, name) {
+    window.location.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}&am=${amt}&cu=INR`;
+    if(confirm("Did you send the money? This will reset their wallet to 0.")) {
         await supabase.rpc('process_payout', { p_id: pId });
-        loadAllData();
+        loadData();
     }
 }
 
-function processPayout(upiId, amount, name) {
-    if(!upiId || !upiId.includes('@')) { alert("Invalid UPI ID"); return; }
-    const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
-    window.location.href = upiLink;
+async function updateStatus(id, stat) {
+    await supabase.from('leads').update({ status: stat }).eq('id', id);
+    loadData();
 }
