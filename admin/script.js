@@ -1,69 +1,73 @@
 // ==========================================
-// ⚙️ CONFIGURATION
+// 🚀 SUPABASE CONFIGURATION
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbzVIj90Wi64e68e-99ium85WHw_qwLl_o3HOWY0ZM4fXEJKxX5LtL-s57Dxa_qKSsILvw/exec";
-let sessionPass = "";
+const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
+const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+let MASTER_KEY = "BOSS777"; // Change this to your password
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loginBtn").addEventListener("click", login);
     const refreshBtn = document.getElementById("refreshBtn");
-    if(refreshBtn) refreshBtn.addEventListener("click", () => loadAllData());
+    if(refreshBtn) refreshBtn.addEventListener("click", loadAllData);
 });
 
 function login() {
     const input = document.getElementById("adminPass").value.trim();
-    if(!input) { alert("Enter password"); return; }
-    sessionPass = input;
-    document.getElementById("loginBtn").innerText = "Verifying Command Center...";
-    loadAllData(true); 
+    if(input === MASTER_KEY) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadAllData();
+    } else {
+        alert("❌ Access Denied");
+    }
 }
 
-async function loadAllData(isLoginAttempt = false) {
+async function loadAllData() {
     try {
-        // FIXED: Added backticks for Template Literal
-        const response = await fetch(`${API_URL}?action=readAll&password=${sessionPass}`);
-        const data = await response.json();
+        // 1. Fetch PENDING LEADS (For Tasks Table)
+        const { data: leads, error: e1 } = await supabase
+            .from('leads')
+            .select('*, promoters(full_name, upi_id), campaigns(app_name, promoter_payout, user_payout)')
+            .eq('status', 'pending');
 
-        if (data.status === "success") {
-            if(isLoginAttempt) {
-                document.getElementById("loginScreen").style.display = "none";
-                document.getElementById("dashboard").style.display = "block";
-            }
-            renderUserTasks(data.leads);
-            renderPromoterPayouts(data.wallets);
-        } else {
-            throw new Error("Invalid Access");
-        }
+        // 2. Fetch HIGH EARNING PROMOTERS (For Payout Cards)
+        const { data: promoters, error: e2 } = await supabase
+            .from('promoters')
+            .select('*')
+            .gt('wallet_balance', 99);
+
+        if (e1 || e2) throw new Error("Database Error");
+
+        renderUserTasks(leads);
+        renderPromoterPayouts(promoters);
+        
     } catch (err) {
         console.error(err);
-        if(isLoginAttempt) alert("❌ Access Denied: Check Password");
+        alert("Error loading data from SQL");
     }
 }
 
 // ==========================================
-// 3. RENDER PROMOTERS (₹100+ SEPARATE SECTION)
+// 3. RENDER PROMOTER CARDS (Wallet Balance >= 100)
 // ==========================================
-function renderPromoterPayouts(wallets) {
+function renderPromoterPayouts(promoters) {
     const container = document.getElementById("promoterList");
-    container.innerHTML = "";
-    const highEarners = wallets.filter(p => parseInt(p.walletBalance) >= 100);
+    container.innerHTML = promoters.length === 0 ? 
+        "<p>No promoters due for payout.</p>" : "";
 
-    if (highEarners.length === 0) {
-        container.innerHTML = "<p style='color:#555;'>No promoters due for payout (Min ₹100).</p>";
-        return;
-    }
-
-    highEarners.forEach(promoter => {
+    promoters.forEach(p => {
         const card = `
             <div class="payout-card">
                 <div class="card-info">
                     <span class="badge">Promoter</span>
-                    <h4>${promoter.name}</h4>
-                    <p class="upi-text">${promoter.upiId}</p>
-                    <h2 class="amount">₹${promoter.walletBalance}</h2>
+                    <h4>${p.full_name}</h4>
+                    <p class="upi-text">${p.upi_id}</p>
+                    <h2 class="amount">₹${p.wallet_balance}</h2>
                 </div>
-                <button class="pay-btn" onclick="processPayout('${promoter.upiId}', '${promoter.walletBalance}', '${promoter.name}')">
-                    Direct Pay (PhonePe) 💸
+                <button class="pay-btn" onclick="confirmPromoterPay('${p.id}', '${p.upi_id}', '${p.wallet_balance}', '${p.full_name}')">
+                    Pay via PhonePe 💸
                 </button>
             </div>
         `;
@@ -72,29 +76,30 @@ function renderPromoterPayouts(wallets) {
 }
 
 // ==========================================
-// 4. RENDER NORMAL USERS (TASK TABLE)
+// 4. RENDER NORMAL USERS (Task List)
 // ==========================================
 function renderUserTasks(leads) {
     const tbody = document.getElementById("userTaskBody");
-    tbody.innerHTML = "";
+    tbody.innerHTML = leads.length === 0 ? "<tr><td colspan='4'>No pending tasks.</td></tr>" : "";
 
-    leads.reverse().forEach(row => {
-        if(!row[1]) return; 
+    leads.forEach(lead => {
+        const isPromoter = lead.promoter_id !== null;
+        const upi = isPromoter ? lead.promoters.upi_id : lead.lead_upi;
+        const payout = isPromoter ? lead.campaigns.promoter_payout : lead.campaigns.user_payout;
+        const source = isPromoter ? lead.promoters.full_name : "Direct User";
 
-        const status = row[5] || "Pending";
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>
-                <div style="font-weight:bold;">${row[3]}</div> <div style="font-size:11px; color:#555;">${row[2]}</div> </td>
-            <td><b style="color:#22c55e">${row[4]}</b></td>
-            <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
+                <div style="font-weight:bold;">${lead.campaigns.app_name}</div>
+                <div style="font-size:11px; color:#555;">By: ${source}</div>
+            </td>
+            <td><b style="color:#22c55e">${lead.lead_phone}</b></td>
+            <td><code style="font-size:11px">${upi}</code></td>
             <td>
                 <div class="action-group">
-                    ${status !== "Approved" && status !== "Paid" ? 
-                        `<button class="approve-sm" onclick="approveUser('${row[2]}', this)">Verify ✅</button>` : 
-                        `<span class="done-check">✓ ${status}</span>`
-                    }
-                    <button class="pay-sm" onclick="processPayout('${row[3]}', '${row[6]}', 'User Task')">Pay ₹${row[6]}</button>
+                    <button class="approve-sm" onclick="approveLead('${lead.id}', '${lead.promoter_id}', ${payout})">Approve ✅</button>
+                    <button class="pay-sm" onclick="processPayout('${upi}', ${payout}, 'User Task')">Pay ₹${payout}</button>
                 </div>
             </td>
         `;
@@ -103,42 +108,33 @@ function renderUserTasks(leads) {
 }
 
 // ==========================================
-// 5. MISSING: APPROVE USER LOGIC
+// 5. ACTION LOGIC (SQL UPDATES)
 // ==========================================
-window.approveUser = async function(phone, btn) {
-    if(!confirm("Mark this task as Approved?")) return;
-    btn.innerText = "...";
-    btn.disabled = true;
-
-    try {
-        await fetch(API_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify({
-                action: "approve",
-                password: sessionPass,
-                phone: phone
-            })
-        });
-        alert("✅ Task Approved!");
-        loadAllData(); // Refresh to show "Approved" status
-    } catch (err) {
-        alert("Error approving task");
-        btn.disabled = false;
-        btn.innerText = "Verify ✅";
+async function approveLead(leadId, promoterId, amount) {
+    if(!confirm("Approve this task?")) return;
+    
+    // Update Lead to Approved
+    await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
+    
+    // If it's a promoter, add to their wallet balance
+    if (promoterId !== "null" && promoterId !== null) {
+        await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
     }
-};
+    
+    alert("✅ Approved!");
+    loadAllData();
+}
 
-// ==========================================
-// 6. SMART PAYOUT LOGIC
-// ==========================================
+async function confirmPromoterPay(pId, upi, amt, name) {
+    processPayout(upi, amt, name);
+    if(confirm("Once paid, reset promoter wallet to 0?")) {
+        await supabase.rpc('process_payout', { p_id: pId });
+        loadAllData();
+    }
+}
+
 function processPayout(upiId, amount, name) {
-    if(!upiId || !upiId.includes('@')) {
-        alert("Invalid UPI ID: " + upiId);
-        return;
-    }
-    const cleanAmount = amount.toString().replace('₹', '').trim();
-    // FIXED: Added backticks for Template Literal
-    const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${cleanAmount}&cu=INR`;
+    if(!upiId || !upiId.includes('@')) { alert("Invalid UPI ID"); return; }
+    const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
     window.location.href = upiLink;
 }
