@@ -2,7 +2,7 @@ const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-const MASTER_KEY = "BOSS777";
+const MASTER_KEY = "znek7906";
 
 // 1. LOGIN LOGIC
 document.getElementById("loginBtn").addEventListener("click", () => {
