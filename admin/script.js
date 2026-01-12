@@ -94,7 +94,7 @@ function renderUserTasks(leads) {
                         `<button class="approve-sm" onclick="approveUser('${row[2]}', this)">Verify ✅</button>` : 
                         `<span class="done-check">✓ ${status}</span>`
                     }
-                    <button class="pay-sm" onclick="processPayout('${row[3]}', '20', 'User Task')">Pay ₹20</button>
+                    <button class="pay-sm" onclick="processPayout('${row[3]}', '${row[6]}', 'User Task')">Pay ₹${row[6]}</button>
                 </div>
             </td>
         `;
