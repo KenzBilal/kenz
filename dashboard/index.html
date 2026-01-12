@@ -20,12 +20,19 @@
       <button onclick="logout()" class="logout-btn">Logout</button>
     </header>
 
-    <section class="card welcome-card">
+        <section class="card welcome-card">
       <div>
         <h2 id="userName">Welcome Back</h2>
-        <div class="code-badge">Code: <span id="userCode">...</span></div>
+        
+        <p style="color:#aaa; font-size:12px; margin: 10px 0 5px 0;">Your Referral Code:</p>
+        <div class="copy-box">
+          <span id="userCode">...</span> 
+          <button class="copy-btn" onclick="copyCode()">COPY ❐</button>
+        </div>
+
       </div>
-    </section>
+        </section>
+    
 
     <section class="stats-grid">
       <div class="stat-box">
@@ -51,6 +58,8 @@
 
   </div>
 
+    <div id="toast">✅ Code Copied!</div>
+  
   <script src="script.js"></script>
   <script>
     // Initialize Dashboard logic on load
