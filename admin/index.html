@@ -3,27 +3,17 @@
 <head>
     <title>CashTree | Ultimate Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root { --primary: #00ff88; --bg: #0a0a0a; --card: #161616; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 20px; }
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-        .tab { padding: 10px 20px; background: #222; cursor: pointer; border-radius: 8px; }
-        .tab.active { background: var(--primary); color: black; font-weight: bold; }
-        .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-pay { background: var(--primary); color: black; }
-        .btn-reject { background: #ff4444; color: white; }
-        .upi-box { background: #000; padding: 5px 10px; border-radius: 4px; color: var(--primary); font-family: monospace; }
-    </style>
+    <link rel="stylesheet" href="admin-style.css">
 </head>
 <body>
-    <div id="authLayer" style="text-align: center; margin-top: 100px;">
+
+    <div id="authLayer">
         <h1>🔐 Master Access</h1>
-        <input type="password" id="adminPass" style="padding:10px; border-radius:5px; border:none;">
-        <button class="btn btn-pay" onclick="checkAccess()">Unlock</button>
+        <input type="password" id="adminPass" placeholder="Enter Master Key">
+        <button class="btn btn-pay" id="loginBtn">Unlock</button>
     </div>
 
-    <div id="adminPanel" style="display: none; max-width: 900px; margin: auto;">
+    <div id="adminPanel" style="display: none;">
         <div class="tab-container">
             <div id="tabLeads" class="tab active" onclick="switchTab('leads')">Pending Leads</div>
             <div id="tabPayouts" class="tab" onclick="switchTab('payouts')">Withdrawal Requests</div>
@@ -31,139 +21,15 @@
 
         <div id="leadsSection">
             <h2>New Submissions</h2>
-            <div id="leadsList">Loading...</div>
+            <div id="leadsList">Loading leads...</div>
         </div>
 
         <div id="payoutsSection" style="display: none;">
             <h2>Promoters to be Paid</h2>
-            <div id="payoutsList">Loading...</div>
+            <div id="payoutsList">Loading payouts...</div>
         </div>
     </div>
 
-    <script>
-        const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
-        const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        function checkAccess() {
-            if(document.getElementById("adminPass").value === "BOSS777") {
-                document.getElementById("authLayer").style.display = "none";
-                document.getElementById("adminPanel").style.display = "block";
-                loadData();
-            }
-        }
-
-        function switchTab(type) {
-            document.getElementById("leadsSection").style.display = type === 'leads' ? 'block' : 'none';
-            document.getElementById("payoutsSection").style.display = type === 'payouts' ? 'block' : 'none';
-            document.getElementById("tabLeads").className = type === 'leads' ? 'tab active' : 'tab';
-            document.getElementById("tabPayouts").className = type === 'payouts' ? 'tab active' : 'tab';
-        }
-        async function loadData() {
-    // We fetch everything: Lead info, Promoter info, and Campaign (App) info
-    const { data: leads, error } = await supabase
-        .from('leads')
-        .select(`
-            id, 
-            lead_phone, 
-            lead_upi, 
-            promoter_id,
-            promoters ( full_name, upi_id ),
-            campaigns ( app_name, promoter_payout, user_payout )
-        `)
-        .eq('status', 'pending');
-
-    if (error) { console.error(error); return; }
-
-    const container = document.getElementById("leadsList");
-    
-    container.innerHTML = leads.map(l => {
-        // 10/10 LOGIC: Determine who gets paid and how much
-        const isPromoterLead = l.promoter_id !== null;
-        
-        // If promoter brought them, use promoter_payout. If random, use user_payout.
-        const amountToPay = isPromoterLead ? l.campaigns.promoter_payout : l.campaigns.user_payout;
-        
-        // If promoter, use their saved UPI. If random, use the UPI they typed in the folder.
-        const targetUPI = isPromoterLead ? l.promoters.upi_id : l.lead_upi;
-        
-        const sourceLabel = isPromoterLead 
-            ? `<span style="color:#00dbff">PROMOTER: ${l.promoters.full_name}</span>` 
-            : `<span style="color:#ffcc00">DIRECT USER</span>`;
-
-        return `
-            <div class="card">
-                <div>
-                    <strong style="font-size:1.2em">${l.campaigns.app_name}</strong><br>
-                    ${sourceLabel}<br>
-                    <small>User Phone: ${l.lead_phone}</small><br>
-                    <div style="margin-top:10px;">
-                        <span style="color:#00ff88; font-weight:bold; font-size:1.1em">PAY: ₹${amountToPay}</span><br>
-                        <code class="upi-box" style="display:inline-block; margin-top:5px; padding:5px; background:#000; border:1px solid #333;">${targetUPI || 'No UPI Provided'}</code>
-                    </div>
-                </div>
-                <div style="text-align:right">
-                    <button class="btn btn-pay" onclick="handlePayout('${l.id}', '${l.promoter_id}', ${amountToPay})">
-                        PAID & APPROVE ✅
-                    </button>
-                    <button class="btn btn-reject" onclick="updateStatus('${l.id}','rejected')">REJECT</button>
-                </div>
-            </div>
-        `;
-    }).join('') || "No pending leads.";
-}
-
-async function handlePayout(leadId, promoterId, amount) {
-    if(!confirm("Have you sent the UPI payment? Clicking OK will approve the lead.")) return;
-
-    // 1. Update Lead Status to 'approved'
-    const { error: err1 } = await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
-
-    // 2. If it was a promoter, we ALSO update their history/wallet
-    if (promoterId && promoterId !== "null") {
-        await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
-    }
-
-    if(!err1) {
-        alert("Lead Approved!");
-        loadData(); // Refresh the list
-    }
-}
-       
-
-            // LOAD PAYOUTS (Promoters with balance > 100)
-            const { data: promoters } = await supabase.from('promoters').select('*').gt('wallet_balance', 99);
-            document.getElementById("payoutsList").innerHTML = promoters.map(p => `
-                <div class="card">
-                    <div>
-                        <strong>${p.full_name}</strong><br>
-                        <span class="upi-box">${p.upi_id}</span>
-                    </div>
-                    <div style="text-align: right;">
-                        <h3 style="margin:0; color:var(--primary)">₹${p.wallet_balance}</h3>
-                        <button class="btn btn-pay" onclick="confirmPayment('${p.id}')">MARK AS PAID 💸</button>
-                    </div>
-                </div>
-            `).join('') || "No pending payouts.";
-        }
-
-        async function approveLead(id, p_id, amt) {
-            await supabase.from('leads').update({status:'approved'}).eq('id', id);
-            await supabase.rpc('increment_wallet', {row_id: p_id, amount: amt});
-            loadData();
-        }
-
-        async function updateStatus(id, stat) {
-            await supabase.from('leads').update({status:stat}).eq('id', id);
-            loadData();
-        }
-
-        async function confirmPayment(p_id) {
-            if(confirm("Did you send the UPI payment? This will reset their balance to 0.")) {
-                await supabase.rpc('process_payout', {p_id: p_id});
-                loadData();
-            }
-        }
-    </script>
+    <script src="admin.js"></script>
 </body>
 </html>
