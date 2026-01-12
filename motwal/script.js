@@ -50,15 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
         .single();
 
       // 6. INSERT LEAD INTO SQL
-      const { error } = await supabase
-        .from('leads')
-        .insert([{
-          promoter_id: promoter ? promoter.id : null, 
-          campaign_id: campaign ? campaign.id : null,
-          lead_phone: phone,
-          status: 'pending'
-        }]);
-
+const { error } = await supabase
+  .from('leads')
+  .insert([{
+      promoter_id: promoter ? promoter.id : null, 
+      campaign_id: campaign ? campaign.id : null,
+      lead_phone: phone,
+      lead_upi: upi, // <--- NEW: Saves the user's UPI
+      status: 'pending'
+  }]);
       if (error) throw error;
 
       // SUCCESS: SHOW MSG & REDIRECT
