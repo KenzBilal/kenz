@@ -128,7 +128,7 @@ function renderOffers(code) {
       pay: "₹30 / Refer",
       desc: "Instant payout on verification.",
       link: `../motwal/index.html?ref=${code}` 
-    }, // <--- ⚠️ THIS COMMA WAS MISSING!
+    },
     {
       id: "angelone",
       name: "Angel One",
