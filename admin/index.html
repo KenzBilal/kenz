@@ -5,43 +5,41 @@
   <title>👑 CashTree Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* --- 1. DARK THEME STYLING --- */
-    :root { --bg:#02050a; --card:#0b121a; --text:#eaf2f8; --green:#22c55e; --blue:#3b82f6; --red:#ef4444; }
+    /* Dark Theme Styles */
+    :root { --bg:#02050a; --card:#0b121a; --text:#eaf2f8; --green:#22c55e; --blue:#3b82f6; }
     body { background:var(--bg); color:var(--text); font-family:sans-serif; padding:20px; margin:0; }
     
-    /* LOGIN SCREEN (Overlay) */
+    /* Login Overlay */
     #loginScreen { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: var(--bg); z-index: 1000;
       display:flex; flex-direction:column; align-items:center; justify-content:center; 
     }
     .login-box { text-align: center; width: 100%; max-width: 320px; }
+    
+    /* Inputs & Buttons */
     input { padding:14px; border-radius:12px; background:var(--card); border:1px solid #333; color:white; margin-bottom:15px; width:100%; box-sizing: border-box; font-size: 16px; }
     input:focus { outline: none; border-color: var(--green); }
-    
     button { padding:14px; width: 100%; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size: 16px; transition: 0.2s; }
     .btn-green { background:var(--green); color:black; }
-    .btn-green:hover { box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
     
-    /* DASHBOARD */
+    /* Dashboard */
     #dashboard { display:none; max-width:1200px; margin:0 auto; }
     .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px; }
     
-    /* TABLE STYLES */
+    /* Table */
     .table-container { overflow-x: auto; border-radius:12px; border: 1px solid #333; }
     table { width:100%; border-collapse:collapse; background:var(--card); min-width: 600px; }
     th, td { padding:14px; text-align:left; border-bottom:1px solid #222; font-size:14px; }
     th { background:#111; color:#888; text-transform:uppercase; font-size:12px; letter-spacing: 1px; }
-    tr:hover { background: rgba(255,255,255,0.02); }
     
-    /* BADGES & BUTTONS */
-    .status-badge { padding:4px 10px; border-radius:6px; font-size:11px; font-weight:bold; text-transform:uppercase; letter-spacing: 0.5px; }
+    /* Badges */
+    .status-badge { padding:4px 10px; border-radius:6px; font-size:11px; font-weight:bold; text-transform:uppercase; }
     .pending { background:rgba(245, 158, 11, 0.15); color:#f59e0b; }
     .approved { background:rgba(34, 197, 94, 0.15); color:var(--green); }
-
+    
     .action-btn { padding:6px 12px; font-size:12px; cursor:pointer; border-radius:6px; border:none; margin-right:8px; text-decoration:none; display: inline-block; }
     .pay-btn { background: rgba(59, 130, 246, 0.15); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); }
-    .pay-btn:hover { background: var(--blue); color: white; }
   </style>
 </head>
 <body>
@@ -49,9 +47,9 @@
   <div id="loginScreen">
     <div class="login-box">
       <h2>👑 God Mode</h2>
-      <p style="color:#888; margin-bottom: 20px;">Enter Admin Password to Access</p>
+      <p style="color:#888; margin-bottom: 20px;">Enter Admin Password</p>
       <input type="password" id="adminPass" placeholder="Enter Password">
-      <button class="btn-green" onclick="login()">Enter Dashboard</button>
+      <button class="btn-green" id="loginBtn">Enter Dashboard</button>
     </div>
   </div>
 
@@ -61,7 +59,7 @@
         <h2 style="margin:0;">Live Leads</h2>
         <span style="font-size:12px; color:#666;" id="lastUpdate">Waiting for data...</span>
       </div>
-      <button onclick="loadData()" style="width: auto; background:#333; color:white; padding: 10px 20px;">🔄 Refresh</button>
+      <button id="refreshBtn" style="width: auto; background:#333; color:white; padding: 10px 20px;">🔄 Refresh</button>
     </div>
 
     <div class="table-container">
@@ -76,150 +74,11 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="tableBody">
-          </tbody>
+        <tbody id="tableBody"></tbody>
       </table>
     </div>
   </div>
 
-<script>
-// ⚠️ PASTE YOUR WEB APP URL HERE (From the Google Sheet Deployment)
-const API_URL = "https://script.google.com/macros/s/AKfycby_YOUR_ID_HERE/exec"; 
-
-// 🔒 SECURITY VARIABLE
-// We store the password here ONLY after you type it. 
-// If you refresh the page, this is wiped clean. Safe.
-let sessionPass = ""; 
-
-// 1. LOGIN FUNCTION
-function login() {
-  const input = document.getElementById("adminPass").value;
-  const btn = document.querySelector(".btn-green");
-
-  if(!input) { alert("Enter password"); return; }
-  
-  btn.innerText = "Verifying...";
-  btn.disabled = true;
-
-  // We try to fetch data using the password
-  // If the sheet returns data, the password is correct.
-  sessionPass = input;
-  loadData(true); 
-}
-
-// 2. LOAD DATA FUNCTION
-function loadData(isLoginAttempt = false) {
-  const tbody = document.getElementById("tableBody");
-  
-  if(!isLoginAttempt) {
-    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding:20px;'>Refreshing Data...</td></tr>";
-  }
-
-  fetch(API_URL + "?action=read&password=" + sessionPass)
-    .then(res => res.json())
-    .then(data => {
-      // Logic: If data is an Array, login worked. If it's an error object, login failed.
-      if (Array.isArray(data)) {
-        // SUCCESS
-        if(isLoginAttempt) {
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("dashboard").style.display = "block";
-        }
-        renderTable(data);
-        document.getElementById("lastUpdate").innerText = "Last updated: " + new Date().toLocaleTimeString();
-      } else {
-        // FAILURE (Wrong Password or Server Error)
-        if(isLoginAttempt) {
-          alert("❌ Access Denied: Wrong Password");
-          document.querySelector(".btn-green").innerText = "Enter Dashboard";
-          document.querySelector(".btn-green").disabled = false;
-        }
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      if(isLoginAttempt) {
-        alert("Connection Failed. Check your Internet or API URL.");
-        document.querySelector(".btn-green").innerText = "Enter Dashboard";
-        document.querySelector(".btn-green").disabled = false;
-      }
-    });
-}
-
-// 3. RENDER TABLE FUNCTION
-function renderTable(data) {
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
-
-  // Structure based on your Sheet:
-  // [Date, PromoterCode, LeadPhone, LeadUPI, AppName, Status, Commission]
-  // Indexes: 0=Date, 1=PromoCode, 2=Phone, 3=UPI, 4=App, 5=Status
-
-  if(data.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No leads found yet.</td></tr>";
-    return;
-  }
-
-  // Reverse to show newest first
-  data.reverse().forEach(row => {
-    // Safety check for empty rows
-    if(!row[1]) return; 
-
-    const date = new Date(row[0]).toLocaleDateString();
-    const promoter = row[1];
-    const phone = row[2];
-    const upi = row[3];
-    const app = row[4];
-    const status = row[5] || "Pending"; 
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${date}</td>
-      <td style="font-weight:bold; color:#888;">${promoter}</td>
-      <td>
-        <div style="font-weight:bold;">${phone}</div>
-        <div style="font-size:11px; color:#555;">${upi}</div>
-      </td>
-      <td style="color:var(--green)">${app}</td>
-      <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
-      <td>
-        ${status !== "Approved" ? 
-          `<button class="action-btn btn-green" onclick="approveUser('${phone}', this)">Approve ✅</button>` : 
-          `<span style="color:#444; font-size:12px; margin-right:10px;">Synced</span>`
-        }
-        <a href="upi://pay?pa=${upi}&pn=CashTree_User&am=100&cu=INR" target="_blank" class="action-btn pay-btn">Pay 💸</a>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-// 4. APPROVE USER FUNCTION
-function approveUser(phone, btn) {
-  if(!confirm("Are you sure? This will update the status to 'Approved'.")) return;
-
-  btn.innerText = "...";
-  btn.disabled = true;
-
-  // Send command to Google Sheet
-  fetch(API_URL, {
-    method: "POST",
-    mode: "no-cors", 
-    body: JSON.stringify({
-      action: "approve",
-      password: sessionPass, // Send the verified password
-      phone: phone
-    })
-  }).then(() => {
-    // Visual Update (We assume success because no-cors blocks reading response)
-    alert("✅ Lead Approved! You can now pay them.");
-    btn.parentElement.innerHTML = '<span class="status-badge approved" style="margin-right:10px;">Approved</span> <a href="#" class="action-btn pay-btn">Pay 💸</a>';
-  }).catch(err => {
-    alert("Error connecting to server");
-    btn.disabled = false;
-    btn.innerText = "Approve ✅";
-  });
-}
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
