@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>👑 CashTree Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashTree | Command Center</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="admin-body">
 
-  <div id="loginScreen">
-    <div class="login-box">
-      <h2>👑 God Mode</h2>
-      <p style="color:#888; margin-bottom: 20px;">Enter Admin Password</p>
-      <input type="password" id="adminPass" placeholder="Enter Password">
-      <button class="btn-green" id="loginBtn">Enter Dashboard</button>
-    </div>
-  </div>
+    <header class="admin-header">
+        <div class="brand">🌱 CashTree <span>Admin</span></div>
+        <div id="statusIndicator" class="status-pill">System Online</div>
+    </header>
 
-  <div id="dashboard">
-    <div class="header">
-      <div>
-        <h2 style="margin:0;">Live Leads</h2>
-        <span style="font-size:12px; color:#666;" id="lastUpdate">Waiting for data...</span>
-      </div>
-      <button id="refreshBtn" style="width: auto; background:#333; color:white; padding: 10px 20px;">🔄 Refresh</button>
-    </div>
+    <main class="admin-container">
+        
+        <section class="admin-section">
+            <div class="section-header">
+                <h3>🏆 Promoter Payouts <span class="badge">Balance ≥ ₹100</span></h3>
+            </div>
+            <div id="promoterList" class="grid-container">
+                <p class="loading">Fetching high-earners...</p>
+            </div>
+        </section>
 
-    <div class="table-container">
-      <table id="leadTable">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Promoter</th>
-            <th>Lead Info</th>
-            <th>App</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
+        <section class="admin-section">
+            <div class="section-header">
+                <h3>👥 Recent User Tasks <span class="badge">Pending Approval</span></h3>
+            </div>
+            <div class="table-wrapper">
+                <table id="userTaskTable">
+                    <thead>
+                        <tr>
+                            <th>User UPI</th>
+                            <th>App Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTaskBody">
+                        </tbody>
+                </table>
+            </div>
+        </section>
 
-  <script src="script.js"></script>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
