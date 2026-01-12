@@ -178,3 +178,24 @@ function copyLink(text) {
   navigator.clipboard.writeText(text);
   alert("Link Copied!");
 }
+
+// --- COPY TO CLIPBOARD FUNCTION ---
+function copyCode() {
+  const codeText = document.getElementById("userCode").innerText;
+  
+  // Ignore if code hasn't loaded yet
+  if(codeText === "..." || codeText === "") return;
+
+  navigator.clipboard.writeText(codeText).then(() => {
+    // Show Toast
+    const toast = document.getElementById("toast");
+    toast.className = "show";
+    
+    // Hide after 2 seconds
+    setTimeout(function(){ 
+        toast.className = toast.className.replace("show", ""); 
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy', err);
+  });
+}
