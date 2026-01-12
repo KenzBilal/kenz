@@ -1,66 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CashTree | Admin Panel</title>
+    <title>CashTree | Admin Command Center</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; }
-        .card { background: #1e1e1e; padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #333; }
-        .btn-approve { background: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; }
-        .btn-reject { background: #dc3545; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; margin-left: 10px; }
-        h1 { color: #00ff88; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 30px; }
+        .admin-box { max-width: 800px; margin: auto; }
+        .card { background: #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { color: #00ff88; text-align: center; }
+        .btn-approve { background: #00c853; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: bold; }
+        .btn-reject { background: #ff3d00; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; margin-left: 10px; }
+        #authLayer { text-align: center; margin-top: 100px; }
+        input { padding: 12px; border-radius: 6px; border: 1px solid #444; background: #222; color: white; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>Lead Approval Panel</h1>
-    <div id="leadsList">Loading pending leads...</div>
+
+    <div id="authLayer">
+        <h1>🔐 Admin Access</h1>
+        <input type="password" id="adminPass" placeholder="Enter Master Key">
+        <br>
+        <button class="btn-approve" onclick="checkAccess()">Unlock Panel</button>
+    </div>
+
+    <div id="adminPanel" class="admin-box" style="display: none;">
+        <h1>Lead Approval Panel</h1>
+        <div id="leadsList">Searching for pending leads...</div>
+    </div>
 
     <script>
         const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
         const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+        // SET YOUR PASSWORD HERE
+        const MASTER_KEY = "znek7906"; 
+
+        function checkAccess() {
+            const pass = document.getElementById("adminPass").value;
+            if (pass === MASTER_KEY) {
+                document.getElementById("authLayer").style.display = "none";
+                document.getElementById("adminPanel").style.display = "block";
+                fetchLeads();
+            } else {
+                alert("Access Denied!");
+            }
+        }
+
         async function fetchLeads() {
-            // This query gets the lead + the app name + the promoter's name all at once
             const { data, error } = await supabase
                 .from('leads')
                 .select(`
                     id, lead_phone, status,
-                    promoters ( full_name, username ),
+                    promoters ( id, full_name, username ),
                     campaigns ( app_name, promoter_payout )
                 `)
                 .eq('status', 'pending');
 
             const container = document.getElementById("leadsList");
-            if (data.length === 0) { container.innerHTML = "No pending leads! Good job."; return; }
+            if (!data || data.length === 0) { 
+                container.innerHTML = "<p style='text-align:center'>No pending leads. Refreshing in 10s...</p>"; 
+                setTimeout(fetchLeads, 10000);
+                return; 
+            }
 
             container.innerHTML = data.map(lead => `
                 <div class="card">
-                    <h3>App: ${lead.campaigns.app_name}</h3>
-                    <p>Promoter: ${lead.promoters.full_name} (${lead.promoters.username})</p>
-                    <p>User Phone: ${lead.lead_phone}</p>
-                    <button class="btn-approve" onclick="approveLead('${lead.id}', '${lead.promoters.id}', ${lead.campaigns.promoter_payout})">Approve ✅</button>
-                    <button class="btn-reject" onclick="rejectLead('${lead.id}')">Reject ❌</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h3 style="margin:0">${lead.campaigns.app_name}</h3>
+                            <p style="color:#aaa; margin:5px 0;">Promoter: ${lead.promoters.full_name} (${lead.promoters.username})</p>
+                            <p><strong>User: ${lead.lead_phone}</strong></p>
+                        </div>
+                        <div>
+                            <button class="btn-approve" onclick="approveLead('${lead.id}', '${lead.promoters.id}', ${lead.campaigns.promoter_payout})">Approve (₹${lead.campaigns.promoter_payout})</button>
+                            <button class="btn-reject" onclick="rejectLead('${lead.id}')">Reject</button>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         async function approveLead(leadId, promoterId, amount) {
-            // 1. Update status to 'approved'
-            await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
-            // 2. Call the wallet function we just made
-            await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
-            alert("Approved! Wallet updated.");
-            fetchLeads();
+            const { error: err1 } = await supabase.from('leads').update({ status: 'approved' }).eq('id', leadId);
+            const { error: err2 } = await supabase.rpc('increment_wallet', { row_id: promoterId, amount: amount });
+            
+            if(!err1 && !err2) {
+                alert("Payment Added to Wallet!");
+                fetchLeads();
+            } else {
+                alert("Error updating wallet. Check SQL function.");
+            }
         }
 
         async function rejectLead(leadId) {
             await supabase.from('leads').update({ status: 'rejected' }).eq('id', leadId);
-            alert("Lead rejected.");
             fetchLeads();
         }
-
-        fetchLeads();
     </script>
 </body>
 </html>
