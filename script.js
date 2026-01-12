@@ -1,3 +1,9 @@
+// 1. Initialize the SQL Connection
+const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
+const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================================
@@ -82,3 +88,4 @@ document.addEventListener("DOMContentLoaded", () => {
     dashLink.href = "/dashboard/?code=" + code;
   }
 });
+
