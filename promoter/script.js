@@ -28,13 +28,14 @@ document.getElementById("signupBtn").addEventListener("click", function() {
   if (!email.includes("@")) { alert("Please enter a valid email."); return; }
   if (upi.length < 3 || !upi.includes("@")) { alert("Please enter a valid UPI ID."); return; }
 
-  // 3. GENERATE PROMOTER CODE (Firstname + Last 4 Phone)
-  // Remove spaces/symbols from name, take first part, make uppercase
-  const cleanName = name.split(" ")[0].replace(/[^a-zA-Z]/g, "").toUpperCase();
-  const last4 = phone.slice(-4);
-  
-  const generatedCode = cleanName + last4; // Example: RAHUL9876
-  const generatedPass = last4;             // Example: 9876
+ // 3. GENERATE PROMOTER CODE (First 4 of Name + Last 4 Phone)
+const cleanName = name.split(" ")[0].replace(/[^a-zA-Z]/g, "").toUpperCase();
+const last4 = phone.slice(-4);
+
+// FIX: Use .substring(0, 4) to take only the first 4 letters
+const generatedCode = cleanName.substring(0, 4) + last4; 
+
+const generatedPass = last4;
 
   // 4. SEND TO GOOGLE SHEETS
   btn.innerText = "Creating Account...";
