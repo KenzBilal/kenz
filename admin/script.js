@@ -1,7 +1,7 @@
 // ==========================================
 // ⚙️ CONFIGURATION
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbyFzLh4XdP5ogDAA4FJfVIz4nr5Xbj7lHD1WWyorqCA_VuQmWZN_M8vIk83UG36xdypEA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzVIj90Wi64e68e-99ium85WHw_qwLl_o3HOWY0ZM4fXEJKxX5LtL-s57Dxa_qKSsILvw/exec";
 let sessionPass = "";
 
 document.addEventListener("DOMContentLoaded", () => {
