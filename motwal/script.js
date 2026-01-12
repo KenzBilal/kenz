@@ -1,7 +1,14 @@
+// ==========================================
+// 🚀 SUPABASE CONFIGURATION (10/10)
+// ==========================================
+const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
+const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("submitBtn");
 
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", async function () {
     // 1. GET VALUES
     const phone = document.getElementById("phone").value.trim();
     const upi = document.getElementById("upi").value.trim();
@@ -17,42 +24,55 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // 3. GET REFERRAL CODE FROM URL (e.g., ?ref=BATMAN)
+    // 3. GET REFERRAL CODE FROM URL
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('ref') || "DIRECT_TRAFFIC";
 
-    // 4. SHOW LOADING & DISABLE BUTTON
+    // 4. SHOW LOADING
     btn.innerText = "Processing...";
     btn.disabled = true;
     btn.style.opacity = "0.7";
 
-    // 5. PREPARE DATA FOR GOOGLE SHEETS
-    // Using the IDs we extracted earlier
-    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSf-k2OWSAaqYKqxUWVzueKzg60Gd-Px6xzPP0gWBEvFZNRIqw/viewform?usp=publish-editor";
-    const formData = new FormData();
+    try {
+      // 5. SQL LOGIC: FIND PROMOTER & CAMPAIGN IDs
+      // A. Get Promoter UUID
+      const { data: promoter } = await supabase
+        .from('promoters')
+        .select('id')
+        .eq('username', refCode)
+        .single();
 
-    formData.append("entry.1820803299", upi);        // UPI ID
-    formData.append("entry.1219897736", phone);      // Phone (Stored in 'App Name' column)
-    formData.append("entry.1044400763", refCode);    // Promoter Code
+      // B. Get Motwal Campaign UUID
+      const { data: campaign } = await supabase
+        .from('campaigns')
+        .select('id')
+        .eq('app_name', 'Motwal')
+        .single();
 
-    // 6. SEND SILENTLY & REDIRECT
-    fetch(formUrl, {
-      method: "POST",
-      mode: "no-cors",
-      body: formData
-    }).then(() => {
-      // Success Message
+      // 6. INSERT LEAD INTO SQL
+      const { error } = await supabase
+        .from('leads')
+        .insert([{
+          promoter_id: promoter ? promoter.id : null, 
+          campaign_id: campaign ? campaign.id : null,
+          lead_phone: phone,
+          status: 'pending'
+        }]);
+
+      if (error) throw error;
+
+      // SUCCESS: SHOW MSG & REDIRECT
       msg.style.display = "block";
       btn.style.display = "none";
 
-      // REDIRECT TO YOUR CREDITCODE LINK (1.5 seconds delay)
       setTimeout(() => {
         window.location.href = "https://trkkcoin.com/IT3779ZXP1/JAM0MN?ln=English";
       }, 1500);
 
-    }).catch((error) => {
-      // Even if error occurs, redirect so you don't lose the lead
+    } catch (err) {
+      console.error("SQL Error:", err);
+      // Fail-safe: Always redirect so the user completes the task
       window.location.href = "https://trkkcoin.com/IT3779ZXP1/JAM0MN?ln=English";
-    });
+    }
   });
 });
