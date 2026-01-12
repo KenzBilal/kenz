@@ -1,22 +1,13 @@
 // ==========================================
-// ⚙️ CONFIGURATION
+// 🚀 SUPABASE CONFIGURATION
 // ==========================================
-const CONFIG = {
-  // ⚠️ PASTE YOUR ANGEL ONE LINK FROM CREDITCODE HERE
-  OFFER_LINK: "https://trkkcoin.com/ITC65034934/JAM0MN?ln=English", 
+const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
+const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // AUTOMATIC SETTINGS (DO NOT CHANGE)
-  APP_NAME: "AngelOne", // This will show in your Sheet
-  
-  // YOUR GOOGLE FORM CONFIG (Auto-filled)
-  FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSf-k2OWSAaqYKqxUWVzueKzg60Gd-Px6xzPP0gWBEvFZNRIqw/formResponse",
-  FIELD_PHONE: "entry.1211951730", 
-  FIELD_UPI:   "entry.1820803299",
-  FIELD_APP:   "entry.1219897736", // Saves "AngelOne"
-  FIELD_REF:   "entry.1044400763"  // Saves "BATMAN"
-};
+const OFFER_LINK = "https://trkkcoin.com/ITC65034934/JAM0MN?ln=English";
 
-document.getElementById("submitBtn").addEventListener("click", function() {
+document.getElementById("submitBtn").addEventListener("click", async function() {
     const btn = document.getElementById("submitBtn");
     const msg = document.getElementById("statusMsg");
     
@@ -42,31 +33,45 @@ document.getElementById("submitBtn").addEventListener("click", function() {
     btn.innerText = "Processing...";
     btn.disabled = true;
 
-    // 5. SEND DATA TO GOOGLE SHEETS
-    const formData = new FormData();
-    formData.append(CONFIG.FIELD_PHONE, phone);
-    formData.append(CONFIG.FIELD_UPI, upi);
-    formData.append(CONFIG.FIELD_APP, CONFIG.APP_NAME);
-    formData.append(CONFIG.FIELD_REF, refCode);
+    try {
+        // 5. SQL LOGIC: CONNECT LEAD TO PROMOTER & ANGEL ONE
+        // A. Find Promoter UUID
+        const { data: promoter } = await supabase
+            .from('promoters')
+            .select('id')
+            .eq('username', refCode)
+            .single();
 
-    fetch(CONFIG.FORM_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: formData
-    }).then(() => {
-      // 6. REDIRECT TO OFFER
-      redirectToOffer();
-    }).catch((err) => {
-      // Fallback redirect
-      redirectToOffer();
-    });
+        // B. Find Angel One Campaign UUID (Make sure it's named 'AngelOne' in your DB)
+        const { data: campaign } = await supabase
+            .from('campaigns')
+            .select('id')
+            .eq('app_name', 'AngelOne') 
+            .single();
 
-    function redirectToOffer() {
-      msg.style.display = "block";
-      btn.style.display = "none";
-      
-      setTimeout(() => {
-        window.location.href = CONFIG.OFFER_LINK;
-      }, 1500);
+        // C. Insert into SQL Leads Table
+        const { error } = await supabase
+            .from('leads')
+            .insert([{
+                promoter_id: promoter ? promoter.id : null, 
+                campaign_id: campaign ? campaign.id : null,
+                lead_phone: phone,
+                status: 'pending'
+            }]);
+
+        if (error) throw error;
+
+        // 6. SUCCESS: REDIRECT
+        msg.style.display = "block";
+        btn.style.display = "none";
+        
+        setTimeout(() => {
+            window.location.href = OFFER_LINK;
+        }, 1500);
+
+    } catch (err) {
+        console.error("Submission Error:", err);
+        // Fail-safe: Always redirect so you don't lose the user
+        window.location.href = OFFER_LINK;
     }
 });
