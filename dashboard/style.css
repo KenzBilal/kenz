@@ -110,22 +110,22 @@ input:focus { outline: none; border-color: var(--green); }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-/* THE COPY BOX */
+/* --- COPY BOX STYLES --- */
 .copy-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #111;
-  border: 1px dashed #333;
-  padding: 12px 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.05); /* Slight transparent white */
+  border: 1px dashed #444;
+  padding: 8px 12px;
+  border-radius: 6px;
+  max-width: 250px; /* Keeps it neat */
 }
 
-#refCodeDisplay {
+#userCode {
   font-family: monospace;
-  font-size: 18px;
-  letter-spacing: 2px;
+  font-size: 16px;
+  letter-spacing: 1px;
   color: #fff;
   font-weight: bold;
 }
@@ -133,19 +133,20 @@ input:focus { outline: none; border-color: var(--green); }
 .copy-btn {
   background: transparent;
   border: none;
-  color: #22c55e;
+  color: #22c55e; /* Green text */
   font-weight: bold;
   cursor: pointer;
-  font-size: 12px;
-  padding: 5px 10px;
-  border-radius: 4px;
+  font-size: 11px;
+  padding: 4px 8px;
+  text-transform: uppercase;
 }
 
 .copy-btn:hover {
   background: rgba(34, 197, 94, 0.1);
+  border-radius: 4px;
 }
 
-/* THE TOAST NOTIFICATION (Hidden by default) */
+/* --- TOAST POPUP STYLES --- */
 #toast {
   visibility: hidden;
   min-width: 200px;
@@ -155,7 +156,7 @@ input:focus { outline: none; border-color: var(--green); }
   border-radius: 50px;
   padding: 12px;
   position: fixed;
-  z-index: 1000;
+  z-index: 9999;
   left: 50%;
   bottom: 30px;
   transform: translateX(-50%);
@@ -169,5 +170,5 @@ input:focus { outline: none; border-color: var(--green); }
 #toast.show {
   visibility: visible;
   opacity: 1;
-  bottom: 50px; /* Moves up slightly when appearing */
+  bottom: 50px; /* Moves up slightly */
 }
