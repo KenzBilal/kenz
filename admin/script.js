@@ -142,3 +142,32 @@ window.approveUser = function(phone, btn) {
     btn.innerText = "Approve ✅";
   });
 };
+function processPayout(upiId, amount, name) {
+    const cleanAmount = amount.replace('₹', '').trim();
+    
+    // UPI Deep Link Format
+    // pa = UPI ID, pn = Recipient Name, am = Amount, cu = Currency
+    const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${cleanAmount}&cu=INR`;
+    
+    // Redirect to PhonePe/UPI Apps
+    window.location.href = upiLink;
+}
+
+// Example of how to render the Promoter Card
+function renderPromoterCard(promoter) {
+    // Only show if balance >= 100
+    if (parseInt(promoter.walletBalance) < 100) return '';
+
+    return `
+        <div class="payout-card">
+            <div class="card-info">
+                <h4>${promoter.name}</h4>
+                <p class="upi-text">${promoter.upiId}</p>
+                <h2 class="amount">₹${promoter.walletBalance}</h2>
+            </div>
+            <button class="pay-btn" onclick="processPayout('${promoter.upiId}', '${promoter.walletBalance}', '${promoter.name}')">
+                Pay via PhonePe 💸
+            </button>
+        </div>
+    `;
+}
