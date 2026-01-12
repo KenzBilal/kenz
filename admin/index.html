@@ -1,151 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>👑 CashTree God Mode</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root { --bg:#02050a; --card:#0b121a; --text:#eaf2f8; --green:#22c55e; --red:#ef4444; }
-    body { background:var(--bg); color:var(--text); font-family:sans-serif; padding:20px; margin:0; }
-    
-    /* LOGIN SCREEN */
-    #loginScreen { display:flex; height:100vh; align-items:center; justify-content:center; flex-direction:column; }
-    input { padding:12px; border-radius:8px; background:var(--card); border:1px solid #333; color:white; margin-bottom:10px; width:250px; }
-    button { padding:12px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold; }
-    .btn-green { background:var(--green); color:black; }
-    
-    /* DASHBOARD */
-    #dashboard { display:none; max-width:1000px; margin:0 auto; }
-    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px; }
-    
-    table { width:100%; border-collapse:collapse; background:var(--card); border-radius:10px; overflow:hidden; }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid #222; font-size:14px; }
-    th { background:#111; color:#888; text-transform:uppercase; font-size:12px; }
-    tr:hover { background:#161b22; }
-    
-    .status-badge { padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; text-transform:uppercase; }
-    .pending { background:#f59e0b20; color:#f59e0b; }
-    .approved { background:#22c55e20; color:#22c55e; }
-
-    .action-btn { padding:6px 12px; font-size:12px; cursor:pointer; border-radius:4px; border:none; margin-right:5px; }
-    .pay-btn { background:#3b82f6; color:white; text-decoration:none; display:inline-block; }
-  </style>
-</head>
-<body>
-
-  <div id="loginScreen">
-    <h2>🔒 Admin Access</h2>
-    <input type="password" id="adminPass" placeholder="Enter Admin Password">
-    <button class="btn-green" onclick="login()">Enter Dashboard</button>
-  </div>
-
-  <div id="dashboard">
-    <div class="header">
-      <h2>📊 Live Leads</h2>
-      <button onclick="loadData()" style="background:#333; color:white;">🔄 Refresh</button>
-    </div>
-
-    <table id="leadTable">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>User Info</th>
-          <th>App</th>
-          <th>Promoter</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <tr><td colspan="6" style="text-align:center;">Loading Data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
 <script>
-// ⚠️ PASTE YOUR DEPLOYED WEB APP URL HERE
-const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec"; 
+// ⚠️ PASTE YOUR NEW DEPLOYMENT URL HERE
+const API_URL = "https://script.google.com/macros/s/YOUR_NEW_ID_HERE/exec"; 
 
-// YOUR PASSWORD (Must match what you put in Google Apps Script)
-const MY_PASS = "znek7906"; 
+let sessionPass = ""; // We store what you typed temporarily
 
 function login() {
   const input = document.getElementById("adminPass").value;
-  if (input === MY_PASS) {
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
-    loadData();
-  } else {
-    alert("Wrong Password!");
-  }
-}
+  const btn = document.querySelector(".btn-green");
+  
+  // UI Loading State
+  btn.innerText = "Verifying...";
+  btn.disabled = true;
 
-function loadData() {
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>Fetching Data...</td></tr>";
-
-  fetch(API_URL + "?action=read")
+  // Send the input to Google to check
+  fetch(API_URL + "?action=read&password=" + input)
     .then(res => res.json())
-    .then(data => {
-      tbody.innerHTML = "";
-      
-      // Data Structure: [Timestamp, Email, Phone, App, RefCode, UPI, Status]
-      // Note: Adjust indices based on your columns. 
-      // Assuming: Col A(0)=Date, C(2)=Phone, D(3)=App, E(4)=Ref, F(5)=UPI, G(6)=Status
-      
-      data.reverse().forEach(row => {
-        const phone = row[2]; // Adjust index if needed
-        const app = row[3];
-        const ref = row[4];
-        const upi = row[5]; 
-        const status = row[6] || "Pending"; // Default to Pending if empty
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${new Date(row[0]).toLocaleDateString()}</td>
-          <td>
-            <div style="font-weight:bold;">${phone}</div>
-            <div style="font-size:11px; color:#666;">${upi}</div>
-          </td>
-          <td style="color:var(--green)">${app}</td>
-          <td>${ref}</td>
-          <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
-          <td>
-            ${status !== "Approved" ? 
-              `<button class="action-btn btn-green" onclick="approveUser('${phone}', this)">Approve ✅</button>` : 
-              `<span style="color:#444; font-size:12px;">Done</span>`
-            }
-            <a href="upi://pay?pa=${upi}&pn=CashTreeUser&am=100&cu=INR" class="action-btn pay-btn">Pay 💸</a>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+    .then(response => {
+      if (response.result === "success") {
+        // Password was correct!
+        sessionPass = input; // Save it for this session
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        renderTable(response.data); // Load the data we just got
+      } else {
+        alert("❌ Wrong Password!");
+        btn.innerText = "Enter Dashboard";
+        btn.disabled = false;
+      }
+    })
+    .catch(err => {
+      alert("Server Error. Check Internet.");
+      btn.innerText = "Enter Dashboard";
+      btn.disabled = false;
     });
 }
 
+function loadData() {
+  // Use the saved password to ask for data again
+  fetch(API_URL + "?action=read&password=" + sessionPass)
+    .then(res => res.json())
+    .then(response => {
+      if (response.result === "success") {
+        renderTable(response.data);
+      }
+    });
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+
+  // Data mapping depends on your sheet columns
+  // Assuming: [Date, PromoterCode, LeadPhone, LeadUPI, AppName, Status, Commission]
+  
+  data.reverse().forEach(row => {
+    const phone = row[2]; 
+    const app = row[4];
+    const ref = row[1];
+    const upi = row[3]; 
+    const status = row[5] || "Pending"; 
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${new Date(row[0]).toLocaleDateString()}</td>
+      <td>
+        <div style="font-weight:bold;">${phone}</div>
+        <div style="font-size:11px; color:#666;">${upi}</div>
+      </td>
+      <td style="color:var(--green)">${app}</td>
+      <td>${ref}</td>
+      <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
+      <td>
+        ${status !== "Approved" ? 
+          `<button class="action-btn btn-green" onclick="approveUser('${phone}', this)">Approve ✅</button>` : 
+          `<span style="color:#444; font-size:12px;">Done</span>`
+        }
+        <a href="upi://pay?pa=${upi}&pn=User&am=100&cu=INR" class="action-btn pay-btn">Pay 💸</a>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
 function approveUser(phone, btn) {
-  if(!confirm("Mark this user as Approved? Promoters will get paid.")) return;
+  if(!confirm("Mark this user as Approved?")) return;
 
-  btn.innerText = "Saving...";
-  btn.disabled = true;
-
+  btn.innerText = "...";
+  
   fetch(API_URL, {
     method: "POST",
-    mode: "no-cors", // Important for Google Apps Script
+    mode: "no-cors", 
     body: JSON.stringify({
       action: "approve",
-      password: MY_PASS,
+      password: sessionPass, // Send the password with the command
       phone: phone
     })
   }).then(() => {
-    // Because of 'no-cors', we can't read the response, but we assume success
     alert("✅ User Approved!");
     btn.parentElement.innerHTML = '<span class="status-badge approved">Approved</span>';
-  }).catch(err => {
-    alert("Error connecting to server");
-    btn.disabled = false;
   });
 }
 </script>
-</body>
-</html>
