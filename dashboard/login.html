@@ -2,39 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login | CashTree Partner</title>
+  <title>Partner Access | CashTree</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="../styles.css"> 
+  <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="center-body">
+<body class="login-mode">
 
-  <div class="card login-card">
-    <div class="brand">🌱 CashTree <span>Partner</span></div>
-    <h2>Promoter Login</h2>
-    <p class="sub-text">Enter your credentials to access your earnings.</p>
+  <div class="login-box">
+    <div class="login-brand">Cash<span>Tree</span></div>
+    <p class="login-desc">Secure access for verified partners.</p>
 
-    <div class="input-group">
-      <label>Promoter Code</label>
-      <input type="text" id="code" placeholder="Ex: BATMAN77">
+    <div class="input-field">
+      <label for="code">Partner Code</label>
+      <input type="text" id="code" placeholder="Enter your unique ID" autocomplete="off">
     </div>
 
-    <div class="input-group">
-      <label>Password</label>
-      <input type="password" id="pass" placeholder="Enter your password">
+    <div class="input-field">
+      <label for="pass">Access Key</label>
+      <input type="password" id="pass" placeholder="••••••••">
     </div>
 
-    <button class="submit-btn" id="loginBtn">
-      Login to Dashboard
+    <button id="loginBtn" class="login-submit-btn">
+      Unlock Dashboard
     </button>
 
-    <div class="footer-link" style="margin-top: 25px; font-size: 14px; color: var(--muted);">
-      Don't have a partner account? <br>
-      <a href="../index.html#create-link" style="color:var(--accent); text-decoration: none; font-weight: bold;">Join the Team Now →</a>
+    <div class="login-footer">
+      New here? <a href="../index.html#create-link">Apply for Access →</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../script.js"></script>
+
 </body>
 </html>
