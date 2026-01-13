@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login – CashTree Partner</title>
+  <title>Login | CashTree Partner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,29 +11,29 @@
   <div class="card login-card">
     <div class="brand">🌱 CashTree <span>Partner</span></div>
     <h2>Promoter Login</h2>
-    <p class="sub-text">Enter your credentials to access the dashboard.</p>
+    <p class="sub-text">Enter your credentials to access your earnings.</p>
 
     <div class="input-group">
       <label>Promoter Code</label>
-      <input type="text" id="code" placeholder="Ex: BATMAN">
+      <input type="text" id="code" placeholder="Ex: BATMAN77">
     </div>
 
     <div class="input-group">
       <label>Password</label>
-      <input type="password" id="pass" placeholder="Ex: 1234">
+      <input type="password" id="pass" placeholder="Enter your password">
     </div>
 
     <button class="submit-btn" id="loginBtn" onclick="attemptLogin()">
       Login to Dashboard
     </button>
 
-    <p id="errorMsg" class="error-msg"></p>
-
-    <div class="footer-link">
-      Don't have an account? <a href="../promoter/index.html">Join Now</a>
+    <div class="footer-link" style="margin-top: 25px; font-size: 14px; color: var(--muted);">
+      Don't have a partner account? <br>
+      <a href="../promoter/index.html" style="color:var(--green); text-decoration: none; font-weight: bold;">Join the Team Now →</a>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 </html>
