@@ -54,7 +54,6 @@ button { font-family: inherit; }
    3. NAVIGATION
    ========================================= */
 .nav {
-.nav {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -484,4 +483,5 @@ button { font-family: inherit; }
 
   .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
 }
+
 
