@@ -2,82 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Promoter Signup – CashTree Partner</title>
+  <title>Join CashTree | Become a Partner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="center-body">
 
-<div class="card">
+  <div class="card login-card">
+    <div class="brand">🌱 CashTree <span>Partner</span></div>
+    
+    <h1>Join the Team</h1>
+    <p class="sub-text">Start earning per successful refer today.</p>
 
-  <div class="brand">
-    🌱 CashTree <span>Partner</span>
-  </div>
-
-  <h1>Join the Team</h1>
-  <div class="badge">Promoter Program</div>
-
-  <div class="info-box">
-    <strong>Benefits:</strong><br>
-    • Instant Promoter Code generation<br>
-    • Earn Money per successful refer<br>
-    • Live Dashboard access<br>
-    • Daily Payouts via UPI
-  </div>
-
-  <div class="section">
-    <label>Full Name</label>
-    <input type="text" id="name" placeholder="Enter your name">
-  </div>
-
-  <div class="section">
-    <label>Phone Number (Your Login ID)</label>
-    <input type="tel" id="phone" placeholder="Ex: 9876543210">
-  </div>
-
-  <div class="section">
-    <label>Email Address</label>
-    <input type="email" id="email" placeholder="example@gmail.com">
-  </div>
-
-  <div class="section">
-    <label>UPI ID (For Payouts)</label>
-    <input type="text" id="upi" placeholder="Ex: name@upi">
-  </div>
-
-  <button class="submit-btn" id="signupBtn">
-    Sign Up as Promoter
-  </button>
-
-  <div class="submit-desc">
-    Already a partner? <a href="../dashboard/login.html" style="color:var(--green)">Login Here</a>
-  </div>
-
-</div>
-
-<div class="popup" id="successPopup">
-  <div class="popup-card">
-    <div style="font-size:40px; margin-bottom:10px;">🎉</div>
-    <h2>Registration Successful!</h2>
-    <p style="color:#aaa; font-size:14px;">Save these details to login.</p>
-
-    <div class="cred-box">
-      <div class="cred-row">
-        <span>Promoter Code:</span>
-        <strong id="newCode">...</strong>
-      </div>
-      <div class="cred-row">
-        <span>Password:</span>
-        <strong id="newPass">...</strong>
-      </div>
+    <div class="info-box" style="text-align: left; margin-bottom: 20px; font-size: 13px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
+      <strong style="color:var(--green)">Member Perks:</strong><br>
+      • Choose your own unique Promoter Code<br>
+      • ₹20 Welcome Bonus (if referred)<br>
+      • Real-time "My Team" tracking<br>
+      • Withdraw starting at ₹100
     </div>
 
-    <button class="copy-btn" id="loginRedirectBtn">
-      Go to Dashboard Login →
-    </button>
-  </div>
-</div>
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="newName" placeholder="Enter your full name">
+    </div>
 
-<script src="script.js"></script>
+    <div class="input-group">
+      <label>Choose Promoter Code (Username)</label>
+      <input type="text" id="newCode" placeholder="Ex: BATMAN77">
+    </div>
+
+    <div class="input-group">
+      <label>UPI ID (For Payouts)</label>
+      <input type="text" id="newUpi" placeholder="example@ybl">
+    </div>
+
+    <div class="input-group">
+      <label>Set Password</label>
+      <input type="password" id="newPass" placeholder="Min 4 characters">
+    </div>
+
+    <div class="input-group" style="border: 1px dashed var(--green); padding: 10px; border-radius: 10px; margin-top: 15px;">
+      <label style="color:var(--green)">Have a Referral Code?</label>
+      <input type="text" id="referCode" placeholder="Enter code for ₹20 bonus">
+    </div>
+
+    <button class="submit-btn" id="signupBtn" onclick="attemptSignup()" style="margin-top: 20px;">
+      Create Partner Account
+    </button>
+
+    <div class="footer-link" style="margin-top: 20px; font-size: 14px;">
+      Already a partner? <a href="../dashboard/login.html" style="color:var(--green); text-decoration: none; font-weight: bold;">Login Here</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
 </body>
 </html>
