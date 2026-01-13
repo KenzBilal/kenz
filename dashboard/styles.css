@@ -1,3 +1,11 @@
+/* =========================================
+   0. UNIVERSAL RESET (CRITICAL FIX)
+   ========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ... followed by :root { ... */
 :root {
   --bg: #02050a;
   --card: #0b121a;
