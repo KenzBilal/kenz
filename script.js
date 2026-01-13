@@ -1,5 +1,5 @@
 /* =========================================
-   1. SQL CONNECTION (ROOT)
+   1. SQL CONNECTION
    ========================================= */
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
@@ -8,98 +8,70 @@ const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================================
-     2. MOBILE NAVIGATION (THE FIX)
+     2. MOBILE NAVIGATION (MENU)
      ========================================= */
   const toggle = document.getElementById("navToggle");
   const navLinks = document.getElementById("navLinks");
 
   if (toggle && navLinks) {
-    // Brute force click handler
     toggle.onclick = function(e) {
       e.preventDefault();
       e.stopPropagation();
       navLinks.classList.toggle("nav-open");
-      
-      // Accessibility update
       const isOpen = navLinks.classList.contains("nav-open");
-      toggle.setAttribute("aria-expanded", isOpen);
-      toggle.innerHTML = isOpen ? "✕" : "☰"; // Changes icon to X when open
+      toggle.innerHTML = isOpen ? "✕" : "☰"; 
     };
 
-    // Close menu when clicking any link inside
-    navLinks.addEventListener("click", (e) => {
-      if (e.target.tagName === 'A') {
-        navLinks.classList.remove("nav-open");
-        toggle.innerHTML = "☰";
-      }
-    });
-
-    // Close menu when clicking anywhere outside
     document.addEventListener("click", (e) => {
       if (!navLinks.contains(e.target) && !toggle.contains(e.target)) {
-        if (navLinks.classList.contains("nav-open")) {
-          navLinks.classList.remove("nav-open");
-          toggle.innerHTML = "☰";
-        }
+        navLinks.classList.remove("nav-open");
+        toggle.innerHTML = "☰";
       }
     });
   }
 
   /* =========================================
-     3. FAQ ACCORDION (SMOOTH)
+     3. FAQ ACCORDION SYSTEM
      ========================================= */
   const faqItems = document.querySelectorAll(".faq-item");
-
   faqItems.forEach(item => {
     const question = item.querySelector(".faq-question");
     if (question) {
       question.onclick = function() {
         const isActive = item.classList.contains("active");
-
         // Close all others
         faqItems.forEach(other => other.classList.remove("active"));
-
-        // Toggle current
-        if (!isActive) {
-          item.classList.add("active");
-        }
+        // Open this one if it wasn't active
+        if (!isActive) item.classList.add("active");
       };
     }
   });
 
   /* =========================================
-     4. SMOOTH SCROLLING 
+     4. TELEGRAM CTA (MOBILE FLOATING BUTTON)
      ========================================= */
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function (e) {
-      const targetId = this.getAttribute("href");
-      if (targetId === "#" || targetId === "") return;
+  const mobileCta = document.getElementById("mobileCta");
+  const ctaClose = document.querySelector(".cta-close");
 
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
-    });
-  });
+  if (ctaClose && mobileCta) {
+    ctaClose.onclick = function() {
+      mobileCta.style.display = "none";
+      // Optional: Remember that user closed it for this session
+      sessionStorage.setItem("ctaClosed", "true");
+    };
+  }
+  
+  // Re-hide if they already closed it
+  if (sessionStorage.getItem("ctaClosed") === "true" && mobileCta) {
+    mobileCta.style.display = "none";
+  }
 
   /* =========================================
-     5. SMART REDIRECT LOGIC
+     5. REDIRECT LOGIC
      ========================================= */
   const dashLink = document.getElementById("menuDashboardLink");
   const partnerId = localStorage.getItem("p_id");
-
-  if (dashLink) {
-    if (partnerId) {
-      // If already logged in, go straight to dashboard
-      dashLink.href = "dashboard/index.html";
-    } else {
-      // Otherwise, go to login page
-      dashLink.href = "dashboard/login.html";
-    }
+  if (dashLink && partnerId) {
+    dashLink.href = "dashboard/index.html";
   }
-
 });
