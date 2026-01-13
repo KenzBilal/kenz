@@ -1,6 +1,92 @@
+/* =========================================
+   1. SQL CONNECTION
+   ========================================= */
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* =========================================
+     LOGIN LOGIC
+     ========================================= */
+  const loginBtn = document.getElementById("loginBtn");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", async () => {
+      
+      const codeInput = document.getElementById("code").value.trim();
+      const passInput = document.getElementById("pass").value.trim();
+
+      // 1. Basic Validation
+      if (!codeInput || !passInput) {
+        alert("Please enter both Partner Code and Access Key.");
+        return;
+      }
+
+      loginBtn.innerHTML = "Verifying...";
+      loginBtn.disabled = true;
+
+      // 2. Check Database
+      const { data, error } = await supabase
+        .from('partners')
+        .select('*')
+        .eq('code', codeInput)
+        .eq('password', passInput)
+        .single(); // We expect exactly one user
+
+      // 3. Handle Result
+      if (error || !data) {
+        alert("❌ Invalid Code or Password. Please try again.");
+        loginBtn.innerHTML = "Unlock Dashboard";
+        loginBtn.disabled = false;
+      } else {
+        // SUCCESS!
+        // Save the partner ID to browser memory
+        localStorage.setItem("p_id", data.id);
+        localStorage.setItem("p_code", data.code);
+        
+        loginBtn.innerHTML = "✅ Success! Redirecting...";
+        
+        // Redirect to the Dashboard Index (Main Panel)
+        setTimeout(() => {
+          window.location.href = "index.html"; 
+        }, 1000);
+      }
+    });
+  }
+
+  /* =========================================
+     DASHBOARD DATA LOADER (For index.html)
+     ========================================= */
+  const partnerId = localStorage.getItem("p_id");
+  
+  // If we are on the Main Dashboard page (not login page)
+  if (partnerId && !loginBtn) {
+    loadDashboardData(partnerId);
+  } else if (!partnerId && !loginBtn) {
+    // If no ID and not on login page, kick them out
+    window.location.href = "login.html";
+  }
+
+  async function loadDashboardData(id) {
+    // Fetch fresh data from DB
+    const { data, error } = await supabase
+      .from('partners')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (data) {
+      // Update HTML elements if they exist
+      const balEl = document.getElementById("balanceDisplay");
+      const nameEl = document.getElementById("partnerName");
+      
+      if (balEl) balEl.innerText = "₹" + data.balance;
+      if (nameEl) nameEl.innerText = data.code;
+    }
+  }
+
+});
 
 const MIN_WITHDRAW_PARTNER = 100;
 const MIN_WITHDRAW_USER = 50;
