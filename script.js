@@ -1,9 +1,12 @@
 /* =========================================
-   1. SQL CONNECTION
-   ========================================= */
+   1. SQL CONNECTION*/
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
-const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseKey = 'sb_publishable_XXXX';
+
+const supabaseClient = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
 
 /* =========================================
    2. CLICK SAFETY (Prevents Ads Blocking)
@@ -97,3 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
