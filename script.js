@@ -34,10 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // B. Close when clicking OUTSIDE
-    document.addEventListener("click", () => {
-      nav.classList.remove("nav-open");
-      toggle.setAttribute("aria-expanded", "false");
-    });
+  document.addEventListener("click", (e) => {
+  if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+    nav.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+});
+
 
     // C. Close when clicking a LINK inside (Missing in my previous version)
     nav.querySelectorAll("a").forEach(link => {
@@ -127,3 +130,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
