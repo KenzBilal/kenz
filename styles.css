@@ -9,11 +9,10 @@
   --text: #eaf2f8;
   --muted: #90a0b0;
   
-  /* Brand Colors */
-  --accent: #22c55e;       /* Vibrant Green */
+  --accent: #22c55e;
   --accent-dark: #15803d;
-  --cyan: #22d3ee;         /* Cyan for CTA */
-  --gold: #f59e0b;         /* Premium Gold */
+  --cyan: #22d3ee;
+  --gold: #f59e0b;
   
   --nav-height: 64px;
 }
@@ -40,7 +39,7 @@ body {
 }
 
 a { text-decoration: none; color: inherit; }
-button { font-family: inherit; }
+button { font-family: inherit; cursor: pointer; }
 
 .container {
   max-width: 1100px;
@@ -51,12 +50,12 @@ button { font-family: inherit; }
 }
 
 /* =========================================
-   3. NAVIGATION
+   3. NAVIGATION (FIXED SYNTAX)
    ========================================= */
 .nav {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 2000; /* Higher z-index */
   background: rgba(4, 6, 10, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -86,69 +85,30 @@ button { font-family: inherit; }
 }
 .nav-links a:hover { background: rgba(255,255,255,0.06); }
 
-/* Dashboard Highlight */
 #menuDashboardLink {
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
   color: #022c22 !important;
 }
 
 .nav-toggle {
-  display: none; /* Hidden on Desktop */
+  display: none;
   background: none;
   border: none;
   color: #fff;
-  font-size: 24px;
-  cursor: pointer;
+  font-size: 28px;
+  padding: 5px;
 }
 
 /* =========================================
-   MOBILE RESPONSIVENESS (The Fix)
+   4. HERO SECTION
    ========================================= */
-@media (max-width: 768px) {
-  .nav-toggle {
-    display: block; /* Show ☰ on Mobile */
-  }
-
-  .nav-links {
-    display: none; /* Hide links by default on Mobile */
-    flex-direction: column;
-    position: absolute;
-    top: 100%; /* Sits right under the nav bar */
-    right: 0;
-    background: var(--card); /* Matches your site's dark cards */
-    width: 200px;
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: 0 0 0 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    gap: 15px;
-  }
-
-  /* Matches your script: nav.classList.toggle("nav-open") */
-  .nav-links.nav-open {
-    display: flex;
-  }
-
-  /* Make links look better in the vertical menu */
-  .nav-links a {
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-  }
-}
-   
-
-/* =========================================
-   4. HERO SECTION (RESTORED TO ORIGINAL STYLE)
-   ========================================= */
-.hero { padding: 60px 0 60px; }
+.hero { padding: 60px 0; }
 .hero h1 {
   font-size: clamp(2.2rem, 4vw, 3rem);
   line-height: 1.15;
   margin: 0 0 16px;
   font-weight: 800;
 }
-.hero-highlight { color: #fff; }
 
 .lead {
   color: var(--muted);
@@ -157,15 +117,13 @@ button { font-family: inherit; }
   margin-bottom: 40px;
 }
 
-/* THE "CHUNKY" BUTTON GRID */
 .hero-actions-equal {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  max-width: 100%; /* Allow full width matching your image */
+  margin-bottom: 30px;
 }
 
-/* THE "FAT" GREEN HERO BUTTONS */
 .hero-btn {
   display: flex;
   flex-direction: column;
@@ -173,29 +131,16 @@ button { font-family: inherit; }
   justify-content: center;
   text-align: center;
   background: linear-gradient(180deg, #22c55e, #16a34a);
-  color: #022c22; /* Dark Green Text */
-  padding: 24px 16px; /* Tall padding */
-  border-radius: 20px; /* Big rounded corners */
+  color: #022c22;
+  padding: 24px 16px;
+  border-radius: 20px;
   font-weight: 800;
   font-size: 1.1rem;
-  line-height: 1.25;
-  box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.5); /* The Green Glow */
+  box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.5);
   transition: transform 0.2s ease;
-  text-decoration: none;
-  border: none;
 }
 
-.hero-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 50px -10px rgba(34, 197, 94, 0.7);
-}
-
-/* THE "CREATE LINK" ROCKET BUTTON */
-.cta-center {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-}
+.hero-btn:hover { transform: translateY(-4px); }
 
 .create-link-cta {
   display: inline-flex;
@@ -203,37 +148,18 @@ button { font-family: inherit; }
   justify-content: center;
   gap: 10px;
   width: 100%;
-  max-width: 450px; /* Limits width so it doesn't stretch too far */
+  max-width: 450px;
   padding: 18px 30px;
   border-radius: 24px;
   background: rgba(6, 40, 40, 0.6);
   border: 1px solid rgba(34, 211, 238, 0.3);
-  color: #67e8f9; /* Cyan text */
+  color: #67e8f9;
   font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); /* Cyan glow */
-  transition: 0.2s;
-}
-
-.create-link-cta:hover {
-  background: rgba(6, 40, 40, 0.9);
-  box-shadow: 0 0 40px rgba(34, 211, 238, 0.25);
-  transform: translateY(-2px);
-}
-
-.hero-trust {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: var(--muted);
-  opacity: 0.8;
 }
 
 /* =========================================
-   5. OFFER CARDS
+   5. OFFER CARDS & GRID
    ========================================= */
-.section { padding: 60px 0; }
-.section-title { font-size: 1.8rem; margin: 0 0 10px; }
-
 .offer-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -249,82 +175,29 @@ button { font-family: inherit; }
   display: flex;
   flex-direction: column;
   gap: 16px;
-  position: relative;
   transition: 0.3s ease;
 }
 
-.offer-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255,255,255,0.15);
-}
-
-.offer-head h3 { margin: 0; font-size: 1.1rem; }
-.offer-points { padding-left: 20px; color: var(--muted); font-size: 0.95rem; margin: 0; }
-.offer-points li { margin-bottom: 6px; }
-
-.offer-footer {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.earn { font-size: 1.1rem; }
 .earn strong { color: var(--accent); font-size: 1.3rem; }
 
-/* Buttons inside cards */
 .btn.primary {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 12px 20px;
+  padding: 12px;
   border-radius: 12px;
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
   color: #022c22;
   font-weight: 700;
-  width: 100%; /* Fill card width */
-  text-decoration: none;
-  border: none;
 }
 
 /* =========================================
-   6. PREMIUM & SPECIAL OFFERS
-   ========================================= */
-.premium-offer {
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(4,6,10,0.5));
-}
-.premium-badge {
-  position: absolute;
-  top: 14px; right: 14px;
-  background: var(--gold);
-  color: #3a2200;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-/* PhonePe Blue Button */
-.offer-confirm-btn {
-  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
-  color: #fff;
-  text-align: center;
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: 800;
-  display: block;
-  text-decoration: none;
-}
-
-/* =========================================
-   7. FAQ ACCORDION (Clean Dropdown)
+   7. FAQ ACCORDION
    ========================================= */
 .faq-item {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
   margin-bottom: 12px;
-  overflow: hidden;
 }
 
 .faq-question {
@@ -334,117 +207,49 @@ button { font-family: inherit; }
   border: none;
   color: var(--text);
   font-weight: 600;
-  font-size: 1rem;
-  text-align: left;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
-/* Arrow */
-.faq-question::after {
-  content: '+';
-  font-size: 1.2rem;
-  color: var(--muted);
-  transition: transform 0.3s ease;
-}
-.faq-item.active .faq-question::after {
-  content: '−';
-  transform: rotate(180deg);
-  color: var(--text);
+.faq-item.active .faq-answer {
+  max-height: 500px;
+  padding: 0 20px 20px 20px;
 }
 
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  padding: 0 20px;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-}
-.faq-item.active .faq-answer {
-  max-height: 500px;
-  padding-bottom: 20px;
+  transition: 0.3s;
 }
 
 /* =========================================
-   8. FOOTER BUTTONS (Scaled Correctly)
+   8. FOOTER BUTTONS
    ========================================= */
-.center-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-top: 20px;
-}
+.center-stack { display: flex; flex-direction: column; align-items: center; gap: 16px; }
 
-/* Payment Button - NOT GIGANTIC */
 .pay-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 14px 32px;
-  min-width: 240px;
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
   color: #022c22;
   border-radius: 14px;
   font-weight: 800;
-  font-size: 16px;
-  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
-  text-decoration: none;
-  transition: 0.2s;
 }
 
-.pay-btn:hover { transform: translateY(-2px); }
-
-.price-old {
-  text-decoration: line-through;
-  opacity: 0.6;
-  margin-right: 8px;
-  font-size: 0.9em;
-}
-
-/* Telegram Blue Button */
 .telegram-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 14px 32px;
-  min-width: 240px;
   background: linear-gradient(180deg, #38bdf8, #0284c7);
   color: #fff;
   border-radius: 14px;
   font-weight: 700;
-  font-size: 16px;
-  text-decoration: none;
-  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
 }
 
 /* =========================================
-   9. FOOTER
-   ========================================= */
-.footer {
-  margin-top: 80px;
-  padding: 40px 0;
-  border-top: 1px solid var(--border);
-  background: rgba(4, 6, 10, 0.5);
-}
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-.footer-links a { margin-left: 20px; color: var(--muted); }
-
-/* =========================================
-   10. MOBILE RESPONSIVENESS (FIXED)
+   10. MOBILE RESPONSIVENESS (POLISHED)
    ========================================= */
 @media (max-width: 768px) {
   
   .nav-toggle { display: block; }
+
   .nav-links {
     display: none;
     position: absolute;
@@ -454,34 +259,35 @@ button { font-family: inherit; }
     background: #0b121a;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 10px;
+    padding: 15px;
     width: 200px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    z-index: 1001; /* Ensure it stays on top */
+    z-index: 3000;
+    gap: 10px;
   }
-  .nav-links.nav-open { display: flex; }
 
-  /* Stack Offer Cards vertically */
+  /* JavaScript triggers this class */
+  .nav-links.nav-open { 
+    display: flex !important; 
+  }
+
   .offer-grid { grid-template-columns: 1fr; }
   
-  /* --- FIX: KEEP HERO BUTTONS IN ONE LINE --- */
   .hero-actions-equal { 
-    grid-template-columns: repeat(3, 1fr); /* Force 3 columns */
-    gap: 8px; /* Smaller gap for mobile */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
   }
   
-  /* Shrink buttons to fit in one line */
   .hero-btn { 
-    width: 100%; 
-    padding: 12px 4px; /* Less side padding */
-    font-size: 0.8rem; /* Smaller text */
+    padding: 12px 4px;
+    font-size: 0.75rem;
     border-radius: 12px;
-    min-height: 60px; /* Ensure consistent height */
-    white-space: normal; /* Allow text to wrap if needed */
-    line-height: 1.2;
+    min-height: 60px;
   }
 
-  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
-}
-
-
+  .footer-inner { 
+    flex-direction: column; 
+    text-align: center; 
+    gap: 20px; 
+  }
+     }
