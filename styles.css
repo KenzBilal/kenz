@@ -267,3 +267,20 @@ button { font-family: inherit; cursor: pointer; }
 .hero-highlight {
   color: var(--accent); /* Makes "that actually work" Green */
 }
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 99999 !important;
+}
+
+.ad-sandbox,
+.ad-sandbox iframe,
+.ad-sandbox div {
+  z-index: 1 !important;
+}
+
+.ad-sandbox {
+  pointer-events: none;
+}
+
