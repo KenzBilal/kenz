@@ -101,8 +101,24 @@
   <link rel="preconnect" href="https://telegram.org">
 
   <!-- ================= SECURITY ================= -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://nap5k.com https://rzp.io https://*.telegram.org https://*.t.me; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:; frame-src https://rzp.io https://*.telegram.org; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;">
+ <meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+script-src 'self'
+https://nap5k.com
+https://rzp.io
+https://cdn.jsdelivr.net
+https://*.telegram.org
+https://*.t.me;
+style-src 'self' 'unsafe-inline' https:;
+img-src 'self' data: https:;
+font-src 'self' https:;
+connect-src 'self' https:;
+frame-src https://rzp.io https://*.telegram.org;
+object-src 'none';
+base-uri 'self';
+upgrade-insecure-requests;">
+
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Permissions-Policy"
