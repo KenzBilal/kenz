@@ -1,58 +1,37 @@
-// 1. Initialize the SQL Connection
+/* =========================================
+   1. SQL CONNECTION (ROOT)
+   ========================================= */
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================================
-     1. FAQ ACCORDION (Added this back)
-     ========================================= */
-  const faqItems = document.querySelectorAll(".faq-item");
-
-  faqItems.forEach(item => {
-    const question = item.querySelector(".faq-question");
-
-    if (question) {
-      question.addEventListener("click", () => {
-        // Check if this item is currently open
-        const isActive = item.classList.contains("active");
-
-        // Close ALL other items first (so only one stays open)
-        faqItems.forEach(otherItem => {
-          otherItem.classList.remove("active");
-        });
-
-        // If the one we clicked wasn't open, open it now
-        if (!isActive) {
-          item.classList.add("active");
-        }
-      });
-    }
-  });
-
-  /* =========================================
-     2. MOBILE NAVIGATION
+     2. MOBILE NAVIGATION (FIXED)
      ========================================= */
   const toggle = document.getElementById("navToggle");
   const nav = document.getElementById("navLinks");
 
   if (toggle && nav) {
-    // Open/Close menu
+    // Open/Close menu when clicking ☰
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
       nav.classList.toggle("nav-open");
+      
+      // Accessibility update
+      const isOpen = nav.classList.contains("nav-open");
+      toggle.setAttribute("aria-expanded", isOpen);
     });
 
-    // Close menu when clicking a link (Fixes overlay getting stuck)
+    // Close menu when clicking a link (How it works / Dashboard)
     nav.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", () => {
         nav.classList.remove("nav-open");
       });
     });
 
-    // Close menu when clicking outside
+    // Close menu when clicking anywhere else on the screen
     document.addEventListener("click", (e) => {
       if (!nav.contains(e.target) && !toggle.contains(e.target)) {
         nav.classList.remove("nav-open");
@@ -61,7 +40,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================================
-     3. SMOOTH SCROLLING
+     3. FAQ ACCORDION
+     ========================================= */
+  const faqItems = document.querySelectorAll(".faq-item");
+
+  faqItems.forEach(item => {
+    const question = item.querySelector(".faq-question");
+
+    if (question) {
+      question.addEventListener("click", () => {
+        const isActive = item.classList.contains("active");
+
+        // Close all others
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove("active");
+        });
+
+        // Open current if it was closed
+        if (!isActive) {
+          item.classList.add("active");
+        }
+      });
+    }
+  });
+
+  /* =========================================
+     4. SMOOTH SCROLLING
      ========================================= */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function (e) {
@@ -80,12 +84,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================================
-     4. DASHBOARD LINK (Optional)
+     5. DYNAMIC DASHBOARD LINK
      ========================================= */
   const dashLink = document.getElementById("menuDashboardLink");
-  const code = localStorage.getItem("cashttree_referral");
-  if (code && dashLink) {
-    dashLink.href = "/dashboard/?code=" + code;
+  const savedReferral = localStorage.getItem("cashttree_referral");
+  const partnerId = localStorage.getItem("p_id");
+
+  // If they are a logged-in partner, send them straight to dashboard index
+  if (partnerId && dashLink) {
+    dashLink.href = "dashboard/index.html";
+  } 
+  // Otherwise, if we have a referral code, attach it to login (optional)
+  else if (savedReferral && dashLink) {
+    dashLink.href = "dashboard/login.html?ref=" + savedReferral;
   }
+  // Default fallback
+  else if (dashLink) {
+    dashLink.href = "dashboard/login.html";
+  }
+
 });
+
 
