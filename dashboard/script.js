@@ -6,11 +6,22 @@ const MIN_WITHDRAW_PARTNER = 100;
 const MIN_WITHDRAW_USER = 50;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Determine if we are on login or index
+    // 1. Login Page Logic
     if (document.getElementById("loginBtn")) {
         document.getElementById("loginBtn").addEventListener("click", attemptLogin);
-    } else {
+    } 
+    // 2. Dashboard Page Logic
+    else {
         initDashboard();
+        
+        // Mobile Menu Toggle Logic
+        const menuBtn = document.querySelector(".menu-icon");
+        const navLinks = document.getElementById("navLinks");
+        if (menuBtn && navLinks) {
+            menuBtn.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+            });
+        }
     }
 });
 
@@ -40,6 +51,7 @@ async function initDashboard() {
 
     // 1. Fetch User Data
     const { data: user } = await supabase.from('promoters').select('*').eq('id', pId).single();
+    if (!user) return logout(); // Safety check if user deleted
     
     // 2. Fetch Team (Users referred by this person)
     const { data: team } = await supabase.from('promoters')
@@ -69,8 +81,6 @@ function updateUI(user, totalEarned) {
 
     const btn = document.getElementById("payoutBtn");
     
-    // RULE: If they have a username/code, they are a Partner (100). 
-    // If they are a direct user (short/no code), they are User (50).
     const limit = (user.username && user.username.length > 3) ? MIN_WITHDRAW_PARTNER : MIN_WITHDRAW_USER;
     
     if (user.wallet_balance >= limit) {
@@ -88,7 +98,6 @@ function renderTeam(team) {
     if (!team || team.length === 0) return;
 
     container.innerHTML = team.map(m => {
-        // MASK PHONE: Shows last 4 digits only
         const masked = m.phone ? "*******" + m.phone.slice(-4) : "No Phone";
         return `
             <div class="team-card">
@@ -110,6 +119,7 @@ async function renderSQLOffers(userCode) {
     if (!campaigns) return;
 
     container.innerHTML = campaigns.map(offer => {
+        // Construct the tracking link
         const cleanLink = `${window.location.origin}/${offer.app_name.toLowerCase()}/index.html?ref=${userCode}`;
         return `
         <div class="offer-card">
@@ -122,14 +132,32 @@ async function renderSQLOffers(userCode) {
       `}).join('');
 }
 
+// --- MISSING FUNCTION ADDED HERE ---
+function copyLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        showToast("Link Copied! 🔗");
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        // Fallback for older browsers
+        const textarea = document.createElement("textarea");
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast("Link Copied! 🔗");
+    });
+}
+
 function copyCode() {
     const code = document.getElementById("userCode").innerText;
     navigator.clipboard.writeText(code);
-    showToast();
+    showToast("Code Copied! ✅");
 }
 
-function showToast() {
+function showToast(msg) {
     const t = document.getElementById("toast");
+    if(msg) t.innerText = msg; // Allow custom message
     t.className = "show";
     setTimeout(() => t.className = "", 3000);
 }
@@ -137,4 +165,10 @@ function showToast() {
 function logout() {
     localStorage.removeItem("p_id");
     window.location.href = "login.html";
+}
+
+// Mobile Menu Function (Called from HTML or Event Listener)
+function toggleMenu() {
+    const nav = document.getElementById("navLinks");
+    if(nav) nav.classList.toggle("active");
 }
