@@ -1,133 +1,99 @@
 /* =========================================
-   1. SQL CONNECTION (New Feature)
+   1. SQL CONNECTION
    ========================================= */
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 /* =========================================
-   2. CLICK SAFETY FIX (From Old Script)
-   Prevents Ads/Overlays from blocking clicks
+   2. CLICK SAFETY (Prevents Ads Blocking)
    ========================================= */
 (function () {
-  document.querySelectorAll("a, button").forEach(el => {
-    el.style.pointerEvents = "auto";
-  });
+  // Runs immediately to unblock buttons
+  const style = document.createElement('style');
+  style.innerHTML = 'a, button { pointer-events: auto !important; }';
+  document.head.appendChild(style);
 })();
 
+/* =========================================
+   3. MAIN SCRIPT (Waits for HTML to Load)
+   ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================================
-     3. MOBILE MENU (RESTORED EXACTLY FROM OLD)
-     ========================================= */
+  // --- A. MOBILE MENU (The Fix) ---
   const toggle = document.getElementById("navToggle");
   const nav = document.getElementById("navLinks");
 
   if (toggle && nav) {
-    // A. Toggle Menu on Click (Using EventListener like old script)
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation(); // Stop click from closing it immediately
+    // 1. Toggle on Click
+    toggle.onclick = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       nav.classList.toggle("nav-open");
-      
-      // Update ARIA for accessibility (Old Script logic)
-      toggle.setAttribute("aria-expanded", nav.classList.contains("nav-open"));
+    };
+
+    // 2. Close when clicking OUTSIDE
+    document.addEventListener("click", function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove("nav-open");
+      }
     });
 
-    // B. Close when clicking OUTSIDE
-  document.addEventListener("click", (e) => {
-  if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-    nav.classList.remove("nav-open");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-});
-
-
-    // C. Close when clicking a LINK inside (Missing in my previous version)
+    // 3. Close when clicking A LINK
     nav.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", () => {
         nav.classList.remove("nav-open");
-        toggle.setAttribute("aria-expanded", "false");
       });
     });
+  } else {
+    console.error("Menu Error: 'navToggle' or 'navLinks' ID not found in HTML.");
   }
 
-  /* =========================================
-     4. FAQ ACCORDION
-     ========================================= */
+  // --- B. FAQ ACCORDION ---
   const faqItems = document.querySelectorAll(".faq-item");
   faqItems.forEach(item => {
     const question = item.querySelector(".faq-question");
     if (question) {
-      question.addEventListener("click", () => {
+      question.onclick = () => {
         const isActive = item.classList.contains("active");
-        // Close all others
         faqItems.forEach(other => other.classList.remove("active"));
-        // Toggle current
         if (!isActive) item.classList.add("active");
-      });
+      };
     }
   });
 
-  /* =========================================
-     5. SMART CTA (BLUE BUTTON LOGIC)
-     ========================================= */
+  // --- C. SMART CTA (Blue Button) ---
   const mobileCta = document.getElementById("mobileCta");
   const ctaClose = document.querySelector(".cta-close");
   const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
   function checkCtaVisibility() {
     if (!mobileCta) return;
-
-    // A. Check Memory (Last 24h)
     const lastClosed = localStorage.getItem("ctaClosedTime");
     const now = new Date().getTime();
-    if (lastClosed && (now - lastClosed < ONE_DAY_MS)) return; 
+    if (lastClosed && (now - lastClosed < ONE_DAY_MS)) return;
 
-    // B. Check Scroll (50%)
-    const scrollPosition = window.scrollY + window.innerHeight;
-    const pageHeight = document.documentElement.scrollHeight;
-    const scrollPercentage = (scrollPosition / pageHeight) * 100;
-
-    if (scrollPercentage > 50) {
-      mobileCta.classList.add("visible");
-    }
+    const scrollPercentage = ((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight) * 100;
+    if (scrollPercentage > 50) mobileCta.classList.add("visible");
   }
-
+  
   window.addEventListener("scroll", checkCtaVisibility);
 
   if (ctaClose && mobileCta) {
-    ctaClose.onclick = function() {
+    ctaClose.onclick = () => {
       mobileCta.classList.remove("visible");
       localStorage.setItem("ctaClosedTime", new Date().getTime());
     };
   }
 
-  /* =========================================
-     6. OFFER EXPIRY CHECK (From Old Script)
-     ========================================= */
-  const btn = document.getElementById("payBtn");
-  if (btn) {
-    // Update date if needed
-    const offerEnd = new Date("2026-01-05T23:59:59"); 
-    if (new Date() > offerEnd) {
-      btn.classList.add("no-offer");
-    }
-  }
-
-  /* =========================================
-     7. DASHBOARD REDIRECT (HYBRID)
-     ========================================= */
+  // --- D. DASHBOARD REDIRECT ---
   const dashLink = document.getElementById("menuDashboardLink");
-  const oldCode = localStorage.getItem("cashttree_referral");
   const partnerId = localStorage.getItem("p_id");
-
+  const oldCode = localStorage.getItem("cashttree_referral");
+  
   if (dashLink) {
-    if (partnerId) {
-      dashLink.href = "dashboard/index.html";
-    } else if (oldCode) {
-      dashLink.href = "dashboard/index.html?code=" + oldCode;
-    }
+    if (partnerId) dashLink.href = "dashboard/index.html";
+    else if (oldCode) dashLink.href = "dashboard/index.html?code=" + oldCode;
   }
 
 });
-
