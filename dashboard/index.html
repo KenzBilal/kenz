@@ -1,67 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard | CashTree</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
+    <div class="dashboard">
+        <header class="top">
+            <div class="user-info">
+                <div class="user-avatar">👤</div>
+                <div>
+                    <div class="greeting">Welcome back,</div>
+                    <div class="username" id="partnerName">Loading...</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout ➔</button>
+        </header>
 
-  <div id="loader" class="loader-overlay">
-    <div class="spinner"></div>
-    <p>Connecting to CashTree...</p>
-  </div>
-
-  <div class="dashboard" style="display:none;" id="mainContent">
-    <header class="top">
-      <div class="brand">🌱 CashTree</div>
-      <div class="nav-links">
-          <a href="#myTeamSection" class="nav-item-link">My Team 👥</a>
-          <button onclick="logout()" class="logout-btn">Logout</button>
-      </div>
-    </header>
-
-    <section class="card welcome-card">
-      <h2 id="userName">Welcome Back</h2>
-      <p class="label-text">Your Referral Code:</p>
-      <div class="copy-box">
-        <span id="userCode">...</span> 
-        <button class="copy-btn" onclick="copyCode()">COPY ❐</button>
-      </div>
-    </section>
-
-    <section class="stats-grid">
-      <div class="stat-box">
-        <p>Wallet Balance</p>
-        <h1 id="walletBal" class="money-text">₹0</h1>
-        <button id="payoutBtn" class="payout-btn" disabled>Loading...</button>
-      </div>
-      <div class="stat-box secondary">
-        <p>Total Life-Time Earnings</p>
-        <h2 id="totalEarned">₹0</h2>
-      </div>
-    </section>
-
-    <section class="offers">
-      <h3 class="section-title">Active Campaigns</h3>
-      <div class="offer-list" id="offersContainer">
-          </div>
-    </section>
-
-    <section id="myTeamSection" class="team-section">
-        <h3 class="section-title">My Team (Partners)</h3>
-        <p class="sub-text">See your recruits and tracking here.</p>
-        <div id="teamList" class="team-grid">
-            <p style="color:#666; text-align:center; padding:20px;">No partners recruited yet.</p>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Wallet Balance</div>
+                <div class="stat-value" id="balanceDisplay">₹0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Total Clicks</div>
+                <div class="stat-value">0</div>
+            </div>
         </div>
-    </section>
 
-    <div style="height: 60px;"></div> </div>
+        <div class="section-header">
+            <h3>🔥 Active Campaigns</h3>
+            <span class="badge">LIVE</span>
+        </div>
 
-  <div id="toast">✅ Code Copied!</div>
+        <div id="offersContainer" class="offers-list">
+            <div style="text-align:center; color:#666;">Loading...</div>
+        </div>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
 </body>
-</html>
