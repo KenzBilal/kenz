@@ -54,6 +54,7 @@ button { font-family: inherit; }
    3. NAVIGATION
    ========================================= */
 .nav {
+.nav {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -81,23 +82,62 @@ button { font-family: inherit; }
   padding: 8px 16px;
   border-radius: 10px;
   transition: background 0.2s;
+  text-decoration: none;
+  color: #fff;
 }
 .nav-links a:hover { background: rgba(255,255,255,0.06); }
 
 /* Dashboard Highlight */
 #menuDashboardLink {
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
-  color: #022c22;
+  color: #022c22 !important;
 }
 
 .nav-toggle {
-  display: none;
+  display: none; /* Hidden on Desktop */
   background: none;
   border: none;
   color: #fff;
   font-size: 24px;
   cursor: pointer;
 }
+
+/* =========================================
+   MOBILE RESPONSIVENESS (The Fix)
+   ========================================= */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block; /* Show ☰ on Mobile */
+  }
+
+  .nav-links {
+    display: none; /* Hide links by default on Mobile */
+    flex-direction: column;
+    position: absolute;
+    top: 100%; /* Sits right under the nav bar */
+    right: 0;
+    background: var(--card); /* Matches your site's dark cards */
+    width: 200px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 0 0 0 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    gap: 15px;
+  }
+
+  /* Matches your script: nav.classList.toggle("nav-open") */
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  /* Make links look better in the vertical menu */
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+   
 
 /* =========================================
    4. HERO SECTION (RESTORED TO ORIGINAL STYLE)
@@ -444,3 +484,4 @@ button { font-family: inherit; }
 
   .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
 }
+
