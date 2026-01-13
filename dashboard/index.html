@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard – CashTree Partner</title>
+  <title>Dashboard | CashTree</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,42 +10,35 @@
 
   <div id="loader" class="loader-overlay">
     <div class="spinner"></div>
-    <p>Syncing with Server...</p>
+    <p>Connecting to CashTree...</p>
   </div>
 
   <div class="dashboard" style="display:none;" id="mainContent">
-
     <header class="top">
-      <div class="brand">🌱 CashTree <span>Loot</span></div>
-      <button onclick="logout()" class="logout-btn">Logout</button>
+      <div class="brand">🌱 CashTree</div>
+      <div class="nav-links">
+          <a href="#myTeamSection" class="nav-item-link">My Team 👥</a>
+          <button onclick="logout()" class="logout-btn">Logout</button>
+      </div>
     </header>
 
-        <section class="card welcome-card">
-      <div>
-        <h2 id="userName">Welcome Back</h2>
-        
-        <p style="color:#aaa; font-size:12px; margin: 10px 0 5px 0;">Your Referral Code:</p>
-        <div class="copy-box">
-          <span id="userCode">...</span> 
-          <button class="copy-btn" onclick="copyCode()">COPY ❐</button>
-        </div>
-
+    <section class="card welcome-card">
+      <h2 id="userName">Welcome Back</h2>
+      <p class="label-text">Your Referral Code:</p>
+      <div class="copy-box">
+        <span id="userCode">...</span> 
+        <button class="copy-btn" onclick="copyCode()">COPY ❐</button>
       </div>
-        </section>
-    
+    </section>
 
     <section class="stats-grid">
       <div class="stat-box">
         <p>Wallet Balance</p>
-        <h1 id="walletBal">₹0</h1>
-        
-        <button id="payoutBtn" class="payout-btn" disabled>
-          Min Withdraw: ₹100
-        </button>
+        <h1 id="walletBal" class="money-text">₹0</h1>
+        <button id="payoutBtn" class="payout-btn" disabled>Loading...</button>
       </div>
-
       <div class="stat-box secondary">
-        <p>Total Earnings</p>
+        <p>Total Life-Time Earnings</p>
         <h2 id="totalEarned">₹0</h2>
       </div>
     </section>
@@ -53,17 +46,22 @@
     <section class="offers">
       <h3 class="section-title">Active Campaigns</h3>
       <div class="offer-list" id="offersContainer">
+          </div>
+    </section>
+
+    <section id="myTeamSection" class="team-section">
+        <h3 class="section-title">My Team (Partners)</h3>
+        <p class="sub-text">See your recruits and tracking here.</p>
+        <div id="teamList" class="team-grid">
+            <p style="color:#666; text-align:center; padding:20px;">No partners recruited yet.</p>
         </div>
     </section>
 
-  </div>
+    <div style="height: 60px;"></div> </div>
 
-    <div id="toast">✅ Code Copied!</div>
-  
+  <div id="toast">✅ Code Copied!</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
-  <script>
-    // Initialize Dashboard logic on load
-    document.addEventListener("DOMContentLoaded", initDashboard);
-  </script>
 </body>
 </html>
