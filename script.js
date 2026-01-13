@@ -8,7 +8,7 @@ const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================================
-     2. MOBILE NAVIGATION (MENU)
+     2. MOBILE NAVIGATION
      ========================================= */
   const toggle = document.getElementById("navToggle");
   const navLinks = document.getElementById("navLinks");
@@ -18,10 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       e.stopPropagation();
       navLinks.classList.toggle("nav-open");
+      
+      // Toggle Icon
       const isOpen = navLinks.classList.contains("nav-open");
       toggle.innerHTML = isOpen ? "✕" : "☰"; 
+      toggle.setAttribute("aria-expanded", isOpen);
     };
 
+    // Close when clicking outside
     document.addEventListener("click", (e) => {
       if (!navLinks.contains(e.target) && !toggle.contains(e.target)) {
         navLinks.classList.remove("nav-open");
@@ -31,47 +35,44 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================================
-     3. FAQ ACCORDION SYSTEM
+     3. FAQ ACCORDION
      ========================================= */
   const faqItems = document.querySelectorAll(".faq-item");
+
   faqItems.forEach(item => {
     const question = item.querySelector(".faq-question");
     if (question) {
       question.onclick = function() {
         const isActive = item.classList.contains("active");
-        // Close all others
+        // Close others
         faqItems.forEach(other => other.classList.remove("active"));
-        // Open this one if it wasn't active
+        // Open current
         if (!isActive) item.classList.add("active");
       };
     }
   });
 
   /* =========================================
-     4. TELEGRAM CTA (MOBILE FLOATING BUTTON)
+     4. TELEGRAM CTA CLOSE BUTTON (New)
      ========================================= */
   const mobileCta = document.getElementById("mobileCta");
+  // Your HTML uses class "cta-close" for the button
   const ctaClose = document.querySelector(".cta-close");
 
   if (ctaClose && mobileCta) {
     ctaClose.onclick = function() {
       mobileCta.style.display = "none";
-      // Optional: Remember that user closed it for this session
-      sessionStorage.setItem("ctaClosed", "true");
     };
-  }
-  
-  // Re-hide if they already closed it
-  if (sessionStorage.getItem("ctaClosed") === "true" && mobileCta) {
-    mobileCta.style.display = "none";
   }
 
   /* =========================================
-     5. REDIRECT LOGIC
+     5. DASHBOARD REDIRECT
      ========================================= */
   const dashLink = document.getElementById("menuDashboardLink");
   const partnerId = localStorage.getItem("p_id");
+
   if (dashLink && partnerId) {
     dashLink.href = "dashboard/index.html";
   }
+
 });
