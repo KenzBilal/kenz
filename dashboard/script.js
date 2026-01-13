@@ -3,258 +3,127 @@
    ========================================= */
 const supabaseUrl = 'https://qzjvratinjirrcmgzjlx.supabase.co';
 const supabaseKey = 'sb_publishable_AB7iUKxOU50vnoqllSfAnQ_Wdji8gEc';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// ✅ FIX 1: Renamed to 'supabaseClient' to stop the crash
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================================
-     LOGIN LOGIC
-     ========================================= */
+  // --- A. DETECT PAGE TYPE ---
   const loginBtn = document.getElementById("loginBtn");
+  const partnerId = localStorage.getItem("p_id");
+
+  // --- B. LOGIN PAGE LOGIC ---
   if (loginBtn) {
     loginBtn.addEventListener("click", async () => {
       
       const codeInput = document.getElementById("code").value.trim();
       const passInput = document.getElementById("pass").value.trim();
 
-      // 1. Basic Validation
       if (!codeInput || !passInput) {
-        alert("Please enter both Partner Code and Access Key.");
+        showToast("⚠️ Enter Code and Password");
         return;
       }
 
       loginBtn.innerHTML = "Verifying...";
       loginBtn.disabled = true;
 
-      // 2. Check Database
-      const { data, error } = await supabase
+      // ✅ FIX 2: Query the 'partners' table (which we actually created)
+      const { data, error } = await supabaseClient
         .from('partners')
         .select('*')
         .eq('code', codeInput)
         .eq('password', passInput)
-        .single(); // We expect exactly one user
+        .single();
 
-      // 3. Handle Result
       if (error || !data) {
-        alert("❌ Invalid Code or Password. Please try again.");
+        console.error("Login Error:", error);
+        showToast("❌ Invalid Credentials");
         loginBtn.innerHTML = "Unlock Dashboard";
         loginBtn.disabled = false;
       } else {
-        // SUCCESS!
-        // Save the partner ID to browser memory
+        // SUCCESS
         localStorage.setItem("p_id", data.id);
         localStorage.setItem("p_code", data.code);
         
-        loginBtn.innerHTML = "✅ Success! Redirecting...";
-        
-        // Redirect to the Dashboard Index (Main Panel)
+        loginBtn.innerHTML = "✅ Success!";
         setTimeout(() => {
           window.location.href = "index.html"; 
         }, 1000);
       }
     });
-  }
-
-  /* =========================================
-     DASHBOARD DATA LOADER (For index.html)
-     ========================================= */
-  const partnerId = localStorage.getItem("p_id");
+  } 
   
-  // If we are on the Main Dashboard page (not login page)
-  if (partnerId && !loginBtn) {
-    loadDashboardData(partnerId);
-  } else if (!partnerId && !loginBtn) {
-    // If no ID and not on login page, kick them out
-    window.location.href = "login.html";
-  }
-
-  async function loadDashboardData(id) {
-    // Fetch fresh data from DB
-    const { data, error } = await supabase
-      .from('partners')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (data) {
-      // Update HTML elements if they exist
-      const balEl = document.getElementById("balanceDisplay");
-      const nameEl = document.getElementById("partnerName");
-      
-      if (balEl) balEl.innerText = "₹" + data.balance;
-      if (nameEl) nameEl.innerText = data.code;
+  // --- C. DASHBOARD PAGE LOGIC ---
+  else {
+    // If on dashboard but no ID, kick to login
+    if (!partnerId) {
+      window.location.href = "login.html";
+      return;
     }
+    
+    // Load Data
+    initDashboard(partnerId);
   }
 
 });
 
-const MIN_WITHDRAW_PARTNER = 100;
-const MIN_WITHDRAW_USER = 50;
-
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Login Page Logic
-    if (document.getElementById("loginBtn")) {
-        document.getElementById("loginBtn").addEventListener("click", attemptLogin);
-    } 
-    // 2. Dashboard Page Logic
-    else {
-        initDashboard();
-        
-        // Mobile Menu Toggle Logic
-        const menuBtn = document.querySelector(".menu-icon");
-        const navLinks = document.getElementById("navLinks");
-        if (menuBtn && navLinks) {
-            menuBtn.addEventListener("click", () => {
-                navLinks.classList.toggle("active");
-            });
-        }
-    }
-});
-
-async function attemptLogin() {
-    const code = document.getElementById("code").value.trim().toUpperCase();
-    const pass = document.getElementById("pass").value.trim();
-    if (!code || !pass) return alert("Enter credentials");
-
-    const { data: user, error } = await supabase
-        .from('promoters')
+/* =========================================
+   DASHBOARD FUNCTIONS
+   ========================================= */
+async function initDashboard(id) {
+    // 1. Fetch Partner Data
+    const { data: user, error } = await supabaseClient
+        .from('partners')
         .select('*')
-        .eq('username', code)
-        .eq('password', pass)
+        .eq('id', id)
         .single();
 
     if (user) {
-        localStorage.setItem("p_id", user.id);
-        window.location.href = "index.html";
-    } else {
-        alert("Invalid Code or Password");
+        // Update Balance & Name
+        // We use optional chaining (?) to avoid errors if elements are missing
+        const balEl = document.getElementById("balanceDisplay");
+        const nameEl = document.getElementById("partnerName");
+        const codeEl = document.getElementById("userCode"); // If you have this ID
+        
+        if (balEl) balEl.innerText = "₹" + (user.balance || 0);
+        if (nameEl) nameEl.innerText = user.code;
+        if (codeEl) codeEl.innerText = user.code;
+
+        // Hide Loader if it exists
+        const loader = document.getElementById("loader");
+        const content = document.getElementById("mainContent");
+        if(loader) loader.style.display = "none";
+        if(content) content.style.display = "block";
     }
 }
 
-async function initDashboard() {
-    const pId = localStorage.getItem("p_id");
-    if (!pId) return window.location.href = "login.html";
-
-    // 1. Fetch User Data
-    const { data: user } = await supabase.from('promoters').select('*').eq('id', pId).single();
-    if (!user) return logout(); // Safety check if user deleted
-    
-    // 2. Fetch Team (Users referred by this person)
-    const { data: team } = await supabase.from('promoters')
-        .select('full_name, username, wallet_balance, phone')
-        .eq('referred_by', user.username);
-
-    // 3. Fetch Approved Leads for Total Earnings
-    const { data: leads } = await supabase.from('leads')
-        .select('campaigns(promoter_payout)')
-        .eq('promoter_id', pId)
-        .eq('status', 'approved');
-
-    const totalEarned = leads ? leads.reduce((sum, l) => sum + (l.campaigns?.promoter_payout || 0), 0) : 0;
-    
-    updateUI(user, totalEarned);
-    renderTeam(team);
-    renderSQLOffers(user.username);
-}
-
-function updateUI(user, totalEarned) {
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("mainContent").style.display = "block";
-    document.getElementById("userName").innerText = "Hello, " + user.full_name;
-    document.getElementById("userCode").innerText = user.username;
-    document.getElementById("walletBal").innerText = "₹" + user.wallet_balance;
-    document.getElementById("totalEarned").innerText = "₹" + totalEarned;
-
-    const btn = document.getElementById("payoutBtn");
-    
-    const limit = (user.username && user.username.length > 3) ? MIN_WITHDRAW_PARTNER : MIN_WITHDRAW_USER;
-    
-    if (user.wallet_balance >= limit) {
-        btn.innerText = "Request Payout 💸";
-        btn.className = "payout-btn active";
-        btn.disabled = false;
-        btn.onclick = () => window.open(`https://wa.me/919876543210?text=Payout_Code_${user.username}_Amt_${user.wallet_balance}`);
-    } else {
-        btn.innerText = `Reach ₹${limit} to Withdraw`;
-    }
-}
-
-function renderTeam(team) {
-    const container = document.getElementById("teamList");
-    if (!team || team.length === 0) return;
-
-    container.innerHTML = team.map(m => {
-        const masked = m.phone ? "*******" + m.phone.slice(-4) : "No Phone";
-        return `
-            <div class="team-card">
-                <div>
-                    <strong>${m.full_name}</strong><br>
-                    <small style="color:#666">${masked}</small>
-                </div>
-                <span class="badge ${m.wallet_balance > 0 ? 'success' : ''}">
-                    ${m.wallet_balance > 0 ? 'Active' : 'Pending'}
-                </span>
-            </div>
-        `;
-    }).join('');
-}
-
-async function renderSQLOffers(userCode) {
-    const container = document.getElementById("offersContainer");
-    const { data: campaigns } = await supabase.from('campaigns').select('*').eq('is_active', true);
-    if (!campaigns) return;
-
-    container.innerHTML = campaigns.map(offer => {
-        // Construct the tracking link
-        const cleanLink = `${window.location.origin}/${offer.app_name.toLowerCase()}/index.html?ref=${userCode}`;
-        return `
-        <div class="offer-card">
-            <h3>${offer.app_name}</h3>
-            <span class="pay-badge">₹${offer.promoter_payout} / Refer</span>
-            <div class="actions">
-                <button class="share-btn" onclick="copyLink('${cleanLink}')">Copy Link 🔗</button>
-            </div>
-        </div>
-      `}).join('');
-}
-
-// --- MISSING FUNCTION ADDED HERE ---
-function copyLink(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        showToast("Link Copied! 🔗");
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        // Fallback for older browsers
-        const textarea = document.createElement("textarea");
-        textarea.value = url;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-        showToast("Link Copied! 🔗");
-    });
-}
-
-function copyCode() {
-    const code = document.getElementById("userCode").innerText;
-    navigator.clipboard.writeText(code);
-    showToast("Code Copied! ✅");
-}
-
+/* =========================================
+   HELPER FUNCTIONS (Toast, Copy, etc.)
+   ========================================= */
 function showToast(msg) {
-    const t = document.getElementById("toast");
-    if(msg) t.innerText = msg; // Allow custom message
-    t.className = "show";
+    let t = document.getElementById("toast");
+    if (!t) {
+        t = document.createElement("div");
+        t.id = "toast";
+        document.body.appendChild(t);
+    }
+    t.innerText = msg;
+    t.className = "show"; 
     setTimeout(() => t.className = "", 3000);
 }
 
 function logout() {
     localStorage.removeItem("p_id");
+    localStorage.removeItem("p_code");
     window.location.href = "login.html";
 }
 
-// Mobile Menu Function (Called from HTML or Event Listener)
-function toggleMenu() {
-    const nav = document.getElementById("navLinks");
-    if(nav) nav.classList.toggle("active");
+// Mobile Menu Logic
+const menuBtn = document.getElementById("navToggle"); // Ensure this ID matches your HTML
+const navLinks = document.getElementById("navLinks");
+if (menuBtn && navLinks) {
+    menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("nav-open");
+    });
 }
