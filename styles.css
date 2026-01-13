@@ -254,3 +254,16 @@ button { font-family: inherit; cursor: pointer; }
   .footer-inner { flex-direction: column; text-align: center; gap: 20px; }
   .footer-links a { margin: 0 10px; }
 }
+
+/* Add to bottom of styles.css */
+.hero-trust {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 20px;
+  opacity: 0.8;
+}
+
+/* Fix for Hero Highlight Text color */
+.hero-highlight {
+  color: var(--accent); /* Makes "that actually work" Green */
+}
