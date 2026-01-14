@@ -88,7 +88,6 @@ async function loadOffers(partnerCode) {
     const { data: offers, error } = await supabaseClient
         .from('campaigns')
         .select('*')
-        .eq('is_active', true)
         .order('id', { ascending: true });
 
     if (!offers || offers.length === 0) {
